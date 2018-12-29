@@ -6,6 +6,8 @@ namespace DiscomonProject
     {
         private static void Main(string[] args)
         {
+            Unity.RegisterTypes();
+
             Console.WriteLine("Hello, Discord!");
         }
     }
