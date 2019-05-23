@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiscomonProject.Discord;
+using DiscomonProject.Discord.Entities;
+using System;
 
 namespace DiscomonProject
 {
@@ -8,6 +10,15 @@ namespace DiscomonProject
         {
             Unity.RegisterTypes();
             Console.WriteLine("Hello, Discord!");
+            
+            var discordBotConfig = new MonBotConfig
+            {
+                Token = "ABC",
+                SocketConfig = SocketConfig.GetDefault()
+
+            };
         }
     }
+
+    
 }
