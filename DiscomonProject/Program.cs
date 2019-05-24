@@ -17,6 +17,10 @@ namespace DiscomonProject
                 SocketConfig = SocketConfig.GetDefault()
 
             };
+
+            var connection = Unity.Resolve<Connection>();
+
+            Console.ReadKey();
         }
     }
 
