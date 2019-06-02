@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscomonProject", "DiscomonProject\DiscomonProject.csproj", "{2E091795-85A9-4CCB-87D7-C8C319B79E06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscomonProject.xUnit.Tests", "DiscomonProject.xUnit.Tests\DiscomonProject.xUnit.Tests.csproj", "{A9C8A67B-81B9-47D5-95F8-47276EB571CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2E091795-85A9-4CCB-87D7-C8C319B79E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E091795-85A9-4CCB-87D7-C8C319B79E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E091795-85A9-4CCB-87D7-C8C319B79E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C8A67B-81B9-47D5-95F8-47276EB571CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C8A67B-81B9-47D5-95F8-47276EB571CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C8A67B-81B9-47D5-95F8-47276EB571CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C8A67B-81B9-47D5-95F8-47276EB571CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
