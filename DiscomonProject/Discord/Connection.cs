@@ -17,7 +17,7 @@ namespace DiscomonProject.Discord
             _client = client;
         }
 
-        internal async Task ConnectAsync(MonBotConfig config)
+        public async Task ConnectAsync(MonBotConfig config)
         {
             _client.Log += _logger.Log;
 
