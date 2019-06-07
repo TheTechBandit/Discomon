@@ -1,6 +1,7 @@
 ﻿using DiscomonProject.Discord;
 using DiscomonProject.Storage;
 using DiscomonProject.Storage.Implementations;
+using Discord.Commands;
 using Discord.WebSocket;
 using Unity;
 using Unity.Injection;
@@ -30,6 +31,8 @@ namespace DiscomonProject
             _container.RegisterSingleton<ILogger, Logger>();
             _container.RegisterType<DiscordSocketConfig>(new InjectionFactory(i => SocketConfig.GetDefault()));
             _container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
+            _container.RegisterSingleton<CommandServiceConfig>(new InjectionFactory(i => CommandServConfig.GetDefault()));
+            _container.RegisterSingleton<CommandService>(new InjectionConstructor(typeof(CommandServiceConfig)));
             _container.RegisterSingleton<Discord.Connection>();
         }
 
