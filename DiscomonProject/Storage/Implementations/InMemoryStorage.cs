@@ -7,6 +7,14 @@ namespace DiscomonProject.Storage.Implementations
     {
         private readonly Dictionary<string, object> _dictionary = new Dictionary<string, object>();
 
+        public void StoreAllObjects(Dictionary<string, object> dict)
+        {
+            foreach(KeyValuePair<string, object> entry in dict)
+            {
+                StoreObject(entry.Value, entry.Key);
+            }
+        }
+
         public void StoreObject(object obj, string key)
         {
             if (_dictionary.ContainsKey(key))
@@ -22,7 +30,17 @@ namespace DiscomonProject.Storage.Implementations
         {
             if(!_dictionary.ContainsKey(key))
                 throw new ArgumentException($"The provided key '{key}' wasn't found.");
-            return (T)_dictionary[key];
+            return (T)(_dictionary[key]);
+        }
+
+        public int StorageLength()
+        {
+            return _dictionary.Count;
+        }
+
+        public Dictionary<string, object> GetDict()
+        {
+            return _dictionary;
         }
     }
 }

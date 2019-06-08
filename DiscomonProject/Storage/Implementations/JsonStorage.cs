@@ -9,7 +9,7 @@ namespace DiscomonProject.Storage.Implementations
         public T RestoreObject<T>(string key)
         {
             var json = File.ReadAllText($"{key}.json");
-            return JsonConvert.DeserializeObject<T>(json);
+            return (T)JsonConvert.DeserializeObject<T>(json);
         }
 
         public void StoreObject(object obj, string key)
