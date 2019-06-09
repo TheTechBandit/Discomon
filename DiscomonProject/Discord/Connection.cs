@@ -51,9 +51,13 @@ namespace DiscomonProject.Discord
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                 message.Author.IsBot)
                 return;
-
+            
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
+
+            //Check if the user has an existing account. If not, create one.
+            if(!UserHandler.DoesUserExist(message.Author.Id))
+                UserHandler.CreateNewUser(context.User.Id, context.Guild.Id, context.User.Username, context.User.GetAvatarUrl());
 
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.

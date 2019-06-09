@@ -4,7 +4,7 @@ namespace DiscomonProject
 {
     public class DiscordUser
     {
-        private SocketUser _user;
+        public SocketUser _user {get; set;}
 
         public DiscordUser(SocketUser user)
         {

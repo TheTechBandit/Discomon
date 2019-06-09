@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Threading.Tasks;
 using DiscomonProject.Storage.Implementations;
 using Discord.Commands;
@@ -16,10 +18,9 @@ namespace DiscomonProject.Discord
         [Command("whoami")]
         public async Task ShowAccount()
         {
-            DiscordUser user = new DiscordUser(Context.User);
-            UserAccount acc = UserHandler.GetUser(user);
+            UserAccount acc = UserHandler.GetUser(Context.User.Id);
 
-            await ReplyAsync($"Here is your information: \nID: {acc.getID()}\nName: {acc.name}");
+            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}");
         }
     }
 }
