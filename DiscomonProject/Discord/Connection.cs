@@ -28,6 +28,8 @@ namespace DiscomonProject.Discord
             await _client.LoginAsync(TokenType.Bot, config.Token);
             await _client.StartAsync();
 
+            _client.JoinedGuild += HandleGuildJoin;
+
             _commands.CommandExecuted += CommandExecutedAsync;
 
             _client.MessageReceived += HandleCommandAsync;
@@ -35,6 +37,11 @@ namespace DiscomonProject.Discord
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
 
             await Task.Delay(-1);
+        }
+
+        private async Task HandleGuildJoin(SocketGuild guild)
+        {
+            await guild.DefaultChannel.SendMessageAsync("Hello! I am MonBot. By default, my command prefix is **!** \nIf you would like to change this or other settings, type **!settings**. \nIf you would like to learn more about me and what I do, use **!info**. \nTo create a character, type **!createcharacter**. \nTo create a town, type **!foundtown**.");
         }
 
         private async Task HandleCommandAsync(SocketMessage messageParam)

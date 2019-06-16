@@ -20,7 +20,7 @@ namespace DiscomonProject.Discord
         {
             UserAccount acc = UserHandler.GetUser(Context.User.Id);
 
-            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}");
+            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}\nAvatar: {acc.AvatarUrl}\nGuildID: {acc.CurrentGuildId}");
         }
     }
 }
