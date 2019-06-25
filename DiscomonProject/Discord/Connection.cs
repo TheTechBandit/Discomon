@@ -62,9 +62,10 @@ namespace DiscomonProject.Discord
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
 
-            //Check if the user has an existing account. If not, create one.
+            /* -- UNUSED FOR NOW, TEST BEFORE REMOVING --
+            Check if the user has an existing account. If not, create one.
             if(!UserHandler.DoesUserExist(message.Author.Id))
-                UserHandler.CreateNewUser(context.User.Id, context.Guild.Id, context.User.Username, context.User.GetAvatarUrl());
+                UserHandler.CreateNewUser(context.User.Id);*/
 
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.

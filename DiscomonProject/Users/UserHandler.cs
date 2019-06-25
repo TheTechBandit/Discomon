@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DiscomonProject.Discord;
 using DiscomonProject.Storage;
 using DiscomonProject.Storage.Implementations;
 using Discord.WebSocket;
@@ -30,22 +31,32 @@ namespace DiscomonProject
             System.Console.WriteLine($"Successfully loaded {_dic.Count} users.");
         }
 
-        public static UserAccount GetUser(ulong id)
+        public static UserAccount GetUser(ContextIds ids)
         {
-            SaveUsers();
-            return _dic[id];
+            return GetUser(ids.UserId);
         }
 
-        public static UserAccount CreateNewUser(ulong id, ulong guildid, string name, string avaurl)
+        public static UserAccount GetUser(ulong id)
         {
-            System.Console.WriteLine($"Creating new user: {name}");
+            if(DoesUserExist(id))
+            {
+                return _dic[id];
+            }
+            else
+            {
+                CreateNewUser(id);
+                SaveUsers();
+                return _dic[id];
+            }
+        }
+
+        public static UserAccount CreateNewUser(ulong id)
+        {
+            System.Console.WriteLine($"Creating new user with ID: {id}");
 
             UserAccount acc = new UserAccount 
             {
-                UserId = id,
-                CurrentGuildId = guildid,
-                Name = name,
-                AvatarUrl = avaurl
+                UserId = id
             };
             _dic.Add(id, acc);
             SaveUsers();
