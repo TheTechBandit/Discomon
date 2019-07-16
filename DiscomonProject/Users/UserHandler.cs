@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DiscomonProject.Discord;
 using DiscomonProject.Storage;
 using DiscomonProject.Storage.Implementations;
@@ -63,6 +64,14 @@ namespace DiscomonProject
             return acc;
         }
 
+        public static void UpdateUserInfo(ulong id, string name, string mention, string avatar)
+        {
+            var user = GetUser(id);
+            user.Name = name;
+            user.Mention = mention;
+            user.AvatarUrl = avatar;
+        }
+
         private static void SaveUsers()
         {
             System.Console.WriteLine("Saving users...");
@@ -72,6 +81,50 @@ namespace DiscomonProject
         public static bool DoesUserExist(ulong id)
         {
             return _dic.ContainsKey(id);
+        }
+
+        public static bool CharacterExists(ContextIds ids)
+        {
+            var user = GetUser(ids.UserId);
+            if(!user.HasCharacter)
+            {
+                MessageHandler.CharacterMissing(ids, user);
+                return false;
+            }
+            return true;
+        }
+
+        public static bool OtherCharacterExists(ContextIds ids, UserAccount otherUser)
+        {
+            var user = GetUser(ids.UserId);
+            if(!otherUser.HasCharacter)
+            {
+                MessageHandler.OtherCharacterMissing(ids, user);
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ValidCharacterLocation(ContextIds ids)
+        {
+            var user = GetUser(ids.UserId);
+            if(user.Char.CurrentGuildId != ids.GuildId)
+            {
+                MessageHandler.InvalidCharacterLocation(ids, user);
+                return false;
+            }
+            return true;
+        }
+
+        public static bool OtherCharacterLocation(ContextIds ids, UserAccount otherUser)
+        {
+            var user = GetUser(ids.UserId);
+            if(otherUser.Char.CurrentGuildId != ids.GuildId)
+            {
+                MessageHandler.InvalidOtherCharacterLocation(ids, user, otherUser);
+                return false;
+            }
+            return true;
         }
     }
 }

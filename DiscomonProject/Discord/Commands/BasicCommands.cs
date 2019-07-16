@@ -23,7 +23,7 @@ namespace DiscomonProject.Discord
         {
             UserAccount acc = UserHandler.GetUser(Context.User.Id);
 
-            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}\nAvatar: {acc.AvatarUrl}\nGuildID: {acc.CurrentGuildId}");
+            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}\nAvatar: {acc.AvatarUrl}\nGuildID: {acc.Char.CurrentGuildId}");
         }
 
         [Command("monstat")]
@@ -43,21 +43,32 @@ namespace DiscomonProject.Discord
             var fromUser = UserHandler.GetUser(Context.User.Id);
             var toUser = UserHandler.GetUser(target.Id);
 
+            ContextIds idList = new ContextIds(Context);
+
+            if(!UserHandler.CharacterExists(idList))
+                return;
+            if(!UserHandler.OtherCharacterExists(idList, toUser))
+                return;
+            if(!UserHandler.ValidCharacterLocation(idList))
+                return;
+            if(!UserHandler.OtherCharacterLocation(idList, toUser))
+                return;
+
             //Check that the user did not target themself with the command
             if(fromUser.UserId != toUser.UserId)
             {
                 //Set the current user's combat request ID to the user specified
-                fromUser.CombatRequest = toUser.UserId;
+                fromUser.Char.CombatRequest = toUser.UserId;
 
                 //Check if the specified user has a combat request ID that is the current user's ID
-                if(toUser.CombatRequest == fromUser.UserId)
+                if(toUser.Char.CombatRequest == fromUser.UserId)
                 {
                     //Make sure neither users are in combat while sending response request
-                    if(fromUser.InCombat)
+                    if(fromUser.Char.InCombat)
                     {
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot start a duel while in combat!");
                     }
-                    else if(toUser.InCombat)
+                    else if(toUser.Char.InCombat)
                     {
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot start a duel with a player who is in combat!");
                     }
@@ -65,18 +76,25 @@ namespace DiscomonProject.Discord
                     {
                         //Start duel
                         await Context.Channel.SendMessageAsync($"The duel between {target.Mention} and {Context.User.Mention} will now begin!");
-                        fromUser.InCombat = true;
-                        toUser.InCombat = true;
+                        fromUser.Char.InCombat = true;
+                        fromUser.Char.InPvpCombat = true;
+                        fromUser.Char.CombatRequest = 0;
+                        fromUser.Char.InCombatWith = toUser.UserId;
+
+                        toUser.Char.InCombat = true;
+                        toUser.Char.InPvpCombat = true;
+                        toUser.Char.CombatRequest = 0;
+                        toUser.Char.InCombatWith = fromUser.UserId;
                     }
                 }
                 else
                 {
                     //Make sure neither users are in combat while sending initial request
-                    if(fromUser.InCombat)
+                    if(fromUser.Char.InCombat)
                     {
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot request a duel when you are in combat!");
                     }
-                    else if(toUser.InCombat)
+                    else if(toUser.Char.InCombat)
                     {
                         await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot duel a player who is in combat!");
                     }
@@ -92,6 +110,35 @@ namespace DiscomonProject.Discord
                 //Tell the current user they have are a dum dum
                 await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot duel yourself.");
             }
+        }
+
+        [Command("exitcombat")]
+        public async Task ExitCombat()
+        {
+            var user = UserHandler.GetUser(Context.User.Id);
+
+            if(user.Char.InPvpCombat)
+            {
+                var opponent = UserHandler.GetUser(user.Char.InCombatWith);
+                user.Char.InCombat = false;
+                user.Char.InPvpCombat = false;
+                user.Char.InCombatWith = 0;
+
+                opponent.Char.InCombat = false;
+                opponent.Char.InPvpCombat = false;
+                opponent.Char.InCombatWith = 0;
+
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} has forfeited the match! {opponent.Name} wins by default.");
+            }
+            else if(user.Char.InCombat)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} blacked out!");
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention}, you cannot exit combat if you are not in combat.");
+            }
+            
         }
     }
 }

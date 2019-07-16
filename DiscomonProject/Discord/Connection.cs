@@ -62,11 +62,6 @@ namespace DiscomonProject.Discord
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
 
-            /* -- UNUSED FOR NOW, TEST BEFORE REMOVING --
-            Check if the user has an existing account. If not, create one.
-            if(!UserHandler.DoesUserExist(message.Author.Id))
-                UserHandler.CreateNewUser(context.User.Id);*/
-
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.
             await _commands.ExecuteAsync(context, argPos, services: null);
@@ -74,6 +69,9 @@ namespace DiscomonProject.Discord
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
+            //Update user's info
+            UserHandler.UpdateUserInfo(context.User.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+
             // if a command isn't found, log that info to console and exit this method
             if (!command.IsSpecified)
             {
