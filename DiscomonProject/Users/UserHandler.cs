@@ -70,6 +70,7 @@ namespace DiscomonProject
             user.Name = name;
             user.Mention = mention;
             user.AvatarUrl = avatar;
+            SaveUsers();
         }
 
         private static void SaveUsers()
@@ -83,48 +84,43 @@ namespace DiscomonProject
             return _dic.ContainsKey(id);
         }
 
-        public static bool CharacterExists(ContextIds ids)
+        public static async Task CharacterExists(ContextIds ids)
         {
             var user = GetUser(ids.UserId);
             if(!user.HasCharacter)
             {
-                MessageHandler.CharacterMissing(ids, user);
-                return false;
+                await MessageHandler.CharacterMissing(ids);
+                throw new InvalidCharacterStateException("character doesn't exist");
             }
-            return true;
         }
 
-        public static bool OtherCharacterExists(ContextIds ids, UserAccount otherUser)
+        public static async Task OtherCharacterExists(ContextIds ids, UserAccount otherUser)
         {
-            var user = GetUser(ids.UserId);
             if(!otherUser.HasCharacter)
             {
-                MessageHandler.OtherCharacterMissing(ids, user);
-                return false;
+                await MessageHandler.OtherCharacterMissing(ids);
+                throw new InvalidCharacterStateException("other player's character doesn't exist");
             }
-            return true;
         }
 
-        public static bool ValidCharacterLocation(ContextIds ids)
+        public static async Task ValidCharacterLocation(ContextIds ids)
         {
             var user = GetUser(ids.UserId);
             if(user.Char.CurrentGuildId != ids.GuildId)
             {
-                MessageHandler.InvalidCharacterLocation(ids, user);
-                return false;
+                await MessageHandler.InvalidCharacterLocation(ids);
+                throw new InvalidCharacterStateException("character in incorrect location");
             }
-            return true;
         }
 
-        public static bool OtherCharacterLocation(ContextIds ids, UserAccount otherUser)
+        public static async Task OtherCharacterLocation(ContextIds ids, UserAccount otherUser)
         {
             var user = GetUser(ids.UserId);
             if(otherUser.Char.CurrentGuildId != ids.GuildId)
             {
-                MessageHandler.InvalidOtherCharacterLocation(ids, user, otherUser);
-                return false;
+                await MessageHandler.InvalidOtherCharacterLocation(ids, otherUser);
+                throw new InvalidCharacterStateException("other player's character in a different location");
             }
-            return true;
         }
     }
 }

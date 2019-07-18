@@ -37,6 +37,12 @@ namespace DiscomonProject.Discord
             .ConfigureAwait(false);
         }
 
+        [Command("startadventure")]
+        public async Task StartAdventure()
+        {
+            var user = UserHandler.GetUser(Context.User.Id);
+        }
+
         [Command("duel")]
         public async Task Duel(SocketGuildUser target)
         {
@@ -45,14 +51,18 @@ namespace DiscomonProject.Discord
 
             ContextIds idList = new ContextIds(Context);
 
-            if(!UserHandler.CharacterExists(idList))
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.OtherCharacterExists(idList, toUser);
+                await UserHandler.ValidCharacterLocation(idList);
+                await UserHandler.OtherCharacterLocation(idList, toUser);
+            }
+            catch(InvalidCharacterStateException e)
+            {
                 return;
-            if(!UserHandler.OtherCharacterExists(idList, toUser))
-                return;
-            if(!UserHandler.ValidCharacterLocation(idList))
-                return;
-            if(!UserHandler.OtherCharacterLocation(idList, toUser))
-                return;
+            }
 
             //Check that the user did not target themself with the command
             if(fromUser.UserId != toUser.UserId)
@@ -116,6 +126,19 @@ namespace DiscomonProject.Discord
         public async Task ExitCombat()
         {
             var user = UserHandler.GetUser(Context.User.Id);
+            
+            ContextIds idList = new ContextIds(Context);
+            
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
 
             if(user.Char.InPvpCombat)
             {
@@ -128,7 +151,7 @@ namespace DiscomonProject.Discord
                 opponent.Char.InPvpCombat = false;
                 opponent.Char.InCombatWith = 0;
 
-                await Context.Channel.SendMessageAsync($"{Context.User.Mention} has forfeited the match! {opponent.Name} wins by default.");
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} has forfeited the match! {opponent.Char.Name} wins by default.");
             }
             else if(user.Char.InCombat)
             {
