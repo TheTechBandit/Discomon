@@ -11,20 +11,12 @@ namespace DiscomonProject
         public Character Char { get; set; }
         public string AvatarUrl { get; set; }
         public bool HasCharacter { get; set; }
-
-        public bool CompareLocation(ulong guild)
-        {
-            if(Char.CurrentGuildId == guild)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public int PromptState { get; set; }
 
         public UserAccount()
         {
             HasCharacter = false;
+            PromptState = -1;
         }
         
     }

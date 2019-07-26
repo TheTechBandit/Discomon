@@ -14,7 +14,7 @@ namespace DiscomonProject
         public override ArrayList EvGains { get; } = new ArrayList{1, 0, 0, 1, 0};
         public override string Typing { get; set; } = "Beast";
         public override int DexNum { get; } = 999;
-        public override string DexEntry { get; } = "Slowpoke uses its tail to catch prey by dipping it in water at the side of a river. However, this Pokémon often forgets what it’s doing and often spends entire days just loafing at water’s edge.";
+        public override string DexEntry { get; } = "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.";
 
 
         public Snoril() : base()

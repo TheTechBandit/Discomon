@@ -6,7 +6,7 @@ namespace DiscomonProject
     {
         public string Name { get; set; }
         public ulong CurrentGuildId { get; set; }
-        public ulong CurrentGuildName { get; set; }
+        public string CurrentGuildName { get; set; }
         public BasicMon[] Party { get; set; }
         public ArrayList PC { get; set; }
         public ulong CombatRequest { get; set; }

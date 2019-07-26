@@ -18,8 +18,8 @@ namespace DiscomonProject
         public abstract string DexEntry { get; }
         public string Nickname { get; set; }
         public string Gender { get; set; }
-        public UserAccount Catcher { get; set; }
-        public UserAccount Owner { get; set; }
+        public ulong CatcherID { get; set; }
+        public ulong OwnerID { get; set; }
         public int Level { get; set; }
         public ArrayList BaseList;
         public ArrayList Ivs;
@@ -42,8 +42,8 @@ namespace DiscomonProject
             Level = 20;
             Nickname = Species;
             Gender = RandomGender();
-            Catcher = null;
-            Owner = null;
+            CatcherID = 0;
+            OwnerID = 0;
             InitializeLists();
             GenerateIvs();
             SetRandomNature();
@@ -55,8 +55,8 @@ namespace DiscomonProject
             Level = customLvl;
             Nickname = Species;
             Gender = RandomGender();
-            Catcher = null;
-            Owner = null;
+            CatcherID = 0;
+            OwnerID = 0;
             InitializeLists();
             Ivs.Clear();
             Evs.Clear();
@@ -246,6 +246,11 @@ namespace DiscomonProject
         public string CurStatsToString()
         {
             return $"```diff\nHP:{CurStats[0]}\n-Attack:{CurStats[1]}-\nDefense:{CurStats[2]}\n+Affinity:{CurStats[3]}+\nSpeed:{CurStats[4]}```";
+        }
+
+        public string BaseStatsToString()
+        {
+            return $"```diff\nHP:{BaseList[0]}\nAttack:{BaseList[1]}\nDefense:{BaseList[2]}\nAffinity:{BaseList[3]}\nSpeed:{BaseList[4]}```";
         }
 
         public string IvsToString()
