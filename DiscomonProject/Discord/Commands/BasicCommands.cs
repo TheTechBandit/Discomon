@@ -37,6 +37,24 @@ namespace DiscomonProject.Discord
             .ConfigureAwait(false);
         }
 
+        [Command("debuginfo")]
+        public async Task DebugInfo(SocketGuildUser target)
+        {
+            ContextIds ids = new ContextIds(Context);
+            UserAccount user;
+
+            if(target != null)
+            {
+                user = UserHandler.GetUser(target.Id);
+            }
+            else
+            {
+                user = UserHandler.GetUser(ids.UserId);
+            }
+
+            await MessageHandler.SendMessage(ids.GuildId, ids.ChannelId, user.DebugString());
+        }
+
         [Command("debugreset")]
         public async Task DebugReset()
         {

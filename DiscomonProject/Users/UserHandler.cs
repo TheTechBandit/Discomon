@@ -17,13 +17,13 @@ namespace DiscomonProject
         static UserHandler()
         {
             System.Console.WriteLine("Loading User Accounts...");
-
+            
             //Access JsonStorage to load user list into memory
             filepath = "Users/UserList";
 
             _dic = new Dictionary<ulong, UserAccount>();
             _jsonStorage = new JsonStorage();
-            
+
             foreach(KeyValuePair<ulong, UserAccount> entry in _jsonStorage.RestoreObject<Dictionary<ulong, UserAccount>>(filepath))
             {
                 _dic.Add(entry.Key, (UserAccount)entry.Value);

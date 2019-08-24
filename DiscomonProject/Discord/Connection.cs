@@ -31,7 +31,7 @@ namespace DiscomonProject.Discord
             _client.JoinedGuild += HandleGuildJoin;
 
             _commands.CommandExecuted += CommandExecutedAsync;
-
+            
             _client.MessageReceived += HandleCommandAsync;
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
