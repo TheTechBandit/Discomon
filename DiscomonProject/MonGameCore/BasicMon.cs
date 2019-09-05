@@ -75,7 +75,7 @@ namespace DiscomonProject
             NatureMods =  new ArrayList();
             CurStats = new ArrayList();
 
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 5; i++)
             {
                 BaseList.Add(0);
                 Ivs.Add(0);
@@ -93,7 +93,7 @@ namespace DiscomonProject
 
         private void GenerateIvs()
         {
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 5; i++)
             {
                 Ivs[i] = RandomGen.Gen.Next(1, 32);
             }
@@ -136,7 +136,7 @@ namespace DiscomonProject
             }
 
             //Loop through all EVs
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 5; i++)
             {
                 //Check that the current EV is at 255 or lower
                 if((int)Evs[i] <= 255)
@@ -157,7 +157,7 @@ namespace DiscomonProject
         public int GetTotalEvs()
         {
             int total = 0;
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 5; i++)
             {
                 total += (int)Evs[i];
             }
@@ -186,7 +186,7 @@ namespace DiscomonProject
             }
             string[] splitNat = fullNat.Split("/");
 
-            for(int i = 0; i < 6; i++)
+            for(int i = 0; i < 5; i++)
             {
                 NatureMods[i] = 1.0;
             }

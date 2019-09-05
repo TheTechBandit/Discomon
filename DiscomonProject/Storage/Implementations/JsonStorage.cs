@@ -11,6 +11,8 @@ namespace DiscomonProject.Storage.Implementations
         public T RestoreObject<T>(string key)
         {
             var json = File.ReadAllText($"{key}.json");
+            System.Console.WriteLine(json);
+            //THIS LINE CAUSING ERRORS
             return (T)JsonConvert.DeserializeObject<T>(json);
         }
 

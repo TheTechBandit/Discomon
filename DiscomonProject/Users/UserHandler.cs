@@ -29,6 +29,11 @@ namespace DiscomonProject
                 _dic.Add(entry.Key, (UserAccount)entry.Value);
             }
 
+            foreach(KeyValuePair<ulong, UserAccount> kvp in _dic)
+            {
+                Console.WriteLine($"Key: {kvp.Key}\nValue: {kvp.Value}\n");
+            }
+
             System.Console.WriteLine($"Successfully loaded {_dic.Count} users.");
         }
 
@@ -46,7 +51,6 @@ namespace DiscomonProject
             else
             {
                 CreateNewUser(id);
-                SaveUsers();
                 return _dic[id];
             }
         }

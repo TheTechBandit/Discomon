@@ -7,7 +7,7 @@ namespace DiscomonProject
         public string Name { get; set; }
         public ulong CurrentGuildId { get; set; }
         public string CurrentGuildName { get; set; }
-        public BasicMon[] Party { get; set; }
+        public ArrayList Party { get; set; }
         public ArrayList PC { get; set; }
         public ulong CombatRequest { get; set; }
         public ulong InCombatWith { get; set; }
@@ -16,7 +16,7 @@ namespace DiscomonProject
 
         public Character()
         {
-            Party = new BasicMon[6];
+            Party = new ArrayList();
             PC = new ArrayList();
             InCombat = false;
             InPvpCombat = false;

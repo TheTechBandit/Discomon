@@ -27,13 +27,14 @@ namespace DiscomonProject.Discord
         }
 
         [Command("monstat")]
-        public async Task MonStat()
+        public async Task MonStat(int num)
         {
-            BasicMon mon = new Suki(20, new ArrayList{17, 5, 13, 16, 14}, new ArrayList{0, 0, 0, 0, 0}, "Hasty");
+            ContextIds ids = new ContextIds(Context);
+            UserAccount user = UserHandler.GetUser(ids.UserId);
 
              await Context.Channel.SendMessageAsync(
             "",
-            embed: MonEmbedBuilder.MonStats(mon))
+            embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[0]))
             .ConfigureAwait(false);
         }
 
@@ -127,13 +128,13 @@ namespace DiscomonProject.Discord
                 case 2:
                     if(text.Equals("snoril") || text.Equals("1"))
                     {
-                        user.Char.Party[0] = new Snoril();
+                        user.Char.Party.Add(new Snoril());
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Snoril as your partner! Good luck on your adventure.");
                     }
                     else if(text.Equals("suki") || text.Equals("2"))
                     {
-                        user.Char.Party[0] = new Suki();
+                        user.Char.Party.Add(new Suki());
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Suki as your partner! Good luck on your adventure.");
                     }
