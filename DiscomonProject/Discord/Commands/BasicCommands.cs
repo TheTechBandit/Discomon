@@ -31,7 +31,7 @@ namespace DiscomonProject.Discord
         {
             ContextIds ids = new ContextIds(Context);
             UserAccount user = UserHandler.GetUser(ids.UserId);
-
+            
              await Context.Channel.SendMessageAsync(
             "",
             embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[0]))
@@ -87,7 +87,7 @@ namespace DiscomonProject.Discord
                 case 0:
                     if(text.Equals("confirm"))
                     {
-                        user.Char = new Character();
+                        user.Char = new Character(true);
                         user.Char.CurrentGuildId = ids.GuildId;
                         user.Char.CurrentGuildName = Context.Guild.Name;
                         user.PromptState = 1;
@@ -112,11 +112,11 @@ namespace DiscomonProject.Discord
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, your character's name is now {originalText}. Now you must choose your partner.");
 
                         await Context.Channel.SendMessageAsync(
-                        "", embed: MonEmbedBuilder.MonDex(new Snoril()))
+                        "", embed: MonEmbedBuilder.MonDex(new Snoril(true)))
                         .ConfigureAwait(false);
 
                         await Context.Channel.SendMessageAsync(
-                        "", embed: MonEmbedBuilder.MonDex(new Suki()))
+                        "", embed: MonEmbedBuilder.MonDex(new Suki(true)))
                         .ConfigureAwait(false);
                     }
                     else
@@ -128,13 +128,13 @@ namespace DiscomonProject.Discord
                 case 2:
                     if(text.Equals("snoril") || text.Equals("1"))
                     {
-                        user.Char.Party.Add(new Snoril());
+                        user.Char.Party.Add(new Snoril(true));
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Snoril as your partner! Good luck on your adventure.");
                     }
                     else if(text.Equals("suki") || text.Equals("2"))
                     {
-                        user.Char.Party.Add(new Suki());
+                        user.Char.Party.Add(new Suki(true));
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Suki as your partner! Good luck on your adventure.");
                     }

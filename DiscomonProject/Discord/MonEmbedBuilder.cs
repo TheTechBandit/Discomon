@@ -13,10 +13,10 @@ namespace DiscomonProject.Discord
         public static Embed MonStats(BasicMon mon)
         {
             var builder = new EmbedBuilder()
-	        .WithTitle(mon.Typing)
-        	.WithDescription($"DEX NO. {mon.DexNum}")
-        	.WithColor(139, 87, 42)
-        	.WithTimestamp(DateTimeOffset.FromUnixTimeMilliseconds(1560726232528))
+            .WithTitle(mon.Typing)
+            .WithDescription($"DEX NO. {mon.DexNum}")
+            .WithColor(139, 87, 42)
+            .WithTimestamp(DateTimeOffset.FromUnixTimeMilliseconds(1560726232528))
             .WithFooter(footer => {
                 footer
                     .WithText($"Caught By {UserHandler.GetUser(mon.CatcherID).Name}");

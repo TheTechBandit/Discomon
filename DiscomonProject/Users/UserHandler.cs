@@ -59,7 +59,7 @@ namespace DiscomonProject
         {
             System.Console.WriteLine($"Creating new user with ID: {id}");
 
-            UserAccount acc = new UserAccount 
+            UserAccount acc = new UserAccount(true)
             {
                 UserId = id
             };

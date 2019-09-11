@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace DiscomonProject
 {
@@ -7,8 +10,8 @@ namespace DiscomonProject
         public string Name { get; set; }
         public ulong CurrentGuildId { get; set; }
         public string CurrentGuildName { get; set; }
-        public ArrayList Party { get; set; }
-        public ArrayList PC { get; set; }
+        public List<BasicMon> Party { get; set; }
+        public List<BasicMon> PC { get; set; }
         public ulong CombatRequest { get; set; }
         public ulong InCombatWith { get; set; }
         public bool InCombat { get; set; }
@@ -16,8 +19,13 @@ namespace DiscomonProject
 
         public Character()
         {
-            Party = new ArrayList();
-            PC = new ArrayList();
+            
+        }
+
+        public Character(bool newchar)
+        {
+            Party = new List<BasicMon>();
+            PC = new List<BasicMon>();
             InCombat = false;
             InPvpCombat = false;
         }

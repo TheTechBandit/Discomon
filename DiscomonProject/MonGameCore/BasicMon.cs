@@ -1,43 +1,45 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace DiscomonProject
 {
-    public abstract class BasicMon
+    public class BasicMon
     {
-        public abstract string Species { get; }
-        public abstract string ArtURL { get; }
-        public abstract int BaseHP { get; }
-        public abstract int BaseAtt { get; }
-        public abstract int BaseDef { get; }
-        public abstract int BaseAff { get; }
-        public abstract int BaseSpd { get; }
-        public abstract ArrayList EvGains { get; }
-        public abstract string Typing { get; set; }
-        public abstract int DexNum { get; }
-        public abstract string DexEntry { get; }
+        public virtual string Species { get; }
+        public virtual string ArtURL { get; }
+        public virtual int BaseHP { get; }
+        public virtual int BaseAtt { get; }
+        public virtual int BaseDef { get; }
+        public virtual int BaseAff { get; }
+        public virtual int BaseSpd { get; }
+        [JsonIgnore]
+        public virtual List<int> EvGains { get; }
+        public virtual string Typing { get; set; }
+        public virtual int DexNum { get; }
+        public virtual string DexEntry { get; }
         public string Nickname { get; set; }
         public string Gender { get; set; }
         public ulong CatcherID { get; set; }
         public ulong OwnerID { get; set; }
         public int Level { get; set; }
         public ArrayList BaseList;
-        public ArrayList Ivs;
-        public ArrayList Evs;
+        public List<int> Ivs;
+        public List<int> Evs;
         public ArrayList NatureMods;
         public ArrayList CurStats;
-        public readonly ArrayList NatureList = new ArrayList 
-        {
-            "Rash/Att/Def", "Blunt/Att/Aff", "Careful/Att/Spd",
-            "Peaceful/Def/Att", "Stable/Def/Aff", "Sturdy/Def/Spd",
-            "Calm/Aff/Att", "Shy/Aff/Def", "Pensive/Aff/Spd",
-            "Witty/Spd/Att", "Impulsive/Spd/Def", "Hasty/Spd/Aff"
-        };
+        public List<string> NatureList;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
 
         public BasicMon()
+        {
+            
+        }
+
+        public BasicMon(bool initializing)
         {
             Level = 20;
             Nickname = Species;
@@ -50,7 +52,7 @@ namespace DiscomonProject
             Heal();
         }
 
-        public BasicMon(int customLvl, ArrayList customIvs, ArrayList customEvs, string customNature)
+        public BasicMon(int customLvl, List<int> customIvs, List<int> customEvs, string customNature)
         {
             Level = customLvl;
             Nickname = Species;
@@ -70,8 +72,15 @@ namespace DiscomonProject
         private void InitializeLists()
         {
             BaseList = new ArrayList();
-            Ivs = new ArrayList();
-            Evs = new ArrayList();
+            NatureList = new List<string>
+            {
+                "Rash/Att/Def", "Blunt/Att/Aff", "Careful/Att/Spd",
+                "Peaceful/Def/Att", "Stable/Def/Aff", "Sturdy/Def/Spd",
+                "Calm/Aff/Att", "Shy/Aff/Def", "Pensive/Aff/Spd",
+                "Witty/Spd/Att", "Impulsive/Spd/Def", "Hasty/Spd/Aff"
+            };
+            Ivs = new List<int>();
+            Evs = new List<int>();
             NatureMods =  new ArrayList();
             CurStats = new ArrayList();
 
@@ -302,7 +311,7 @@ namespace DiscomonProject
         //Helper method used in IvsToString()
         private string CheckPerfectIv(int index)
         {
-            if((int)Ivs[index] == 31)
+            if(Ivs[index] == 31)
             {
                 return "$";
             }
@@ -315,7 +324,7 @@ namespace DiscomonProject
         //Helper method used in EvsToString()
         private string CheckPerfectEv(int index)
         {
-            if((int)Evs[index] == 255)
+            if(Evs[index] == 255)
             {
                 return "$";
             }

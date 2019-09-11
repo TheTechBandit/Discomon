@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using DiscomonProject.Discord;
+using Newtonsoft.Json;
 
 namespace DiscomonProject
 {
@@ -14,6 +16,10 @@ namespace DiscomonProject
         public int PromptState { get; set; }
 
         public UserAccount()
+        {
+
+        }
+        public UserAccount(bool newuser)
         {
             HasCharacter = false;
             PromptState = -1;
