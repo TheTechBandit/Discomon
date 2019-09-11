@@ -24,11 +24,11 @@ namespace DiscomonProject
         public ulong CatcherID { get; set; }
         public ulong OwnerID { get; set; }
         public int Level { get; set; }
-        public ArrayList BaseList;
+        public List<int> BaseList;
         public List<int> Ivs;
         public List<int> Evs;
-        public ArrayList NatureMods;
-        public ArrayList CurStats;
+        public List<double> NatureMods;
+        public List<int> CurStats;
         public List<string> NatureList;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
@@ -36,12 +36,12 @@ namespace DiscomonProject
 
         public BasicMon()
         {
-            
+
         }
 
-        public BasicMon(bool initializing)
+        public BasicMon(bool deflt)
         {
-            Level = 20;
+            Level = 5;
             Nickname = Species;
             Gender = RandomGender();
             CatcherID = 0;
@@ -71,7 +71,7 @@ namespace DiscomonProject
 
         private void InitializeLists()
         {
-            BaseList = new ArrayList();
+            BaseList = new List<int>();
             NatureList = new List<string>
             {
                 "Rash/Att/Def", "Blunt/Att/Aff", "Careful/Att/Spd",
@@ -81,8 +81,8 @@ namespace DiscomonProject
             };
             Ivs = new List<int>();
             Evs = new List<int>();
-            NatureMods =  new ArrayList();
-            CurStats = new ArrayList();
+            NatureMods =  new List<double>();
+            CurStats = new List<int>();
 
             for(int i = 0; i < 5; i++)
             {

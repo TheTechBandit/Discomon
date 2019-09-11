@@ -128,7 +128,11 @@ namespace DiscomonProject.Discord
                 case 2:
                     if(text.Equals("snoril") || text.Equals("1"))
                     {
-                        user.Char.Party.Add(new Snoril(true));
+                        user.Char.Party.Add(new Snoril(true)
+                        {
+                            CatcherID = user.UserId,
+                            OwnerID = user.UserId
+                        });
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Snoril as your partner! Good luck on your adventure.");
                     }
