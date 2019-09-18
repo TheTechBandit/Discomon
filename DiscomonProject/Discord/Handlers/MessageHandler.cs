@@ -26,7 +26,7 @@ namespace DiscomonProject.Discord
         public static async Task SendEmbedMessage(ContextIds context, string message, Embed emb)
         {
             await _client.GetGuild(context.GuildId).GetTextChannel(context.ChannelId).SendMessageAsync(
-            "",
+            message,
             embed: emb)
             .ConfigureAwait(false);
         }

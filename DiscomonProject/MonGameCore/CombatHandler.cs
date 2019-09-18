@@ -101,16 +101,22 @@ namespace DiscomonProject
                 }
                 else
                 {
-                    //Random one goes first. Implement later.
-                    await MessageHandler.SendMessage(main.Location, "Yo programming is hard. Ghub wins.");
-                    user.Char.ExitCombat();
-                    otherUser.Char.ExitCombat();
+                    var rand = RandomGen.Gen.Next(2);
+                    if(rand == 0)
+                    {
+                        await ApplyMoves(main, true);
+                    }
+                    else if(rand == 1)
+                    {
+                        await ApplyMoves(other, true);
+                    }
                 }
             }
             else
             {
                 await MessageHandler.AttackInvalid(main.Location, GetUserOfInstance(main));
             }
+
         }
 
         public static async Task ApplyMoves(CombatInstance instance, bool firstLoop)
