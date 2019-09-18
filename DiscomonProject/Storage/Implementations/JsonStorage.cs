@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using static System.IO.Directory;
 
 namespace DiscomonProject.Storage.Implementations
@@ -11,8 +12,6 @@ namespace DiscomonProject.Storage.Implementations
         public T RestoreObject<T>(string key)
         {
             var json = File.ReadAllText($"{key}.json");
-            System.Console.WriteLine(json);
-            //THIS LINE CAUSING ERRORS
             return (T)JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto
@@ -27,6 +26,7 @@ namespace DiscomonProject.Storage.Implementations
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });
+            json = JValue.Parse(json).ToString(Formatting.Indented); //Format Json
             File.WriteAllText(file, json);
         }
     }

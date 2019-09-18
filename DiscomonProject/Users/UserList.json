@@ -1,1 +1,505 @@
-{"0":{"UserId":0,"Mention":null,"Name":null,"Char":null,"AvatarUrl":null,"HasCharacter":false,"PromptState":-1},"615533301368881152":{"UserId":615533301368881152,"Mention":"<@!615533301368881152>","Name":"Debugger","Char":{"Name":"Deghub","CurrentGuildId":452818303635685386,"CurrentGuildName":"Discomon","Party":[{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[1,13,5,14,8],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,1.0,0.9],"CurStats":[21,14,11,13,9],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Male","CatcherID":615533301368881152,"OwnerID":615533301368881152,"Level":5,"Nature":"Careful","TotalHP":21,"CurrentHP":1,"Fainted":false}],"PC":[],"CombatRequest":0,"InCombatWith":175698286815084545,"InCombat":true,"InPvpCombat":true,"Combat":{"Location":{"UserId":615533301368881152,"ChannelId":453016453071896586,"GuildId":452818303635685386,"MessageId":623695366721765397},"ThisPlayer":615533301368881152,"OtherPlayer":175698286815084545,"CombatPhase":1,"ActiveMon":{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[1,13,5,14,8],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,1.0,0.9],"CurStats":[21,14,11,13,9],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Male","CatcherID":615533301368881152,"OwnerID":615533301368881152,"Level":5,"Nature":"Careful","TotalHP":21,"CurrentHP":1,"Fainted":false},"EnemyMon":{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[11,3,8,31,19],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,0.9,1.0],"CurStats":[22,13,11,12,10],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Female","CatcherID":175698286815084545,"OwnerID":175698286815084545,"Level":5,"Nature":"Blunt","TotalHP":22,"CurrentHP":2,"Fainted":false}}},"AvatarUrl":"https://cdn.discordapp.com/avatars/615533301368881152/9d0b3f207db31fc2495e7bb2668663bb.png?size=128","HasCharacter":true,"PromptState":2},"175698286815084545":{"UserId":175698286815084545,"Mention":"<@!175698286815084545>","Name":"Ghub","Char":{"Name":"Ghub","CurrentGuildId":452818303635685386,"CurrentGuildName":"Discomon","Party":[{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[11,3,8,31,19],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,0.9,1.0],"CurStats":[22,13,11,12,10],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Female","CatcherID":175698286815084545,"OwnerID":175698286815084545,"Level":5,"Nature":"Blunt","TotalHP":22,"CurrentHP":2,"Fainted":false}],"PC":[],"CombatRequest":0,"InCombatWith":615533301368881152,"InCombat":true,"InPvpCombat":true,"Combat":{"Location":{"UserId":615533301368881152,"ChannelId":453016453071896586,"GuildId":452818303635685386,"MessageId":623695366721765397},"ThisPlayer":175698286815084545,"OtherPlayer":615533301368881152,"CombatPhase":2,"ActiveMon":{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[11,3,8,31,19],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,0.9,1.0],"CurStats":[22,13,11,12,10],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Female","CatcherID":175698286815084545,"OwnerID":175698286815084545,"Level":5,"Nature":"Blunt","TotalHP":22,"CurrentHP":2,"Fainted":false},"EnemyMon":{"$type":"DiscomonProject.Suki, DiscomonProject","BaseList":[65,75,60,75,50],"Ivs":[1,13,5,14,8],"Evs":[0,0,0,0,0],"NatureMods":[1.0,1.1,1.0,1.0,0.9],"CurStats":[21,14,11,13,9],"NatureList":["Rash/Att/Def","Blunt/Att/Aff","Careful/Att/Spd","Peaceful/Def/Att","Stable/Def/Aff","Sturdy/Def/Spd","Calm/Aff/Att","Shy/Aff/Def","Pensive/Aff/Spd","Witty/Spd/Att","Impulsive/Spd/Def","Hasty/Spd/Aff"],"Species":"Suki","ArtURL":"https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png","BaseHP":65,"BaseAtt":75,"BaseDef":60,"BaseAff":75,"BaseSpd":50,"Typing":"Psychic","DexNum":999,"DexEntry":"Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.","Nickname":"Suki","Gender":"Male","CatcherID":615533301368881152,"OwnerID":615533301368881152,"Level":5,"Nature":"Careful","TotalHP":21,"CurrentHP":1,"Fainted":false}}},"AvatarUrl":"https://cdn.discordapp.com/avatars/175698286815084545/a_bb27c2f12e59a8afa837167a5f08daad.gif?size=128","HasCharacter":true,"PromptState":2}}
+{
+  "0": {
+    "UserId": 0,
+    "Mention": null,
+    "Name": null,
+    "Char": null,
+    "AvatarUrl": null,
+    "HasCharacter": false,
+    "PromptState": -1
+  },
+  "615533301368881152": {
+    "UserId": 615533301368881152,
+    "Mention": "<@!615533301368881152>",
+    "Name": "Debugger",
+    "Char": {
+      "Name": "Deghub",
+      "CurrentGuildId": 452818303635685386,
+      "CurrentGuildName": "Discomon",
+      "Party": [
+        {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            8,
+            17,
+            1,
+            15,
+            15
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.0,
+            1.1,
+            1.0,
+            0.9
+          ],
+          "CurStats": [
+            24,
+            12,
+            12,
+            14,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Female",
+          "CatcherID": 615533301368881152,
+          "OwnerID": 615533301368881152,
+          "Level": 5,
+          "Nature": "Sturdy",
+          "TotalHP": 24,
+          "CurrentHP": 24,
+          "Fainted": false,
+          "GenderSymbol": "♀"
+        }
+      ],
+      "PC": [],
+      "CombatRequest": 0,
+      "InCombatWith": 175698286815084545,
+      "InCombat": true,
+      "InPvpCombat": true,
+      "Combat": {
+        "Location": {
+          "UserId": 615533301368881152,
+          "ChannelId": 453016453071896586,
+          "GuildId": 452818303635685386,
+          "MessageId": 623956880514875419
+        },
+        "ThisPlayer": 615533301368881152,
+        "OtherPlayer": 175698286815084545,
+        "CombatPhase": 2,
+        "ActiveMon": {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            8,
+            17,
+            1,
+            15,
+            15
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.0,
+            1.1,
+            1.0,
+            0.9
+          ],
+          "CurStats": [
+            24,
+            12,
+            12,
+            14,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Female",
+          "CatcherID": 615533301368881152,
+          "OwnerID": 615533301368881152,
+          "Level": 5,
+          "Nature": "Sturdy",
+          "TotalHP": 24,
+          "CurrentHP": 24,
+          "Fainted": false,
+          "GenderSymbol": "♀"
+        },
+        "EnemyMon": {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            23,
+            21,
+            23,
+            8,
+            7
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.1,
+            1.0,
+            0.9,
+            1.0
+          ],
+          "CurStats": [
+            25,
+            13,
+            12,
+            11,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Male",
+          "CatcherID": 175698286815084545,
+          "OwnerID": 175698286815084545,
+          "Level": 5,
+          "Nature": "Blunt",
+          "TotalHP": 25,
+          "CurrentHP": 25,
+          "Fainted": false,
+          "GenderSymbol": "♂"
+        }
+      }
+    },
+    "AvatarUrl": "https://cdn.discordapp.com/avatars/615533301368881152/9d0b3f207db31fc2495e7bb2668663bb.png?size=128",
+    "HasCharacter": true,
+    "PromptState": 2
+  },
+  "175698286815084545": {
+    "UserId": 175698286815084545,
+    "Mention": "<@!175698286815084545>",
+    "Name": "Ghub",
+    "Char": {
+      "Name": "Ghub",
+      "CurrentGuildId": 452818303635685386,
+      "CurrentGuildName": "Discomon",
+      "Party": [
+        {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            23,
+            21,
+            23,
+            8,
+            7
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.1,
+            1.0,
+            0.9,
+            1.0
+          ],
+          "CurStats": [
+            25,
+            13,
+            12,
+            11,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Male",
+          "CatcherID": 175698286815084545,
+          "OwnerID": 175698286815084545,
+          "Level": 5,
+          "Nature": "Blunt",
+          "TotalHP": 25,
+          "CurrentHP": 25,
+          "Fainted": false,
+          "GenderSymbol": "♂"
+        }
+      ],
+      "PC": [],
+      "CombatRequest": 0,
+      "InCombatWith": 615533301368881152,
+      "InCombat": true,
+      "InPvpCombat": true,
+      "Combat": {
+        "Location": {
+          "UserId": 615533301368881152,
+          "ChannelId": 453016453071896586,
+          "GuildId": 452818303635685386,
+          "MessageId": 623956880514875419
+        },
+        "ThisPlayer": 175698286815084545,
+        "OtherPlayer": 615533301368881152,
+        "CombatPhase": 1,
+        "ActiveMon": {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            23,
+            21,
+            23,
+            8,
+            7
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.1,
+            1.0,
+            0.9,
+            1.0
+          ],
+          "CurStats": [
+            25,
+            13,
+            12,
+            11,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Male",
+          "CatcherID": 175698286815084545,
+          "OwnerID": 175698286815084545,
+          "Level": 5,
+          "Nature": "Blunt",
+          "TotalHP": 25,
+          "CurrentHP": 25,
+          "Fainted": false,
+          "GenderSymbol": "♂"
+        },
+        "EnemyMon": {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            8,
+            17,
+            1,
+            15,
+            15
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.0,
+            1.1,
+            1.0,
+            0.9
+          ],
+          "CurStats": [
+            24,
+            12,
+            12,
+            14,
+            6
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": "Beast",
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Female",
+          "CatcherID": 615533301368881152,
+          "OwnerID": 615533301368881152,
+          "Level": 5,
+          "Nature": "Sturdy",
+          "TotalHP": 24,
+          "CurrentHP": 24,
+          "Fainted": false,
+          "GenderSymbol": "♀"
+        }
+      }
+    },
+    "AvatarUrl": "https://cdn.discordapp.com/avatars/175698286815084545/a_bb27c2f12e59a8afa837167a5f08daad.gif?size=128",
+    "HasCharacter": true,
+    "PromptState": 2
+  }
+}

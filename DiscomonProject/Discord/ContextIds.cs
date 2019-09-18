@@ -9,6 +9,11 @@ namespace DiscomonProject.Discord
         public ulong GuildId { get; set; }
         public ulong MessageId { get; set; }
 
+        public ContextIds()
+        {
+            
+        }
+
         public ContextIds(SocketCommandContext context)
         {
             UserId = context.User.Id;

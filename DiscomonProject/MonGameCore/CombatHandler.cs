@@ -23,11 +23,13 @@ namespace DiscomonProject
             if(!PlayerHasValidParty(main))
             {
                 user.Char.ExitCombat();
+                otherUser.Char.ExitCombat();
                 await MessageHandler.SendMessage(main.Location, $"Duel canceled! {user.Mention} does not have a valid party.");
                 return;
             }
             else if(!PlayerHasValidParty(other))
             {
+                user.Char.ExitCombat();
                 otherUser.Char.ExitCombat();
                 await MessageHandler.SendMessage(main.Location, $"Duel canceled! {otherUser.Mention} does not have a valid party.");
                 return;
@@ -39,11 +41,11 @@ namespace DiscomonProject
 
             main.ActiveMon = mainMon;
             other.EnemyMon = mainMon;
-            await MessageHandler.SendEmbedMessage(main.Location, "", MonEmbedBuilder.MonSendOut(user, main.ActiveMon));
+            await MessageHandler.SendEmbedMessage(main.Location, $"{user.Mention} sends out **{main.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(main.ActiveMon));
 
             main.EnemyMon = otherMon;
             other.ActiveMon = otherMon;
-            await MessageHandler.SendEmbedMessage(main.Location, "", MonEmbedBuilder.MonSendOut(otherUser, other.ActiveMon));
+            await MessageHandler.SendEmbedMessage(main.Location, $"{otherUser.Mention} sends out **{other.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(other.ActiveMon));
 
             main.CombatPhase = 0;
             other.CombatPhase = 0;
@@ -115,7 +117,7 @@ namespace DiscomonProject
         {
             var other = GetOppositeInstance(instance);
             var user = GetUserOfInstance(instance);
-            var otherUser = GetUserOfInstance(instance);
+            var otherUser = GetUserOfInstance(other);
 
             //instance hits other
             await MessageHandler.UseMove(instance.Location, instance.ActiveMon, "Tackle");

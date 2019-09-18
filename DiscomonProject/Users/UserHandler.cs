@@ -83,6 +83,17 @@ namespace DiscomonProject
             _jsonStorage.StoreObject(_dic, filepath);
         }
 
+        public static void ClearUserData()
+        {
+            System.Console.WriteLine("Deleting all users.");
+            Dictionary<ulong, UserAccount> emptyDic = new Dictionary<ulong, UserAccount>();
+            emptyDic.Add(0, new UserAccount(true)
+            {
+                UserId = 0
+            });
+            _jsonStorage.StoreObject(emptyDic, filepath);
+        }
+
         public static bool DoesUserExist(ulong id)
         {
             return _dic.ContainsKey(id);

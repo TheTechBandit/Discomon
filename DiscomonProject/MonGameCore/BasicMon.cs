@@ -34,6 +34,7 @@ namespace DiscomonProject
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
         public bool Fainted { get; set; }
+        public string GenderSymbol { get; set; }
 
         public BasicMon()
         {
@@ -240,10 +241,12 @@ namespace DiscomonProject
         {
             if(RandomGen.Gen.Next(0, 2) == 1)
             {
+                GenderSymbol = "♂";
                 return "Male";
             }
             else
             {
+                GenderSymbol = "♀";
                 return "Female";
             }
         }

@@ -89,7 +89,7 @@ namespace DiscomonProject.Discord
 
         public static async Task TakesDamage(ContextIds context, BasicMon mon, string damage)
         {
-            await MessageHandler.SendMessage(context, $"{mon.Nickname} takes {damage} damage! {mon.CurrentHP}/{mon.TotalHP} HP");
+            await MessageHandler.SendEmbedMessage(context, $"{mon.Nickname} takes {damage} damage!", MonEmbedBuilder.FieldMon(mon));
         }
 
     }

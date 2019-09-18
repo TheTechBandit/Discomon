@@ -74,5 +74,34 @@ namespace DiscomonProject.Discord
 
             return embed;
         }
+
+        public static Embed FieldMon(BasicMon mon)
+        {
+            var builder = new EmbedBuilder()
+	        .WithTitle($"Lv. {mon.Level}")
+            .WithThumbnailUrl(mon.ArtURL)
+        	.WithColor(255, 62, 62)
+            .WithAuthor($"{mon.Nickname} {mon.GenderSymbol}")
+            .WithDescription($"{mon.CurrentHP}/{mon.TotalHP} HP");
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed EmptyPartySpot(int num)
+        {
+            string spots = "";
+            for(int i = 0; i < num; i++)
+            {
+                spots += "[ Empty ]\n\n";
+            }
+
+            var builder = new EmbedBuilder()
+	        .WithTitle(spots)
+        	.WithColor(62, 255, 62);
+            var embed = builder.Build();
+
+            return embed;
+        }
     }
 }
