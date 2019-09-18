@@ -32,7 +32,7 @@ namespace DiscomonProject.Discord
             ContextIds ids = new ContextIds(Context);
             UserAccount user = UserHandler.GetUser(ids.UserId);
             
-             await Context.Channel.SendMessageAsync(
+            await Context.Channel.SendMessageAsync(
             "",
             embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[0]))
             .ConfigureAwait(false);
@@ -138,7 +138,11 @@ namespace DiscomonProject.Discord
                     }
                     else if(text.Equals("suki") || text.Equals("2"))
                     {
-                        user.Char.Party.Add(new Suki(true));
+                        user.Char.Party.Add(new Suki(true)
+                        {
+                            CatcherID = user.UserId,
+                            OwnerID = user.UserId
+                        });
                         user.HasCharacter = true;
                         await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Suki as your partner! Good luck on your adventure.");
                     }
@@ -213,16 +217,22 @@ namespace DiscomonProject.Discord
                     else
                     {
                         //Start duel
+                        CombatInstance combat = new CombatInstance(idList, Context.User.Id, target.Id);
+
                         await Context.Channel.SendMessageAsync($"The duel between {target.Mention} and {Context.User.Mention} will now begin!");
                         fromUser.Char.InCombat = true;
                         fromUser.Char.InPvpCombat = true;
                         fromUser.Char.CombatRequest = 0;
                         fromUser.Char.InCombatWith = toUser.UserId;
+                        fromUser.Char.Combat = new CombatInstance(idList, fromUser.UserId, toUser.UserId);
 
                         toUser.Char.InCombat = true;
                         toUser.Char.InPvpCombat = true;
                         toUser.Char.CombatRequest = 0;
                         toUser.Char.InCombatWith = fromUser.UserId;
+                        toUser.Char.Combat = new CombatInstance(idList, toUser.UserId, fromUser.UserId);
+
+                        await CombatHandler.StartCombat(fromUser.Char.Combat);
                     }
                 }
                 else
@@ -250,6 +260,22 @@ namespace DiscomonProject.Discord
             }
         }
 
+        [Command("attack")]
+        public async Task Attack()
+        {
+            var user = UserHandler.GetUser(Context.User.Id);
+            ContextIds idList = new ContextIds(Context);
+            
+            if(user.Char.Combat == null)
+            {
+                await MessageHandler.SendMessage(idList, $"{user.Mention} aren't in combat right now!");
+            }
+            else
+            {
+                await CombatHandler.Attack(user.Char.Combat);
+            }
+        }
+
         [Command("exitcombat")]
         public async Task ExitCombat()
         {
@@ -271,13 +297,9 @@ namespace DiscomonProject.Discord
             if(user.Char.InPvpCombat)
             {
                 var opponent = UserHandler.GetUser(user.Char.InCombatWith);
-                user.Char.InCombat = false;
-                user.Char.InPvpCombat = false;
-                user.Char.InCombatWith = 0;
 
-                opponent.Char.InCombat = false;
-                opponent.Char.InPvpCombat = false;
-                opponent.Char.InCombatWith = 0;
+                user.Char.ExitCombat();
+                opponent.Char.ExitCombat();
 
                 await Context.Channel.SendMessageAsync($"{Context.User.Mention} has forfeited the match! {opponent.Char.Name} wins by default.");
             }

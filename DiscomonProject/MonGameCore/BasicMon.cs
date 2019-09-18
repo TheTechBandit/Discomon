@@ -33,6 +33,7 @@ namespace DiscomonProject
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
+        public bool Fainted { get; set; }
 
         public BasicMon()
         {
@@ -250,6 +251,7 @@ namespace DiscomonProject
         public void Heal()
         {
             CurrentHP = TotalHP;
+            Fainted = false;
         }
 
         public string CurStatsToString()
@@ -332,6 +334,12 @@ namespace DiscomonProject
             {
                 return "";
             }
+        }
+
+        public void TakeDamage(int damage)
+        {
+            CurrentHP -= damage;
+            if(CurrentHP < 0) CurrentHP = 0;
         }
         
     }

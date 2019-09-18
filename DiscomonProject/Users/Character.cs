@@ -16,6 +16,7 @@ namespace DiscomonProject
         public ulong InCombatWith { get; set; }
         public bool InCombat { get; set; }
         public bool InPvpCombat { get; set; }
+        public CombatInstance Combat { get; set; }
 
         public Character()
         {
@@ -28,6 +29,28 @@ namespace DiscomonProject
             PC = new List<BasicMon>();
             InCombat = false;
             InPvpCombat = false;
+            Combat = null;
+        }
+
+        public void ExitCombat()
+        {
+            InCombat = false;
+            InPvpCombat = false;
+            CombatRequest = 0;
+            InCombatWith = 0;
+            Combat = null;
+        }
+
+        public BasicMon FirstUsableMon()
+        {
+            for(int i = 0; i < Party.Count; i++)
+            {
+                if(Party[i].CurrentHP > 0)
+                {
+                    return Party[i];
+                }
+            }
+            return null;
         }
     }
 }

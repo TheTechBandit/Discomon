@@ -23,6 +23,7 @@ namespace DiscomonProject
         {
             
         }
+        
         public Suki(bool newmon) : base(newmon)
         {
 

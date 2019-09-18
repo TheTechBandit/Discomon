@@ -63,5 +63,16 @@ namespace DiscomonProject.Discord
 
             return embed;
         }
+
+        public static Embed MonSendOut(UserAccount user, BasicMon mon)
+        {
+            var builder = new EmbedBuilder()
+	        .WithTitle($"{user.Name} sends out **{mon.Nickname}**!")
+            .WithThumbnailUrl(mon.ArtURL)
+        	.WithColor(255, 62, 62);
+            var embed = builder.Build();
+
+            return embed;
+        }
     }
 }
