@@ -29,7 +29,7 @@ namespace DiscomonProject.Discord
         [Command("debuginfo")]
         public async Task DebugInfo(SocketGuildUser target)
         {
-            ContextIds ids = new ContextIds(Context);
+            ContextIds idList = new ContextIds(Context);
             UserAccount user;
 
             if(target != null)
@@ -38,10 +38,10 @@ namespace DiscomonProject.Discord
             }
             else
             {
-                user = UserHandler.GetUser(ids.UserId);
+                user = UserHandler.GetUser(idList.UserId);
             }
 
-            await MessageHandler.SendMessage(ids.GuildId, ids.ChannelId, user.DebugString());
+            await MessageHandler.SendMessage(idList, user.DebugString());
         }
 
         [Command("debugresetchar")]
@@ -62,6 +62,14 @@ namespace DiscomonProject.Discord
             ContextIds idList = new ContextIds(Context);
             await MessageHandler.SendMessage(idList, "User data cleared. Reboot bot to take effect.");
             UserHandler.ClearUserData();
+        }
+
+        [Command("whisper")]
+        public async Task Whisper()
+        {
+            ContextIds idList = new ContextIds(Context);
+
+            await MessageHandler.SendDM(idList.UserId, "_Hello?_");
         }
     }
 }

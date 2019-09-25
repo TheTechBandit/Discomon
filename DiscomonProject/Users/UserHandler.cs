@@ -68,9 +68,10 @@ namespace DiscomonProject
             return acc;
         }
 
-        public static void UpdateUserInfo(ulong id, string name, string mention, string avatar)
+        public static void UpdateUserInfo(ulong id, ulong dm, string name, string mention, string avatar)
         {
             var user = GetUser(id);
+            user.DmId = dm;
             user.Name = name;
             user.Mention = mention;
             user.AvatarUrl = avatar;

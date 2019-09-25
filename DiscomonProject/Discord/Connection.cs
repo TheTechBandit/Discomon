@@ -32,7 +32,7 @@ namespace DiscomonProject.Discord
 
             _commands.CommandExecuted += CommandExecutedAsync;
             
-            _client.MessageReceived += HandleCommandAsync;
+            _client.MessageReceived += MessageRecieved;
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
 
@@ -41,10 +41,10 @@ namespace DiscomonProject.Discord
 
         private async Task HandleGuildJoin(SocketGuild guild)
         {
-            await guild.DefaultChannel.SendMessageAsync("Hello! I am MonBot. By default, my command prefix is **!** \nIf you would like to change this or other settings, type **!settings**. \nIf you would like to learn more about me and what I do, use **!info**. \nTo create a character, type **!createcharacter**. \nTo create a town, type **!foundtown**.");
+            await guild.DefaultChannel.SendMessageAsync("Hello! I am MonBot. By default, my command prefix is **!** \nIf you would like to change this or other settings, type **!settings**. \nIf you would like to learn more about me and what I do, use **!info**. \nTo create a character, type **!startadventure**. \nTo create a town, type **!foundtown**.");
         }
 
-        private async Task HandleCommandAsync(SocketMessage messageParam)
+        private async Task MessageRecieved(SocketMessage messageParam)
         {
             // Don't process the command if it was a system message
             var message = messageParam as SocketUserMessage;
@@ -67,7 +67,7 @@ namespace DiscomonProject.Discord
             await _commands.ExecuteAsync(context, argPos, services: null);
 
             //Update user's info
-            UserHandler.UpdateUserInfo(context.User.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+            UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)

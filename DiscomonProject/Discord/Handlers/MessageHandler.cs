@@ -31,6 +31,19 @@ namespace DiscomonProject.Discord
             .ConfigureAwait(false);
         }
 
+        public static async Task SendDM(ulong userId, string message)
+        {
+            await _client.GetUser(userId).SendMessageAsync(message);
+        }
+
+        public static async Task SendDM(ulong userId, string message, Embed emb)
+        {
+            await _client.GetUser(userId).SendMessageAsync(
+                message,
+                embed: emb)
+                .ConfigureAwait(false);
+        }
+
 
         /* PRESET MESSAGES */
         public static async Task CharacterMissing(ContextIds context)

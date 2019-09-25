@@ -8,6 +8,7 @@ namespace DiscomonProject
     public class UserAccount
     {
         public ulong UserId { get; set; }
+        public ulong DmId { get; set; }
         public string Mention { get; set; }
         public string Name { get; set; }
         public Character Char { get; set; }
