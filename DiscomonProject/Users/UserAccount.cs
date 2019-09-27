@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using DiscomonProject.Discord;
 using Newtonsoft.Json;
 
@@ -15,6 +16,10 @@ namespace DiscomonProject
         public string AvatarUrl { get; set; }
         public bool HasCharacter { get; set; }
         public int PromptState { get; set; }
+        /* meaning behind each int
+        0- attack screen main
+         */
+        public Dictionary<ulong, int> reactionMessages { get; set; }
 
         public UserAccount()
         {
@@ -24,6 +29,7 @@ namespace DiscomonProject
         {
             HasCharacter = false;
             PromptState = -1;
+            Dictionary<ulong, int> reactionMessages = new Dictionary<ulong, int>();
         }
 
         public string DebugString()

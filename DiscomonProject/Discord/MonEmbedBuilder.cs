@@ -103,5 +103,17 @@ namespace DiscomonProject.Discord
 
             return embed;
         }
+
+        public static Embed FightScreen(BasicMon mon)
+        {
+            var builder = new EmbedBuilder()
+	        .WithTitle(mon.Nickname)
+        	.WithColor(62, 255, 62)
+            .WithThumbnailUrl(mon.ArtURL)
+            .WithImageUrl("https://cdn.discordapp.com/attachments/452818546175770624/626432333414924288/fight_screen.png");
+            var embed = builder.Build();
+
+            return embed;
+        }
     }
 }

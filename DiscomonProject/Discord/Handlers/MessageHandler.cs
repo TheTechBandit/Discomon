@@ -105,5 +105,21 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendEmbedMessage(context, $"{mon.Nickname} takes {damage} damage!", MonEmbedBuilder.FieldMon(mon));
         }
 
+        public static async Task FightScreen(ulong userId)
+        {
+            var user = UserHandler.GetUser(userId);
+
+            var dm = await _client.GetUser(userId).GetOrCreateDMChannelAsync();
+            var message = await dm.SendMessageAsync("", false, MonEmbedBuilder.FightScreen(user.Char.Party[0]));
+
+            var fight = message.AddReactionAsync(new Emoji("⚔"));
+            var bag = message.AddReactionAsync(new Emoji("👜"));
+            var swap = message.AddReactionAsync(new Emoji("🔁"));
+            var run = message.AddReactionAsync(new Emoji("🏃"));
+
+            await Task.WhenAll(fight, bag, swap);
+
+        }
+
     }
 }

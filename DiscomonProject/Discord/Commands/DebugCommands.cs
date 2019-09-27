@@ -69,7 +69,7 @@ namespace DiscomonProject.Discord
         {
             ContextIds idList = new ContextIds(Context);
 
-            await MessageHandler.SendDM(idList.UserId, "_Hello?_");
+            await MessageHandler.FightScreen(idList.UserId);
         }
     }
 }

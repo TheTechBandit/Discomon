@@ -7,7 +7,8 @@
     "Char": null,
     "AvatarUrl": null,
     "HasCharacter": false,
-    "PromptState": -1
+    "PromptState": -1,
+    "reactionMessages": null
   },
   "615533301368881152": {
     "UserId": 615533301368881152,
@@ -101,7 +102,8 @@
     },
     "AvatarUrl": "https://cdn.discordapp.com/avatars/615533301368881152/9d0b3f207db31fc2495e7bb2668663bb.png?size=128",
     "HasCharacter": true,
-    "PromptState": 2
+    "PromptState": 2,
+    "reactionMessages": null
   },
   "175698286815084545": {
     "UserId": 175698286815084545,
@@ -195,6 +197,7 @@
     },
     "AvatarUrl": "https://cdn.discordapp.com/avatars/175698286815084545/a_bb27c2f12e59a8afa837167a5f08daad.gif?size=128",
     "HasCharacter": true,
-    "PromptState": 2
+    "PromptState": 2,
+    "reactionMessages": null
   }
 }
