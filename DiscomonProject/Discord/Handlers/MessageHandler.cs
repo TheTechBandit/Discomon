@@ -117,8 +117,9 @@ namespace DiscomonProject.Discord
             var swap = message.AddReactionAsync(new Emoji("🔁"));
             var run = message.AddReactionAsync(new Emoji("🏃"));
 
-            await Task.WhenAll(fight, bag, swap);
+            await Task.WhenAll(fight, bag, swap, run);
 
+            user.ReactionMessages.Add(message.Id, 0);
         }
 
     }

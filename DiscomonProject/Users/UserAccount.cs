@@ -19,7 +19,7 @@ namespace DiscomonProject
         /* meaning behind each int
         0- attack screen main
          */
-        public Dictionary<ulong, int> reactionMessages { get; set; }
+        public Dictionary<ulong, int> ReactionMessages { get; set; }
 
         public UserAccount()
         {
@@ -29,7 +29,7 @@ namespace DiscomonProject
         {
             HasCharacter = false;
             PromptState = -1;
-            Dictionary<ulong, int> reactionMessages = new Dictionary<ulong, int>();
+            Dictionary<ulong, int> ReactionMessages = new Dictionary<ulong, int>();
         }
 
         public string DebugString()

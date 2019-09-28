@@ -34,6 +34,8 @@ namespace DiscomonProject.Discord
             
             _client.MessageReceived += MessageRecieved;
 
+            _client.ReactionAdded += ReactionReceived;
+
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), null);
 
             await Task.Delay(-1);
@@ -68,6 +70,27 @@ namespace DiscomonProject.Discord
 
             //Update user's info
             UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+        }
+
+        public async Task ReactionReceived(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
+        {
+            Console.WriteLine("1");
+            if(reaction.User.Value.IsBot)
+                return;
+
+            Console.WriteLine("2");
+
+            var user = UserHandler.GetUser(reaction.UserId);
+
+            Console.WriteLine("3");
+            
+            //figure out why this is broken
+            if(user.ReactionMessages.ContainsKey(cacheMessage.Value.Id))
+            {
+                Console.WriteLine("fantastic!");
+            }
+
+            Console.WriteLine("4");
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
