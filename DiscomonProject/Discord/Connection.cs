@@ -74,23 +74,114 @@ namespace DiscomonProject.Discord
 
         public async Task ReactionReceived(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
         {
-            Console.WriteLine("1");
             if(reaction.User.Value.IsBot)
                 return;
 
-            Console.WriteLine("2");
-
+            var message = await cacheMessage.GetOrDownloadAsync();
             var user = UserHandler.GetUser(reaction.UserId);
-
-            Console.WriteLine("3");
-            
-            //figure out why this is broken
-            if(user.ReactionMessages.ContainsKey(cacheMessage.Value.Id))
+            ContextIds idList = new ContextIds()
             {
-                Console.WriteLine("fantastic!");
-            }
+                UserId = reaction.UserId,
+                ChannelId = reaction.Channel.Id,
+                GuildId = 0
+            };
+            
+            if(user.ReactionMessages.ContainsKey(message.Id))
+            {
+                var messageType = user.ReactionMessages[message.Id];
 
-            Console.WriteLine("4");
+                //Attack Screen Main
+                if(messageType == 0)
+                {
+                    //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+                    try
+                    {
+                        await UserHandler.CharacterExists(idList);
+                        await UserHandler.CharacterInCombat(idList);
+                    }
+                    catch(InvalidCharacterStateException)
+                    {
+                        return;
+                    }
+                    
+                    if(reaction.Emote.Name == "⚔")
+                    {
+                        Console.WriteLine("1");
+                        await MessageHandler.MoveScreen(user.UserId);
+                        Console.WriteLine("2");
+                        user.ReactionMessages.Remove(message.Id);
+                        Console.WriteLine("3");
+                    }
+                    else if(reaction.Emote.Name == "👜")
+                    {
+                        await MessageHandler.SendDM(user.UserId, "BAG not implemented yet!");
+                    }
+                    else if(reaction.Emote.Name == "🔁")
+                    {
+                        await MessageHandler.SendDM(user.UserId, "SWITCH not implemented yet!");
+                    }
+                    else if(reaction.Emote.Name == "🏃")
+                    {
+                        await MessageHandler.SendDM(user.UserId, "RUN not implemented yet!");
+                    }
+                }
+                //Move Screen
+                else if(messageType == 1)
+                {
+                    Console.WriteLine("4");
+                    //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+                    try
+                    {
+                        await UserHandler.CharacterExists(idList);
+                        await UserHandler.CharacterInCombat(idList);
+                    }
+                    catch(InvalidCharacterStateException)
+                    {
+                        return;
+                    }
+                    
+                    if(reaction.Emote.Name == "1\u20E3")
+                    {
+                        if(user.Char.Combat.ActiveMon.ActiveMoves[0].Name != "None")
+                        {
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[0];
+                            user.ReactionMessages.Remove(message.Id);
+                            await CombatHandler.Attack(user.Char.Combat);
+                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                        }
+                    }
+                    else if(reaction.Emote.Name == "2\u20E3")
+                    {
+                        if(user.Char.Combat.ActiveMon.ActiveMoves[1].Name != "None")
+                        {
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[1];
+                            user.ReactionMessages.Remove(message.Id);
+                            await CombatHandler.Attack(user.Char.Combat);
+                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                        }
+                    }
+                    else if(reaction.Emote.Name == "3\u20E3")
+                    {
+                        if(user.Char.Combat.ActiveMon.ActiveMoves[2].Name != "None")
+                        {
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[2];
+                            user.ReactionMessages.Remove(message.Id);
+                            await CombatHandler.Attack(user.Char.Combat);
+                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                        }
+                    }
+                    else if(reaction.Emote.Name == "4\u20E3")
+                    {
+                        if(user.Char.Combat.ActiveMon.ActiveMoves[3].Name != "None")
+                        {
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[3];
+                            user.ReactionMessages.Remove(message.Id);
+                            await CombatHandler.Attack(user.Char.Combat);
+                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                        }
+                    }
+                }
+            }
         }
 
         public async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)

@@ -69,7 +69,36 @@ namespace DiscomonProject.Discord
         {
             ContextIds idList = new ContextIds(Context);
 
-            await MessageHandler.FightScreen(idList.UserId);
+            await MessageHandler.MoveScreen(idList.UserId);
+        }
+
+        [Command("emojitest")]
+        public async Task EmojiTest()
+        {
+            ContextIds idList = new ContextIds(Context);
+
+            await MessageHandler.EmojiTest(idList);
+        }
+
+        [Command("typetest")]
+        public async Task TypeTest()
+        {
+            ContextIds idList = new ContextIds(Context);
+
+            var attack = new WaterType(true);
+            List<BasicType> defense = new List<BasicType>()
+            {
+                new WaterType(true),
+                new FireType(true)
+            };
+
+            var effect = attack.ParseEffectiveness(defense);
+
+            string defstr = $"{defense[0].Type}";
+            if(defense.Count > 1)
+                defstr += $"/{defense[1].Type}";
+
+            await MessageHandler.SendMessage(idList, $"{attack.Type} is {effect}x effective against {defstr}");
         }
     }
 }

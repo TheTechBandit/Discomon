@@ -138,5 +138,15 @@ namespace DiscomonProject
                 throw new InvalidCharacterStateException("other player's character in a different location");
             }
         }
+
+        public static async Task CharacterInCombat(ContextIds ids)
+        {
+            var user = GetUser(ids.UserId);
+            if(!user.Char.InCombat)
+            {
+                await MessageHandler.NotInCombat(ids);
+                throw new InvalidCharacterStateException("character not in combat");
+            }
+        }
     }
 }

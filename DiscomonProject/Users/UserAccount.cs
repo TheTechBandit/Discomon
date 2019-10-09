@@ -18,6 +18,7 @@ namespace DiscomonProject
         public int PromptState { get; set; }
         /* meaning behind each int
         0- attack screen main
+        1- move selection screen
          */
         public Dictionary<ulong, int> ReactionMessages { get; set; }
 
@@ -29,12 +30,19 @@ namespace DiscomonProject
         {
             HasCharacter = false;
             PromptState = -1;
-            Dictionary<ulong, int> ReactionMessages = new Dictionary<ulong, int>();
+            ReactionMessages = new Dictionary<ulong, int>();
         }
 
         public string DebugString()
         {
-            string str = $"UserID: {UserId}\nMention: {Mention}\nName: {Name}\nAvatarUrl: {AvatarUrl}\nPromptState: {PromptState}\nHasCharacter: {HasCharacter}";
+            string str = $"UserID: {UserId}\nDmId: {DmId}\nMention: {Mention}\nName: {Name}\nAvatarUrl: {AvatarUrl}\nPromptState: {PromptState}";
+            str += "\nReaction Messages- ";
+            foreach(KeyValuePair<ulong, int> pair in ReactionMessages)
+            {
+                str += $"\nKey: {pair.Key} Value: {pair.Value}";
+            }
+
+            str += $"\nHasCharacter: {HasCharacter}";
             if(HasCharacter) str += $"\n**CHARACTER**\nName: {Char.Name}\nCurrentGuildName: {Char.CurrentGuildName}\nCurrentGuildId: {Char.CurrentGuildId}\nCombatRequest: {Char.CombatRequest}\nInCombat: {Char.InCombat}\nInPvpCombat: {Char.InPvpCombat}\nInCombatWith: {Char.InCombatWith}";
             if(Char.InCombat) str += $"\n**COMBAT INSTANCE**\nThisPlayer: {Char.Combat.ThisPlayer}\nOtherPlayer: {Char.Combat.OtherPlayer}\n";
             return str;

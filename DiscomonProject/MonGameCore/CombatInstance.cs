@@ -27,6 +27,7 @@ namespace DiscomonProject
         public int CombatPhase { get; set; }
         public BasicMon ActiveMon { get; set; }
         public BasicMon EnemyMon { get; set; }
+        public BasicMove SelectedMove { get; set; }
 
         public CombatInstance()
         {

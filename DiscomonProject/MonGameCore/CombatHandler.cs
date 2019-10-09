@@ -59,7 +59,8 @@ namespace DiscomonProject
             {
                 //0- Pre turn, activate weather effects... "It is still raining!" or "The rain cleared up!"
 
-                await MessageHandler.AttackStepText(main.Location);
+                await MessageHandler.FightScreen(main.ThisPlayer);
+                await MessageHandler.FightScreen(main.OtherPlayer);
                 main.CombatPhase++;
                 other.CombatPhase++;
             }
@@ -116,7 +117,6 @@ namespace DiscomonProject
             {
                 await MessageHandler.AttackInvalid(main.Location, GetUserOfInstance(main));
             }
-
         }
 
         public static async Task ApplyMoves(CombatInstance instance, bool firstLoop)
@@ -126,10 +126,10 @@ namespace DiscomonProject
             var otherUser = GetUserOfInstance(other);
 
             //instance hits other
-            await MessageHandler.UseMove(instance.Location, instance.ActiveMon, "Tackle");
-            instance.EnemyMon.TakeDamage(10);
+            await MessageHandler.UseMove(instance.Location, instance.ActiveMon, instance.SelectedMove.Name);
+            instance.SelectedMove.ApplyMove(user.Char);
             other.ActiveMon.CurrentHP = instance.EnemyMon.CurrentHP;
-            await MessageHandler.TakesDamage(instance.Location, instance.EnemyMon, "10");
+            await MessageHandler.TakesDamage(instance.Location, instance.EnemyMon);
 
             if(instance.EnemyMon.CurrentHP <= 0)
             {
@@ -142,9 +142,9 @@ namespace DiscomonProject
             else if(firstLoop)
             {
                 await ApplyMoves(other, false);
-                instance.CombatPhase = 1;
-                other.CombatPhase = 1;
-                await MessageHandler.AttackStepText(instance.Location);
+                instance.CombatPhase = 0;
+                other.CombatPhase = 0;
+                await NextStep(instance);
             }
             
         }
@@ -177,6 +177,11 @@ namespace DiscomonProject
             }
 
             return true;
+        }
+
+        public static void MoveEffectiveness(string atk, string defense)
+        {
+            
         }
     }
 }

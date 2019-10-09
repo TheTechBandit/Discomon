@@ -16,7 +16,7 @@ namespace DiscomonProject
         public virtual int BaseSpd { get; }
         [JsonIgnore]
         public virtual List<int> EvGains { get; }
-        public virtual string Typing { get; set; }
+        public virtual List<BasicType> Typing { get; set; }
         public virtual int DexNum { get; }
         public virtual string DexEntry { get; }
         public string Nickname { get; set; }
@@ -30,6 +30,7 @@ namespace DiscomonProject
         public List<double> NatureMods;
         public List<int> CurStats;
         public List<string> NatureList;
+        public List<BasicMove> ActiveMoves;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
@@ -49,6 +50,7 @@ namespace DiscomonProject
             CatcherID = 0;
             OwnerID = 0;
             InitializeLists();
+            ActiveMoves[0] = new Tackle();
             GenerateIvs();
             SetRandomNature();
             Heal();
@@ -85,6 +87,7 @@ namespace DiscomonProject
             Evs = new List<int>();
             NatureMods =  new List<double>();
             CurStats = new List<int>();
+            ActiveMoves = new List<BasicMove>();
 
             for(int i = 0; i < 5; i++)
             {
@@ -100,6 +103,10 @@ namespace DiscomonProject
             BaseList[2] = BaseDef;
             BaseList[3] = BaseAff;
             BaseList[4] = BaseSpd;
+
+            //Fill ActiveMoves with 4 blank moves
+            for(int i = 0; i < 4; i++)
+                ActiveMoves.Add(new None());
         }
 
         private void GenerateIvs()
@@ -343,6 +350,16 @@ namespace DiscomonProject
         {
             CurrentHP -= damage;
             if(CurrentHP < 0) CurrentHP = 0;
+        }
+
+        public string TypingToString()
+        {
+            string str = "";
+            if(Typing.Count > 1)
+                str += $"{Typing[0].Type}/{Typing[1].Type}";
+            else
+                str += $"{Typing[0].Type}";
+            return str;
         }
         
     }
