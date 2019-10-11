@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using DiscomonProject.Discord;
-using Newtonsoft.Json;
+using System.Linq;
 
-namespace DiscomonProject
+namespace DiscomonProject.Users
 {
     public class UserAccount
     {
@@ -24,10 +21,6 @@ namespace DiscomonProject
 
         public UserAccount()
         {
-
-        }
-        public UserAccount(bool newuser)
-        {
             HasCharacter = false;
             PromptState = -1;
             ReactionMessages = new Dictionary<ulong, int>();
@@ -35,12 +28,9 @@ namespace DiscomonProject
 
         public string DebugString()
         {
-            string str = $"UserID: {UserId}\nDmId: {DmId}\nMention: {Mention}\nName: {Name}\nAvatarUrl: {AvatarUrl}\nPromptState: {PromptState}";
+            var str = $"UserID: {UserId}\nDmId: {DmId}\nMention: {Mention}\nName: {Name}\nAvatarUrl: {AvatarUrl}\nPromptState: {PromptState}";
             str += "\nReaction Messages- ";
-            foreach(KeyValuePair<ulong, int> pair in ReactionMessages)
-            {
-                str += $"\nKey: {pair.Key} Value: {pair.Value}";
-            }
+            str = ReactionMessages.Aggregate(str, (current, pair) => current + $"\nKey: {pair.Key} Value: {pair.Value}");
 
             str += $"\nHasCharacter: {HasCharacter}";
             if(HasCharacter) str += $"\n**CHARACTER**\nName: {Char.Name}\nCurrentGuildName: {Char.CurrentGuildName}\nCurrentGuildId: {Char.CurrentGuildId}\nCombatRequest: {Char.CombatRequest}\nInCombat: {Char.InCombat}\nInPvpCombat: {Char.InPvpCombat}\nInCombatWith: {Char.InCombatWith}";

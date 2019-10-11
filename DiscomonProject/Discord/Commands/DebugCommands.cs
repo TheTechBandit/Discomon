@@ -1,14 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
-using DiscomonProject.Storage.Implementations;
-using Discord;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.MonGameCore;
+using DiscomonProject.MonGameCore.Types;
+using DiscomonProject.Users;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscomonProject.Discord
+namespace DiscomonProject.Discord.Commands
 {
     public class DebugCommands : ModuleBase<SocketCommandContext>
     {
@@ -29,17 +28,9 @@ namespace DiscomonProject.Discord
         [Command("debuginfo")]
         public async Task DebugInfo(SocketGuildUser target)
         {
-            ContextIds idList = new ContextIds(Context);
-            UserAccount user;
+            var idList = new ContextIds(Context);
 
-            if(target != null)
-            {
-                user = UserHandler.GetUser(target.Id);
-            }
-            else
-            {
-                user = UserHandler.GetUser(idList.UserId);
-            }
+            var user = UserHandler.GetUser(target?.Id ?? idList.UserId);
 
             await MessageHandler.SendMessage(idList, user.DebugString());
         }
@@ -47,7 +38,7 @@ namespace DiscomonProject.Discord
         [Command("debugresetchar")]
         public async Task DebugResetCharacter()
         {
-            ContextIds ids = new ContextIds(Context);
+            var ids = new ContextIds(Context);
             var user = UserHandler.GetUser(ids.UserId);
             user.Char = null;
             user.HasCharacter = false;
@@ -59,7 +50,7 @@ namespace DiscomonProject.Discord
         [Command("datawipe")]
         public async Task DataWipe()
         {
-            ContextIds idList = new ContextIds(Context);
+            var idList = new ContextIds(Context);
             await MessageHandler.SendMessage(idList, "User data cleared. Reboot bot to take effect.");
             UserHandler.ClearUserData();
         }

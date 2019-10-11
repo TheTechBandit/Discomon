@@ -1,6 +1,6 @@
 using System;
 
-namespace DiscomonProject
+namespace DiscomonProject.Exceptions
 {
     [Serializable]
     class InvalidCharacterStateException: Exception

@@ -5,12 +5,10 @@ namespace DiscomonProject.Discord
 {
     public class DiscordLogger
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
-        public DiscordLogger(ILogger logger)
-        {
-            _logger = logger;
-        }
+        public DiscordLogger(ILogger logger) 
+            => _logger = logger;
 
         public Task Log(LogMessage logMsg)
         {

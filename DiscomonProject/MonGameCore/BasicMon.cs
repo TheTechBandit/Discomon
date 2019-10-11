@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DiscomonProject.MonGameCore;
+using DiscomonProject.MonGameCore.Moves;
+using DiscomonProject.Utilities;
 using Newtonsoft.Json;
 
 namespace DiscomonProject

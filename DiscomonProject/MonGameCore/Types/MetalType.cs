@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore.Types
 {
     public class MetalType : BasicType
     {
@@ -10,30 +10,27 @@ namespace DiscomonProject
         public override List<BasicType> Immunities { get; }
         public override string Description { get; } = "";
 
-        public MetalType() :base()
+        public MetalType()
         {
 
         }
 
         public MetalType(bool newtype) :base(newtype)
         {
-            Advantages = new List<BasicType>()
+            Advantages = new List<BasicType>
             {
                 new FeyType(),
                 new AirType(),
                 new RockType()
             };
-            Disadvantages = new List<BasicType>()
+            Disadvantages = new List<BasicType>
             {
                 new FireType(),
                 new ElectricType(),
                 new MetalType(),
                 new PsychicType()
             };
-            Immunities = new List<BasicType>()
-            {
-                
-            };
+            Immunities = new List<BasicType>();
         }
 
     }

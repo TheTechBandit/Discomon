@@ -5,6 +5,10 @@ using Discord.WebSocket;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.Exceptions;
+using DiscomonProject.MonGameCore;
+using DiscomonProject.Users;
 
 namespace DiscomonProject.Discord
 {
@@ -114,15 +118,15 @@ namespace DiscomonProject.Discord
                     }
                     else if(reaction.Emote.Name == "👜")
                     {
-                        await MessageHandler.SendDM(user.UserId, "BAG not implemented yet!");
+                        await MessageHandler.SendDm(user.UserId, "BAG not implemented yet!");
                     }
                     else if(reaction.Emote.Name == "🔁")
                     {
-                        await MessageHandler.SendDM(user.UserId, "SWITCH not implemented yet!");
+                        await MessageHandler.SendDm(user.UserId, "SWITCH not implemented yet!");
                     }
                     else if(reaction.Emote.Name == "🏃")
                     {
-                        await MessageHandler.SendDM(user.UserId, "RUN not implemented yet!");
+                        await MessageHandler.SendDm(user.UserId, "RUN not implemented yet!");
                     }
                 }
                 //Move Screen
@@ -147,7 +151,7 @@ namespace DiscomonProject.Discord
                             user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[0];
                             user.ReactionMessages.Remove(message.Id);
                             await CombatHandler.Attack(user.Char.Combat);
-                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            await MessageHandler.SendDm(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
                         }
                     }
                     else if(reaction.Emote.Name == "2\u20E3")
@@ -157,7 +161,7 @@ namespace DiscomonProject.Discord
                             user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[1];
                             user.ReactionMessages.Remove(message.Id);
                             await CombatHandler.Attack(user.Char.Combat);
-                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            await MessageHandler.SendDm(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
                         }
                     }
                     else if(reaction.Emote.Name == "3\u20E3")
@@ -167,7 +171,7 @@ namespace DiscomonProject.Discord
                             user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[2];
                             user.ReactionMessages.Remove(message.Id);
                             await CombatHandler.Attack(user.Char.Combat);
-                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            await MessageHandler.SendDm(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
                         }
                     }
                     else if(reaction.Emote.Name == "4\u20E3")
@@ -177,7 +181,7 @@ namespace DiscomonProject.Discord
                             user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[3];
                             user.ReactionMessages.Remove(message.Id);
                             await CombatHandler.Attack(user.Char.Combat);
-                            await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            await MessageHandler.SendDm(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
                         }
                     }
                 }

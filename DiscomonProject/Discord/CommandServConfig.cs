@@ -5,14 +5,12 @@ namespace DiscomonProject.Discord
 {
     public static class CommandServConfig
     {
-        public static CommandServiceConfig GetDefault()
-        {
-            return new CommandServiceConfig
+        public static CommandServiceConfig GetDefault() =>
+            new CommandServiceConfig
             {
                 DefaultRunMode = RunMode.Async,
                 CaseSensitiveCommands = false,
                 LogLevel = LogSeverity.Verbose
             };
-        }
     }
 }

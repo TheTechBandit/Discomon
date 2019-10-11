@@ -1,15 +1,12 @@
 using System;
+using DiscomonProject.MonGameCore;
+using DiscomonProject.Users;
 using Discord;
 
 namespace DiscomonProject.Discord
 {
     public static class MonEmbedBuilder
     {
-        static MonEmbedBuilder()
-        {
-
-        }
-
         public static Embed MonStats(BasicMon mon)
         {
             var moves = "";
@@ -100,7 +97,7 @@ namespace DiscomonProject.Discord
 
         public static Embed EmptyPartySpot(int num)
         {
-            string spots = "";
+            var spots = "";
             for(int i = 0; i < num; i++)
             {
                 spots += "[ Empty ]\n\n";

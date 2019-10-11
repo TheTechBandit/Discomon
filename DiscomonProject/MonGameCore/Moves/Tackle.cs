@@ -1,4 +1,7 @@
-namespace DiscomonProject
+using DiscomonProject.MonGameCore.Types;
+using DiscomonProject.Users;
+
+namespace DiscomonProject.MonGameCore.Moves
 {
     public class Tackle : BasicMove
     {
@@ -9,7 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 40;
         public override int Accuracy { get; } = 100;
         
-        public Tackle() :base()
+        public Tackle()
         {
 
         }
@@ -19,9 +22,7 @@ namespace DiscomonProject
 
         }
         
-        public override void ApplyMove(Character owner)
-        {
-            owner.Combat.EnemyMon.TakeDamage(ApplyPower(owner.Combat));
-        }
+        public override void ApplyMove(Character owner) 
+            => owner.Combat.EnemyMon.TakeDamage(ApplyPower(owner.Combat));
     }
 }

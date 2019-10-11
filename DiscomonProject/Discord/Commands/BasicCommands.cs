@@ -1,14 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
-using DiscomonProject.Storage.Implementations;
-using Discord;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.Exceptions;
+using DiscomonProject.MonGameCore.Mons;
+using DiscomonProject.Users;
 using Discord.Commands;
-using Discord.WebSocket;
 
-namespace DiscomonProject.Discord
+namespace DiscomonProject.Discord.Commands
 {
     public class BasicCommands : ModuleBase<SocketCommandContext>
     {
@@ -16,8 +13,8 @@ namespace DiscomonProject.Discord
         [Command("monstat")]
         public async Task MonStat([Remainder]int num)
         {
-            ContextIds idList = new ContextIds(Context);
-            UserAccount user = UserHandler.GetUser(idList.UserId);
+            var idList = new ContextIds(Context);
+            var user = UserHandler.GetUser(idList.UserId);
 
             //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
             try
@@ -32,14 +29,14 @@ namespace DiscomonProject.Discord
             
             await Context.Channel.SendMessageAsync(
             "",
-            embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[num]))
+            embed: MonEmbedBuilder.MonStats(user.Char.Party[num]))
             .ConfigureAwait(false);
         }
 
         [Command("party")]
         public async Task Party()
         {
-            ContextIds idList = new ContextIds(Context);
+            var idList = new ContextIds(Context);
             var user = UserHandler.GetUser(idList.UserId);
 
             //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
@@ -66,7 +63,7 @@ namespace DiscomonProject.Discord
         [Command("enter")]
         public async Task Enter([Remainder]string text)
         {
-            ContextIds ids = new ContextIds(Context);
+            var ids = new ContextIds(Context);
             var user = UserHandler.GetUser(ids.UserId);
             var originalText = text;
             text = text.ToLower();
@@ -82,9 +79,10 @@ namespace DiscomonProject.Discord
                 case 0:
                     if(text.Equals("confirm"))
                     {
-                        user.Char = new Character(true);
-                        user.Char.CurrentGuildId = ids.GuildId;
-                        user.Char.CurrentGuildName = Context.Guild.Name;
+                        user.Char = new Character()
+                        {
+                            CurrentGuildId = ids.GuildId, CurrentGuildName = Context.Guild.Name
+                        };
                         user.PromptState = 1;
                         await MessageHandler.SendMessage(ids, $"Beginning character creation for {user.Mention}.\nWhat is your name? (use the \"enter\" command to enter your name)");
                     }
@@ -152,7 +150,7 @@ namespace DiscomonProject.Discord
         [Command("startadventure")]
         public async Task StartAdventure()
         {
-            ContextIds ids = new ContextIds(Context);
+            var ids = new ContextIds(Context);
             var user = UserHandler.GetUser(ids.UserId);
 
             if((user.PromptState == -1 || user.PromptState == 0) && !user.HasCharacter)

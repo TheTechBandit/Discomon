@@ -5,7 +5,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Unity;
 using Unity.Injection;
-using Unity.Lifetime;
 using Unity.Resolution;
 
 namespace DiscomonProject
@@ -33,12 +32,10 @@ namespace DiscomonProject
             _container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             _container.RegisterSingleton<CommandServiceConfig>(new InjectionFactory(i => CommandServConfig.GetDefault()));
             _container.RegisterSingleton<CommandService>(new InjectionConstructor(typeof(CommandServiceConfig)));
-            _container.RegisterSingleton<Discord.Connection>();
+            _container.RegisterSingleton<Connection>();
         }
 
-        public static T Resolve<T>()
-        {
-            return (T)Container.Resolve(typeof(T), string.Empty, new CompositeResolverOverride());
-        }
+        public static T Resolve<T>() 
+            => (T)Container.Resolve(typeof(T), string.Empty, new CompositeResolverOverride());
     }
 }

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using DiscomonProject.Discord;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore
 {
     public class CombatInstance
     {
@@ -29,9 +27,10 @@ namespace DiscomonProject
         public BasicMon EnemyMon { get; set; }
         public BasicMove SelectedMove { get; set; }
 
-        public CombatInstance()
+
+        public CombatInstance(bool newtype)
         {
-            
+
         }
 
         public CombatInstance(ContextIds loc, ulong thisPlayer, ulong otherPlayer)

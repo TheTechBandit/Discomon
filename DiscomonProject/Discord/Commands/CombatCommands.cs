@@ -1,14 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
-using DiscomonProject.Storage.Implementations;
-using Discord;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.Exceptions;
+using DiscomonProject.MonGameCore;
+using DiscomonProject.Users;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace DiscomonProject.Discord
+namespace DiscomonProject.Discord.Commands
 {
     public class CombatCommands : ModuleBase<SocketCommandContext>
     {
@@ -54,7 +52,7 @@ namespace DiscomonProject.Discord
                     else
                     {
                         //Start duel
-                        CombatInstance combat = new CombatInstance(idList, Context.User.Id, target.Id);
+                        var combat = new CombatInstance(idList, Context.User.Id, target.Id);
 
                         await Context.Channel.SendMessageAsync($"The duel between {target.Mention} and {Context.User.Mention} will now begin!");
                         fromUser.Char.InCombat = true;
