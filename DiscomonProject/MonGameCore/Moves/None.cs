@@ -1,4 +1,7 @@
-namespace DiscomonProject
+using DiscomonProject.MonGameCore.Types;
+using DiscomonProject.Users;
+
+namespace DiscomonProject.MonGameCore.Moves
 {
     public class None : BasicMove
     {
@@ -9,7 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = 0;
         
-        public None() :base()
+        public None()
         {
 
         }

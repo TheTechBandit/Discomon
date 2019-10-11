@@ -1,9 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Linq;
+using DiscomonProject.MonGameCore;
 
-namespace DiscomonProject
+namespace DiscomonProject.Users
 {
     public class Character
     {
@@ -19,11 +18,6 @@ namespace DiscomonProject
         public CombatInstance Combat { get; set; }
 
         public Character()
-        {
-            
-        }
-
-        public Character(bool newchar)
         {
             Party = new List<BasicMon>();
             PC = new List<BasicMon>();
@@ -41,16 +35,7 @@ namespace DiscomonProject
             Combat = null;
         }
 
-        public BasicMon FirstUsableMon()
-        {
-            for(int i = 0; i < Party.Count; i++)
-            {
-                if(Party[i].CurrentHP > 0)
-                {
-                    return Party[i];
-                }
-            }
-            return null;
-        }
+        public BasicMon FirstUsableMon() 
+            => Party.FirstOrDefault(t => t.CurrentHP > 0);
     }
 }

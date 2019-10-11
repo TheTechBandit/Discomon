@@ -1,4 +1,6 @@
-namespace DiscomonProject
+using DiscomonProject.Users;
+
+namespace DiscomonProject.MonGameCore
 {
     public class BasicMove
     {

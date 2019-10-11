@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore
 {
     public class BasicType
     {
@@ -24,7 +25,7 @@ namespace DiscomonProject
         {
             var effect = 1.0;
 
-            string defstr = $"{def[0].Type}";
+            var defstr = $"{def[0].Type}";
             if(def.Count > 1)
                 defstr += $"/{def[1].Type}";
             System.Console.WriteLine($"{Type} vs. {defstr}");
@@ -32,31 +33,23 @@ namespace DiscomonProject
 
             foreach(BasicType ty in def)
             {
-                foreach(BasicType adv in Advantages)
+                foreach (var adv in Advantages.Where(adv => ty.GetType() == adv.GetType()))
                 {
-                    if(ty.GetType() == adv.GetType())
-                    {
-                        System.Console.WriteLine($"{Type} is advantagous against {ty.Type}");
-                        effect *= 2.0;
-                    }
+                    System.Console.WriteLine($"{Type} is advantagous against {ty.Type}");
+                    effect *= 2.0;
                 }
 
-                foreach(BasicType dis in Disadvantages)
+                foreach (var dis in Disadvantages.Where(dis => ty.GetType() == dis.GetType()))
                 {
-                    if(ty.GetType() == dis.GetType())
-                    {
-                        System.Console.WriteLine($"{Type} is disadvantagous against {ty.Type}");
-                        effect *= 0.5;
-                    }
+                    System.Console.WriteLine($"{Type} is disadvantagous against {ty.Type}");
+                    effect *= 0.5;
                 }
             }
 
             return effect;
         }
 
-        public override string ToString()
-        {
-            return $"{Type}";
-        }
+        public override string ToString() 
+            => $"{Type}";
     }
 }

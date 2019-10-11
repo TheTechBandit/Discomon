@@ -9,9 +9,9 @@ namespace DiscomonProject.Storage.Implementations
 
         public void StoreAllObjects(Dictionary<string, object> dict)
         {
-            foreach(KeyValuePair<string, object> entry in dict)
+            foreach(var (key, value) in dict)
             {
-                StoreObject(entry.Value, entry.Key);
+                StoreObject(value, key);
             }
         }
 
@@ -33,14 +33,10 @@ namespace DiscomonProject.Storage.Implementations
             return (T)(_dictionary[key]);
         }
 
-        public int StorageLength()
-        {
-            return _dictionary.Count;
-        }
+        public int StorageLength() 
+            => _dictionary.Count;
 
-        public Dictionary<string, object> GetDict()
-        {
-            return _dictionary;
-        }
+        public Dictionary<string, object> GetDict() 
+            => _dictionary;
     }
 }

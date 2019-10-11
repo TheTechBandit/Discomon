@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using DiscomonProject.Discord;
 using DiscomonProject.Discord.Entities;

@@ -5,17 +5,12 @@ namespace DiscomonProject.Discord
 {
     public static class SocketConfig
     {
-        public static DiscordSocketConfig GetDefault()
-        {
-            return new DiscordSocketConfig
+        public static DiscordSocketConfig GetDefault() =>
+            new DiscordSocketConfig
             {
                 LogLevel = LogSeverity.Verbose
             };
-        }
 
-        public static DiscordSocketConfig GetNew()
-        {
-            return new DiscordSocketConfig();
-        }
+        public static DiscordSocketConfig GetNew() => new DiscordSocketConfig();
     }
 }

@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using DiscomonProject.MonGameCore.Types;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore.Mons
 {
     public class Suki : BasicMon
     {
@@ -14,12 +12,12 @@ namespace DiscomonProject
         public override int BaseDef { get; } = 60;
         public override int BaseAff { get; } = 75;
         public override int BaseSpd { get; } = 50;
-        public override List<int> EvGains { get; } = new List<int>() {0, 1, 0, 0, 1};
-        public override List<BasicType> Typing { get; set; } = new List<BasicType>() {new PsychicType(true), new AirType()};
+        public override List<int> EvGains { get; } = new List<int> {0, 1, 0, 0, 1};
+        public override List<BasicType> Typing { get; set; } = new List<BasicType>{new PsychicType(true), new AirType()};
         public override int DexNum { get; } = 999;
         public override string DexEntry { get; } = "Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.";
 
-        public Suki() :base()
+        public Suki()
         {
             
         }

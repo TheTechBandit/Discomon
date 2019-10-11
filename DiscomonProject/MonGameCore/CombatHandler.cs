@@ -1,18 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DiscomonProject.Discord;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.Users;
+using DiscomonProject.Utilities;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore
 {
     public static class CombatHandler
     {
-        static CombatHandler()
-        {
-
-        }
-
         public static async Task StartCombat(CombatInstance main)
         {
             var other = GetOppositeInstance(main);
@@ -72,50 +68,51 @@ namespace DiscomonProject
             var other = GetOppositeInstance(main);
 
             var user = GetUserOfInstance(main);
-            var otherUser = GetUserOfInstance(other);
 
-            if(main.CombatPhase == 1 && other.CombatPhase == 1)
+            switch (main.CombatPhase)
             {
-                main.CombatPhase++;
-                await MessageHandler.AttackEnteredText(main.Location, user);
-            }
-            else if(main.CombatPhase == 2 && other.CombatPhase == 1)
-            {
-                await MessageHandler.AttackAlreadyEntered(main.Location, user);
-            }
-            else if(main.CombatPhase == 1 && other.CombatPhase == 2)
-            {
-                main.CombatPhase += 2;
-                other.CombatPhase++;
-                //3- Pre-Attack phase (activate any abilities that trigger before attacks)
+                case 1 when other.CombatPhase == 1:
+                    main.CombatPhase++;
+                    await MessageHandler.AttackEnteredText(main.Location, user);
+                    break;
+                case 2 when other.CombatPhase == 1:
+                    await MessageHandler.AttackAlreadyEntered(main.Location, user);
+                    break;
+                case 1 when other.CombatPhase == 2:
+                {
+                    main.CombatPhase += 2;
+                    other.CombatPhase++;
+                    //3- Pre-Attack phase (activate any abilities that trigger before attacks)
 
-                main.CombatPhase++;
-                other.CombatPhase++;
-                //4- Attacks register. Calculate whether it hit, damage, bonus effects of attacks
-                if(main.ActiveMon.CurStats[4] > main.EnemyMon.CurStats[4])
-                {
-                    await ApplyMoves(main, true);
-                }
-                else if(main.ActiveMon.CurStats[4] < main.EnemyMon.CurStats[4])
-                {
-                    await ApplyMoves(other, true);
-                }
-                else
-                {
-                    var rand = RandomGen.Gen.Next(2);
-                    if(rand == 0)
+                    main.CombatPhase++;
+                    other.CombatPhase++;
+                    //4- Attacks register. Calculate whether it hit, damage, bonus effects of attacks
+                    if(main.ActiveMon.CurStats[4] > main.EnemyMon.CurStats[4])
                     {
                         await ApplyMoves(main, true);
                     }
-                    else if(rand == 1)
+                    else if(main.ActiveMon.CurStats[4] < main.EnemyMon.CurStats[4])
                     {
                         await ApplyMoves(other, true);
                     }
+                    else
+                    {
+                        var rand = RandomGen.Gen.Next(2);
+                        if(rand == 0)
+                        {
+                            await ApplyMoves(main, true);
+                        }
+                        else if(rand == 1)
+                        {
+                            await ApplyMoves(other, true);
+                        }
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                await MessageHandler.AttackInvalid(main.Location, GetUserOfInstance(main));
+                default:
+                    await MessageHandler.AttackInvalid(main.Location, GetUserOfInstance(main));
+                    break;
             }
         }
 
@@ -139,7 +136,8 @@ namespace DiscomonProject
                 otherUser.Char.ExitCombat();
                 return;
             }
-            else if(firstLoop)
+            
+            if(firstLoop)
             {
                 await ApplyMoves(other, false);
                 instance.CombatPhase = 0;
@@ -149,34 +147,18 @@ namespace DiscomonProject
             
         }
 
-        public static UserAccount GetUserOfInstance(CombatInstance instance)
-        {
-            return UserHandler.GetUser(instance.ThisPlayer);
-        }
+        public static UserAccount GetUserOfInstance(CombatInstance instance) 
+            => UserHandler.GetUser(instance.ThisPlayer);
 
-        public static CombatInstance GetOppositeInstance(CombatInstance instance)
-        {
-            return UserHandler.GetUser(instance.OtherPlayer).Char.Combat;
-        }
+        public static CombatInstance GetOppositeInstance(CombatInstance instance) 
+            => UserHandler.GetUser(instance.OtherPlayer).Char.Combat;
 
         public static bool PlayerHasValidParty(CombatInstance instance)
         {
             var user = GetUserOfInstance(instance);
 
-            var count = 0;
-            foreach(BasicMon mon in user.Char.Party)
-            {
-                if(mon.Fainted)
-                {
-                    count++;
-                }
-            }
-            if(count == user.Char.Party.Count || user.Char.Party.Count == 0)
-            {
-                return false;
-            }
-
-            return true;
+            var count = user.Char.Party.Count(mon => mon.Fainted);
+            return count != user.Char.Party.Count && user.Char.Party.Count != 0;
         }
 
         public static void MoveEffectiveness(string atk, string defense)

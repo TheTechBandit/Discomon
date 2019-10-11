@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore.Types
 {
     public class PsychicType : BasicType
     {
@@ -10,27 +10,24 @@ namespace DiscomonProject
         public override List<BasicType> Immunities { get; }
         public override string Description { get; } = "";
 
-        public PsychicType() :base()
+        public PsychicType()
         {
 
         }
 
         public PsychicType(bool newtype) :base(newtype)
         {
-            Advantages = new List<BasicType>()
+            Advantages = new List<BasicType>
             {
                 new BeastType(),
                 new MetalType(),
                 new GhostType()
             };
-            Disadvantages = new List<BasicType>()
+            Disadvantages = new List<BasicType>
             {
                 new PsychicType()
             };
-            Immunities = new List<BasicType>()
-            {
-                
-            };
+            Immunities = new List<BasicType>();
         }
 
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static System.IO.Directory;
@@ -12,7 +10,7 @@ namespace DiscomonProject.Storage.Implementations
         public T RestoreObject<T>(string key)
         {
             var json = File.ReadAllText($"{key}.json");
-            return (T)JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });

@@ -2,68 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DiscomonProject.Discord;
-using DiscomonProject.Storage;
+using DiscomonProject.Discord.Handlers;
+using DiscomonProject.Exceptions;
 using DiscomonProject.Storage.Implementations;
-using Discord.WebSocket;
 
-namespace DiscomonProject
+namespace DiscomonProject.Users
 {
     public static class UserHandler
     {
-        public static readonly string filepath;
-        private static Dictionary<ulong, UserAccount> _dic;
-        private static JsonStorage _jsonStorage;
+        public static readonly string Filepath;
+        private static readonly Dictionary<ulong, UserAccount> Accounts;
+        private static readonly JsonStorage JsonStorage;
 
         static UserHandler()
         {
-            System.Console.WriteLine("Loading User Accounts...");
+            Console.WriteLine("Loading User Accounts...");
             
             //Access JsonStorage to load user list into memory
-            filepath = "Users/UserList";
+            Filepath = "Users/UserList";
 
-            _dic = new Dictionary<ulong, UserAccount>();
-            _jsonStorage = new JsonStorage();
+            Accounts = new Dictionary<ulong, UserAccount>();
+            JsonStorage = new JsonStorage();
 
-            foreach(KeyValuePair<ulong, UserAccount> entry in _jsonStorage.RestoreObject<Dictionary<ulong, UserAccount>>(filepath))
+            foreach(var (id, account) in JsonStorage.RestoreObject<Dictionary<ulong, UserAccount>>(Filepath))
             {
-                _dic.Add(entry.Key, (UserAccount)entry.Value);
+                Accounts.Add(id, account);
             }
 
-            foreach(KeyValuePair<ulong, UserAccount> kvp in _dic)
+            foreach(var (id, acc) in Accounts)
             {
-                Console.WriteLine($"Key: {kvp.Key}\nValue: {kvp.Value}\n");
+                Console.WriteLine($"Key: {id}\nValue: {acc}\n");
             }
 
-            System.Console.WriteLine($"Successfully loaded {_dic.Count} users.");
+            Console.WriteLine($"Successfully loaded {Accounts.Count} users.");
         }
 
-        public static UserAccount GetUser(ContextIds ids)
-        {
-            return GetUser(ids.UserId);
-        }
+        public static UserAccount GetUser(ContextIds ids) 
+            => GetUser(ids.UserId);
 
         public static UserAccount GetUser(ulong id)
         {
-            if(DoesUserExist(id))
-            {
-                return _dic[id];
-            }
-            else
-            {
-                CreateNewUser(id);
-                return _dic[id];
-            }
+            if(DoesUserExist(id)) { return Accounts[id]; }
+
+            CreateNewUser(id);
+            return Accounts[id];
         }
 
         public static UserAccount CreateNewUser(ulong id)
         {
-            System.Console.WriteLine($"Creating new user with ID: {id}");
+            Console.WriteLine($"Creating new user with ID: {id}");
 
-            UserAccount acc = new UserAccount(true)
+            var acc = new UserAccount
             {
                 UserId = id
             };
-            _dic.Add(id, acc);
+            Accounts.Add(id, acc);
             SaveUsers();
             return acc;
         }
@@ -80,25 +73,19 @@ namespace DiscomonProject
 
         private static void SaveUsers()
         {
-            System.Console.WriteLine("Saving users...");
-            _jsonStorage.StoreObject(_dic, filepath);
+            Console.WriteLine("Saving users...");
+            JsonStorage.StoreObject(Accounts, Filepath);
         }
 
         public static void ClearUserData()
         {
-            System.Console.WriteLine("Deleting all users.");
-            Dictionary<ulong, UserAccount> emptyDic = new Dictionary<ulong, UserAccount>();
-            emptyDic.Add(0, new UserAccount(true)
-            {
-                UserId = 0
-            });
-            _jsonStorage.StoreObject(emptyDic, filepath);
+            Console.WriteLine("Deleting all users.");
+            var emptyDic = new Dictionary<ulong, UserAccount> {{0, new UserAccount {UserId = 0}}};
+            JsonStorage.StoreObject(emptyDic, Filepath);
         }
 
-        public static bool DoesUserExist(ulong id)
-        {
-            return _dic.ContainsKey(id);
-        }
+        public static bool DoesUserExist(ulong id) 
+            => Accounts.ContainsKey(id);
 
         public static async Task CharacterExists(ContextIds ids)
         {
@@ -131,7 +118,6 @@ namespace DiscomonProject
 
         public static async Task OtherCharacterLocation(ContextIds ids, UserAccount otherUser)
         {
-            var user = GetUser(ids.UserId);
             if(otherUser.Char.CurrentGuildId != ids.GuildId)
             {
                 await MessageHandler.InvalidOtherCharacterLocation(ids, otherUser);

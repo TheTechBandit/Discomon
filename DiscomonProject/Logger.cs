@@ -9,7 +9,7 @@ namespace DiscomonProject
             if(message is null) 
                 throw new ArgumentException("message cannot be null.");
                 
-            Console.WriteLine($"[{DateTime.Now.ToString("dd/M HH:mmtt")}] - {message}");
+            Console.WriteLine($"[{DateTime.Now:dd/M HH:mmtt}] - {message}");
         }
     }
 }

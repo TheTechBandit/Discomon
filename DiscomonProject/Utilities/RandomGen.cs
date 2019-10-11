@@ -1,14 +1,12 @@
 using System;
 
-namespace DiscomonProject
+namespace DiscomonProject.Utilities
 {
     public static class RandomGen
     {
         public static Random Gen { get; }
 
-        static RandomGen()
-        {
-            Gen = new Random();
-        }
+        static RandomGen() 
+            => Gen = new Random();
     }
 }

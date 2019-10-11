@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using DiscomonProject.MonGameCore.Types;
 
-namespace DiscomonProject
+namespace DiscomonProject.MonGameCore.Mons
 {
     public class Snoril : BasicMon
     {
@@ -14,12 +12,12 @@ namespace DiscomonProject
         public override int BaseDef { get; } = 65;
         public override int BaseAff { get; } = 85;
         public override int BaseSpd { get; } = 15;
-        public override List<int> EvGains { get; } = new List<int>() {1, 0, 0, 1, 0};
-        public override List<BasicType> Typing { get; set; } = new List<BasicType>() {new BeastType(true)};
+        public override List<int> EvGains { get; } = new List<int> {1, 0, 0, 1, 0};
+        public override List<BasicType> Typing { get; set; } = new List<BasicType> {new BeastType(true)};
         public override int DexNum { get; } = 999;
         public override string DexEntry { get; } = "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.";
 
-        public Snoril() : base()
+        public Snoril()
         {
             
         }
