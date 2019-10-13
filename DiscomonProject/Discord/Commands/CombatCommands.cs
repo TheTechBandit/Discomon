@@ -54,6 +54,7 @@ namespace DiscomonProject.Discord
                     else
                     {
                         //Start duel
+                        /*
                         CombatInstance combat = new CombatInstance(idList, Context.User.Id, target.Id);
 
                         await Context.Channel.SendMessageAsync($"The duel between {target.Mention} and {Context.User.Mention} will now begin!");
@@ -70,6 +71,11 @@ namespace DiscomonProject.Discord
                         toUser.Char.Combat = new CombatInstance(idList, toUser.UserId, fromUser.UserId);
 
                         await CombatHandler.StartCombat(fromUser.Char.Combat);
+                        */
+                        NewCombatInstance combat = new NewCombatInstance(idList, fromUser, toUser);
+
+                        NewCombatHandler.StoreInstance(NewCombatHandler.NumberOfInstances(), combat);
+                        await NewCombatHandler.StartCombat(combat);
                     }
                 }
                 else

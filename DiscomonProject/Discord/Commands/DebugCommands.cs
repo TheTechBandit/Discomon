@@ -62,6 +62,7 @@ namespace DiscomonProject.Discord
             ContextIds idList = new ContextIds(Context);
             await MessageHandler.SendMessage(idList, "User data cleared. Reboot bot to take effect.");
             UserHandler.ClearUserData();
+            NewCombatHandler.ClearCombatData();
         }
 
         [Command("whisper")]
@@ -100,5 +101,47 @@ namespace DiscomonProject.Discord
 
             await MessageHandler.SendMessage(idList, $"{attack.Type} is {effect}x effective against {defstr}");
         }
+
+        [Command("quickstart")]
+        public async Task QuickStart([Remainder]string text)
+        {
+            ContextIds ids = new ContextIds(Context);
+            var user = UserHandler.GetUser(ids.UserId);
+
+            user.Char = new Character(true);
+            user.Char.CurrentGuildId = ids.GuildId;
+            user.Char.CurrentGuildName = Context.Guild.Name;
+            user.Char.Name = user.Name;
+
+            text = text.ToLower();
+
+            if(text.Equals("snoril") || text.Equals("1"))
+            {
+                user.Char.Party.Add(new Snoril(true)
+                {
+                    CatcherID = user.UserId,
+                    OwnerID = user.UserId
+                });
+                user.HasCharacter = true;
+                await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Snoril as your partner! Good luck on your adventure.");
+            }
+            else if(text.Equals("suki") || text.Equals("2"))
+            {
+                user.Char.Party.Add(new Suki(true)
+                {
+                    CatcherID = user.UserId,
+                    OwnerID = user.UserId
+                });
+                user.HasCharacter = true;
+                await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Suki as your partner! Good luck on your adventure.");
+            }
+            else
+            {
+                await MessageHandler.SendMessage(ids, $"{user.Mention}, please enter either Snoril or Suki.");
+            }
+
+            user.PromptState = -1;
+        }
+
     }
 }

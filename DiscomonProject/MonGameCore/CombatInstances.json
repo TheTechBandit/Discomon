@@ -1,0 +1,10 @@
+{
+  "0": {
+    "Location": null,
+    "PlayerOne": null,
+    "PlayerTwo": null,
+    "CombatPhase": 0,
+    "IsPvP": false,
+    "IsDoubleBattle": false
+  }
+}

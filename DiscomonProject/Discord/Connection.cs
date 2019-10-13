@@ -140,44 +140,60 @@ namespace DiscomonProject.Discord
                         return;
                     }
                     
+                    System.Console.WriteLine("5");
                     if(reaction.Emote.Name == "1\u20E3")
                     {
-                        if(user.Char.Combat.ActiveMon.ActiveMoves[0].Name != "None")
+                        System.Console.WriteLine("6");
+                        if(user.Char.ActiveMon.ActiveMoves[0].Name != "None")
                         {
-                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[0];
+                            System.Console.WriteLine("7");
                             user.ReactionMessages.Remove(message.Id);
+                            System.Console.WriteLine("8");
+                            await NewCombatHandler.ParseMoveSelection(user, 0);
+                            /*
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[0];
                             await CombatHandler.Attack(user.Char.Combat);
                             await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            */
                         }
                     }
                     else if(reaction.Emote.Name == "2\u20E3")
                     {
-                        if(user.Char.Combat.ActiveMon.ActiveMoves[1].Name != "None")
+                        if(user.Char.ActiveMon.ActiveMoves[1].Name != "None")
                         {
-                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[1];
                             user.ReactionMessages.Remove(message.Id);
+                            await NewCombatHandler.ParseMoveSelection(user, 1);
+                            /*
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[1];
                             await CombatHandler.Attack(user.Char.Combat);
                             await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            */
                         }
                     }
                     else if(reaction.Emote.Name == "3\u20E3")
                     {
-                        if(user.Char.Combat.ActiveMon.ActiveMoves[2].Name != "None")
+                        if(user.Char.ActiveMon.ActiveMoves[2].Name != "None")
                         {
-                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[2];
                             user.ReactionMessages.Remove(message.Id);
+                            await NewCombatHandler.ParseMoveSelection(user, 2);
+                            /*
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[2];
                             await CombatHandler.Attack(user.Char.Combat);
                             await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            */
                         }
                     }
                     else if(reaction.Emote.Name == "4\u20E3")
                     {
-                        if(user.Char.Combat.ActiveMon.ActiveMoves[3].Name != "None")
+                        if(user.Char.ActiveMon.ActiveMoves[3].Name != "None")
                         {
-                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[3];
                             user.ReactionMessages.Remove(message.Id);
+                            await NewCombatHandler.ParseMoveSelection(user, 3);
+                            /*
+                            user.Char.Combat.SelectedMove = user.Char.Combat.ActiveMon.ActiveMoves[3];
                             await CombatHandler.Attack(user.Char.Combat);
                             await MessageHandler.SendDM(user.UserId, $"Selected **{user.Char.Combat.SelectedMove.Name}**!");
+                            */
                         }
                     }
                 }

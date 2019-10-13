@@ -30,10 +30,13 @@ namespace DiscomonProject
         public List<double> NatureMods;
         public List<int> CurStats;
         public List<string> NatureList;
+        public BasicMove SelectedMove;
         public List<BasicMove> ActiveMoves;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
+        public bool DmgHit { get; set; }
+        public bool MoveFailed { get; set; }
         public bool Fainted { get; set; }
         public string GenderSymbol { get; set; }
 
@@ -53,6 +56,8 @@ namespace DiscomonProject
             ActiveMoves[0] = new Tackle();
             GenerateIvs();
             SetRandomNature();
+            DmgHit = false;
+            MoveFailed = false;
             Heal();
         }
 

@@ -8,14 +8,17 @@ namespace DiscomonProject
     public class Character
     {
         public string Name { get; set; }
+        public string Mention { get; set; }
         public ulong CurrentGuildId { get; set; }
         public string CurrentGuildName { get; set; }
+        public BasicMon ActiveMon { get; set; }
         public List<BasicMon> Party { get; set; }
         public List<BasicMon> PC { get; set; }
         public ulong CombatRequest { get; set; }
         public ulong InCombatWith { get; set; }
         public bool InCombat { get; set; }
         public bool InPvpCombat { get; set; }
+        public int CombatId { get; set; }
         public CombatInstance Combat { get; set; }
 
         public Character()
@@ -29,6 +32,7 @@ namespace DiscomonProject
             PC = new List<BasicMon>();
             InCombat = false;
             InPvpCombat = false;
+            CombatId = -1;
             Combat = null;
         }
 
@@ -38,6 +42,10 @@ namespace DiscomonProject
             InPvpCombat = false;
             CombatRequest = 0;
             InCombatWith = 0;
+            CombatId = -1;
+            foreach(BasicMon mon in Party)
+                mon.SelectedMove = null;
+            ActiveMon = null;
             Combat = null;
         }
 
@@ -51,6 +59,24 @@ namespace DiscomonProject
                 }
             }
             return null;
+        }
+
+        public bool HasLivingParty()
+        {
+            var dead = 0;
+            foreach(BasicMon mon in Party)
+            {
+                if(mon.Fainted)
+                {
+                    dead++;
+                }
+            }
+            if(dead == Party.Count || Party.Count < 1 || Party.Count > 6)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

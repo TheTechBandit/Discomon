@@ -179,9 +179,5 @@ namespace DiscomonProject
             return true;
         }
 
-        public static void MoveEffectiveness(string atk, string defense)
-        {
-            
-        }
     }
 }

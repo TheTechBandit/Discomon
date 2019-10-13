@@ -74,6 +74,8 @@ namespace DiscomonProject
             user.DmId = dm;
             user.Name = name;
             user.Mention = mention;
+            if(user.HasCharacter)
+                user.Char.Mention = mention;
             user.AvatarUrl = avatar;
             SaveUsers();
         }

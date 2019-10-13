@@ -110,6 +110,16 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(context, $"{user.Mention}, you cannot enter an attack right now!");
         }
 
+        public static async Task Faint(ContextIds context, UserAccount user, BasicMon mon)
+        {
+            await MessageHandler.SendMessage(context, $"{user.Mention}'s {mon.Nickname} fainted!");
+        }
+
+        public static async Task OutOfMonsWinner(ContextIds context, UserAccount winner, UserAccount loser)
+        {
+            await MessageHandler.SendMessage(context, $"{loser.Mention} has run out of mon! {winner.Mention} wins!");
+        }
+
         public static async Task FaintWinner(ContextIds context, UserAccount user, BasicMon mon)
         {
             await MessageHandler.SendMessage(context, $"{mon.Nickname} fainted! {user.Mention} wins!");
@@ -123,6 +133,11 @@ namespace DiscomonProject.Discord
         public static async Task TakesDamage(ContextIds context, BasicMon mon)
         {
             await MessageHandler.SendEmbedMessage(context, $"{mon.Nickname} takes damage!", MonEmbedBuilder.FieldMon(mon));
+        }
+
+        public static async Task MoveFailed(ContextIds context, BasicMon mon)
+        {
+            await MessageHandler.SendMessage(context, $"{mon.Nickname}'s {mon.SelectedMove.Name} failed!");
         }
 
         public static async Task FightScreen(ulong userId)
