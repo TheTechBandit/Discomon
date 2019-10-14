@@ -106,28 +106,21 @@ namespace DiscomonProject.Discord
         [Command("attack")]
         public async Task Attack()
         {
-            var user = UserHandler.GetUser(Context.User.Id);
             ContextIds idList = new ContextIds(Context);
+            var user = UserHandler.GetUser(idList.UserId);
 
             //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
             try
             {
                 await UserHandler.CharacterExists(idList);
-                await UserHandler.ValidCharacterLocation(idList);
+                await UserHandler.CharacterInCombat(idList);
             }
             catch(InvalidCharacterStateException)
             {
                 return;
             }
             
-            if(user.Char.Combat == null)
-            {
-                await MessageHandler.SendMessage(idList, $"{user.Mention} aren't in combat right now!");
-            }
-            else
-            {
-                await CombatHandler.Attack(user.Char.Combat);
-            }
+            //Resend attack screen, if possible. If an attack/move screen exist already, delete them.
         }
 
         [Command("exitcombat")]

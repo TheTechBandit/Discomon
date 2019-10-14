@@ -19,7 +19,6 @@ namespace DiscomonProject
         public bool InCombat { get; set; }
         public bool InPvpCombat { get; set; }
         public int CombatId { get; set; }
-        public CombatInstance Combat { get; set; }
 
         public Character()
         {
@@ -33,7 +32,6 @@ namespace DiscomonProject
             InCombat = false;
             InPvpCombat = false;
             CombatId = -1;
-            Combat = null;
         }
 
         public void ExitCombat()
@@ -46,7 +44,6 @@ namespace DiscomonProject
             foreach(BasicMon mon in Party)
                 mon.SelectedMove = null;
             ActiveMon = null;
-            Combat = null;
         }
 
         public BasicMon FirstUsableMon()

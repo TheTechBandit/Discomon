@@ -19,11 +19,6 @@ namespace DiscomonProject
         {
 
         }
-        
-        public override void ApplyMove(Character owner)
-        {
-            
-        }
 
         public override int ApplyMove(NewCombatInstance inst, BasicMon owner)
         {

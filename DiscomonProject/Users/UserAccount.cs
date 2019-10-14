@@ -44,7 +44,6 @@ namespace DiscomonProject
 
             str += $"\nHasCharacter: {HasCharacter}";
             if(HasCharacter) str += $"\n**CHARACTER**\nName: {Char.Name}\nCurrentGuildName: {Char.CurrentGuildName}\nCurrentGuildId: {Char.CurrentGuildId}\nCombatRequest: {Char.CombatRequest}\nInCombat: {Char.InCombat}\nInPvpCombat: {Char.InPvpCombat}\nInCombatWith: {Char.InCombatWith}";
-            if(Char.InCombat) str += $"\n**COMBAT INSTANCE**\nThisPlayer: {Char.Combat.ThisPlayer}\nOtherPlayer: {Char.Combat.OtherPlayer}\n";
             return str;
         }
         

@@ -19,11 +19,6 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
         }
-        
-        public override void ApplyMove(Character owner)
-        {
-            owner.Combat.EnemyMon.TakeDamage(ApplyPower(owner.Combat));
-        }
 
         public override int ApplyMove(NewCombatInstance inst, BasicMon owner)
         {

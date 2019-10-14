@@ -20,23 +20,10 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
         }
-        
-        public virtual void ApplyMove(Character owner)
-        {
-
-        }
 
         public virtual int ApplyMove(NewCombatInstance inst, BasicMon owner)
         {
             return 0;
-        }
-
-        public int ApplyPower(CombatInstance inst)
-        {
-            var active = inst.ActiveMon;
-            var enemy = inst.EnemyMon;
-
-            return ((((((2*active.Level)/5)+2)*Power*(active.CurStats[1]/enemy.CurStats[2]))/50)+2);//*mod;
         }
 
         public int ApplyPower(NewCombatInstance inst, BasicMon owner)
