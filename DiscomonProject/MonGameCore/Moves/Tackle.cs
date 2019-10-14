@@ -20,7 +20,7 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override int ApplyMove(NewCombatInstance inst, BasicMon owner)
+        public override int ApplyMove(CombatInstance inst, BasicMon owner)
         {
             var enemy = inst.GetOtherMon(owner);
             int dmg = 0;

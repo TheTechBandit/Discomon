@@ -72,10 +72,10 @@ namespace DiscomonProject.Discord
 
                         await CombatHandler.StartCombat(fromUser.Char.Combat);
                         */
-                        NewCombatInstance combat = new NewCombatInstance(idList, fromUser, toUser);
+                        CombatInstance combat = new CombatInstance(idList, fromUser, toUser);
 
-                        NewCombatHandler.StoreInstance(NewCombatHandler.NumberOfInstances(), combat);
-                        await NewCombatHandler.StartCombat(combat);
+                        CombatHandler.StoreInstance(CombatHandler.NumberOfInstances(), combat);
+                        await CombatHandler.StartCombat(combat);
                     }
                 }
                 else

@@ -20,7 +20,7 @@ namespace DiscomonProject
 
         }
 
-        public override int ApplyMove(NewCombatInstance inst, BasicMon owner)
+        public override int ApplyMove(CombatInstance inst, BasicMon owner)
         {
             return 0;
         }

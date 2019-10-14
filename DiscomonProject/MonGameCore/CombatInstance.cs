@@ -4,7 +4,7 @@ using DiscomonProject.Discord;
 
 namespace DiscomonProject
 {
-    public class NewCombatInstance
+    public class CombatInstance
     {
         public ContextIds Location { get; set; }
         public UserAccount PlayerOne { get; set; }
@@ -28,12 +28,12 @@ namespace DiscomonProject
         public bool IsPvP { get; set; }
         public bool IsDoubleBattle { get; set; }
 
-        public NewCombatInstance()
+        public CombatInstance()
         {
             
         }
 
-        public NewCombatInstance(ContextIds loc, UserAccount one, UserAccount two)
+        public CombatInstance(ContextIds loc, UserAccount one, UserAccount two)
         {
             Location = loc;
             PlayerOne = one;
@@ -45,13 +45,13 @@ namespace DiscomonProject
             PlayerOne.Char.InCombat = true;
             PlayerOne.Char.InPvpCombat = true;
             PlayerOne.Char.CombatRequest = 0;
-            PlayerOne.Char.CombatId = NewCombatHandler.NumberOfInstances();
+            PlayerOne.Char.CombatId = CombatHandler.NumberOfInstances();
             PlayerOne.Char.InCombatWith = PlayerTwo.UserId;
 
             PlayerTwo.Char.InCombat = true;
             PlayerTwo.Char.InPvpCombat = true;
             PlayerTwo.Char.CombatRequest = 0;
-            PlayerTwo.Char.CombatId = NewCombatHandler.NumberOfInstances();
+            PlayerTwo.Char.CombatId = CombatHandler.NumberOfInstances();
             PlayerTwo.Char.InCombatWith = PlayerOne.UserId;
         }
 

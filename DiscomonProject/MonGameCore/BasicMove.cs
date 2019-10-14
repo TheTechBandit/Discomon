@@ -21,12 +21,12 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public virtual int ApplyMove(NewCombatInstance inst, BasicMon owner)
+        public virtual int ApplyMove(CombatInstance inst, BasicMon owner)
         {
             return 0;
         }
 
-        public int ApplyPower(NewCombatInstance inst, BasicMon owner)
+        public int ApplyPower(CombatInstance inst, BasicMon owner)
         {
             var enemy = inst.GetOtherMon(owner);
 

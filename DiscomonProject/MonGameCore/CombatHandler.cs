@@ -6,25 +6,25 @@ using DiscomonProject.Storage.Implementations;
 
 namespace DiscomonProject
 {
-    public static class NewCombatHandler
+    public static class CombatHandler
     {
         public static readonly string filepath;
-        private static Dictionary<int, NewCombatInstance> _dic;
+        private static Dictionary<int, CombatInstance> _dic;
         private static JsonStorage _jsonStorage;
 
-        static NewCombatHandler()
+        static CombatHandler()
         {
             System.Console.WriteLine("Loading Combat Instances...");
             
             //Access JsonStorage to load user list into memory
             filepath = "MonGameCore/CombatInstances";
 
-            _dic = new Dictionary<int, NewCombatInstance>();
+            _dic = new Dictionary<int, CombatInstance>();
             _jsonStorage = new JsonStorage();
 
-            foreach(KeyValuePair<int, NewCombatInstance> entry in _jsonStorage.RestoreObject<Dictionary<int, NewCombatInstance>>(filepath))
+            foreach(KeyValuePair<int, CombatInstance> entry in _jsonStorage.RestoreObject<Dictionary<int, CombatInstance>>(filepath))
             {
-                _dic.Add(entry.Key, (NewCombatInstance)entry.Value);
+                _dic.Add(entry.Key, (CombatInstance)entry.Value);
             }
 
             System.Console.WriteLine($"Successfully loaded {_dic.Count} combat instances.");
@@ -36,7 +36,7 @@ namespace DiscomonProject
             _jsonStorage.StoreObject(_dic, filepath);
         }
 
-        public static void StoreInstance(int key, NewCombatInstance inst)
+        public static void StoreInstance(int key, CombatInstance inst)
         {
             if (_dic.ContainsKey(key))
             {
@@ -49,7 +49,7 @@ namespace DiscomonProject
             SaveInstances();
         }
 
-        public static NewCombatInstance GetInstance(int key)
+        public static CombatInstance GetInstance(int key)
         {
             if(!_dic.ContainsKey(key))
                 throw new ArgumentException($"The provided key '{key}' wasn't found.");
@@ -64,13 +64,13 @@ namespace DiscomonProject
         public static void ClearCombatData()
         {
             System.Console.WriteLine("Deleting all combat instances.");
-            Dictionary<ulong, NewCombatInstance> emptyDic = new Dictionary<ulong, NewCombatInstance>();
-            emptyDic.Add(0, new NewCombatInstance());
+            Dictionary<ulong, CombatInstance> emptyDic = new Dictionary<ulong, CombatInstance>();
+            emptyDic.Add(0, new CombatInstance());
 
             _jsonStorage.StoreObject(emptyDic, filepath);
         }
 
-        public static async Task StartCombat(NewCombatInstance inst)
+        public static async Task StartCombat(CombatInstance inst)
         {
             //Make sure both users have a valid party
             if(!inst.PlayerOne.Char.HasLivingParty())
@@ -121,7 +121,7 @@ namespace DiscomonProject
             }
         }
 
-        public static async Task ResolvePhase(NewCombatInstance inst)
+        public static async Task ResolvePhase(CombatInstance inst)
         {
             //PHASE 0
             if(inst.CombatPhase == 0)
@@ -256,7 +256,7 @@ namespace DiscomonProject
 
         }
 
-        public static async Task ApplyMoves(NewCombatInstance inst, UserAccount first)
+        public static async Task ApplyMoves(CombatInstance inst, UserAccount first)
         {
             var second = inst.GetOtherPlayer(first);
 
@@ -289,17 +289,17 @@ namespace DiscomonProject
             }
         }
 
-        public static void EndCombat(NewCombatInstance inst)
+        public static void EndCombat(CombatInstance inst)
         {
             _dic.Remove(inst.PlayerOne.Char.CombatId);
 
             inst.PlayerOne.Char.ExitCombat();
             inst.PlayerTwo.Char.ExitCombat();
-            NewCombatHandler.SaveInstances();
+            CombatHandler.SaveInstances();
         }
 
         //Post attack phase logic. Mon is the mon who was hit.
-        public static async Task PostAttackPhase(NewCombatInstance inst, BasicMon mon, int val)
+        public static async Task PostAttackPhase(CombatInstance inst, BasicMon mon, int val)
         {
             //5- Post attack mini-phase. Check for death/on-hit abilities
             var owner = UserHandler.GetUser(mon.OwnerID);
