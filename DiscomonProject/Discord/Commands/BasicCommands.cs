@@ -32,7 +32,7 @@ namespace DiscomonProject.Discord
             
             await Context.Channel.SendMessageAsync(
             "",
-            embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[num]))
+            embed: MonEmbedBuilder.MonStats((BasicMon)user.Char.Party[num-1]))
             .ConfigureAwait(false);
         }
 

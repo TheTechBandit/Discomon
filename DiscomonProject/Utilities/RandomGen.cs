@@ -10,5 +10,21 @@ namespace DiscomonProject
         {
             Gen = new Random();
         }
+
+        public static double RandomDouble(double min, double max)
+        {
+            var random = Gen.NextDouble() * (max - min) + min;
+            Console.WriteLine($"Random double between {min} and {max}: {random}");
+            return random;
+        }
+
+        public static bool PercentChance(double chance)
+        {
+            if(RandomDouble(0.0, 99.0) < chance)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

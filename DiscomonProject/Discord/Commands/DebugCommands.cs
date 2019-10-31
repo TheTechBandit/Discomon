@@ -18,15 +18,7 @@ namespace DiscomonProject.Discord
             await ReplyAsync("pong");
         }
 
-        [Command("whoami")]
-        public async Task ShowAccount()
-        {
-            UserAccount acc = UserHandler.GetUser(Context.User.Id);
-
-            await ReplyAsync($"Here is your information: \nID: {acc.UserId}\nName: {acc.Name}\nAvatar: {acc.AvatarUrl}\nGuildID: {acc.Char.CurrentGuildId}");
-        }
-
-        [Command("debuginfo")]
+        [Command("debugplayer")]
         public async Task DebugInfo(SocketGuildUser target)
         {
             ContextIds idList = new ContextIds(Context);
@@ -86,11 +78,11 @@ namespace DiscomonProject.Discord
         {
             ContextIds idList = new ContextIds(Context);
 
-            var attack = new WaterType(true);
+            var attack = new BeastType(true);
             List<BasicType> defense = new List<BasicType>()
             {
-                new WaterType(true),
-                new FireType(true)
+                new BeastType(true),
+                new BeastType(true)
             };
 
             var effect = attack.ParseEffectiveness(defense);
@@ -141,6 +133,36 @@ namespace DiscomonProject.Discord
             }
 
             user.PromptState = -1;
+        }
+
+        [Command("commands")]
+        public async Task Commands()
+        {
+            ContextIds idList = new ContextIds(Context);
+            var str = "";
+            str += "**DEBUG**";
+            str += "\nping- The bot responds with \"pong.\" Used to test ping and trigger bot updates.";
+            str += "\ndebugplayer {@Mention}- Shows debug info for a player's UserAccount and Character profiles.";
+            str += "\ndebugresetchar- Deletes the user's character.";
+            str += "\ndatawipe- Wipes all bot data in case of corrupted data or inconsistent values.";
+            str += "\nwhisper- Used to test various DM or special case messages.";
+            str += "\nemojitest- Temporary test command to showcase custom emoji usage.";
+            str += "\ntypetest- Temporary test command used to demonstrate type advantages.";
+            str += "\nquickstart {MonName}- Easy alternative to !startadventure for testing purposes. Use carefully.";
+
+            str += "\n\n**BASIC**";
+            str += "\nmonstat {Party#}- Shows the stats of the mon at the indicated party number.";
+            str += "\nparty- Lists the mons in the user's party.";
+            str += "\nenter {Input}- Used as an input method. Needs better implementation.";
+            str += "\nstartadventure- Character creation command.";
+            
+            str += "\n\n**COMBAT**";
+            str += "\nduel {@Mention}- Sends a duel request to the mentioned player. Starts a duel if a request has already been recieved from the mentioned player.";
+            str += "\nattack- If the fight/move screen has been broken or lost, this will resend it.";
+            str += "\nexitcombat- Exits combat, automatically forfeiting.";
+            str += "\npheal- Heals the user's party.";
+
+            await MessageHandler.SendMessage(idList, str);
         }
 
     }

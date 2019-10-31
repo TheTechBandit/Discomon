@@ -1,3 +1,4 @@
+using System;
 using Discord.Commands;
 
 namespace DiscomonProject.Discord

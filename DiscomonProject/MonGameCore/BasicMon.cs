@@ -36,6 +36,7 @@ namespace DiscomonProject
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
         public bool DmgHit { get; set; }
+        public int CritChance { get; set; }
         public bool MoveFailed { get; set; }
         public bool Fainted { get; set; }
         public string GenderSymbol { get; set; }
@@ -53,10 +54,11 @@ namespace DiscomonProject
             CatcherID = 0;
             OwnerID = 0;
             InitializeLists();
-            ActiveMoves[0] = new Tackle();
+            ActiveMoves[0] = new Tackle(true);
             GenerateIvs();
             SetRandomNature();
             DmgHit = false;
+            CritChance = 0;
             MoveFailed = false;
             Heal();
         }

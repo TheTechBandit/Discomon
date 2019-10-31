@@ -104,6 +104,7 @@ namespace DiscomonProject
         public static async Task ParseMoveSelection(UserAccount user, int num)
         {
             var inst = GetInstance(user.Char.CombatId);
+            Console.WriteLine($"{inst.CombatPhase}");
 
             if(user.Char.ActiveMon.SelectedMove != null)
             {

@@ -120,7 +120,7 @@ namespace DiscomonProject.Discord
                 return;
             }
             
-            //Resend attack screen, if possible. If an attack/move screen exist already, delete them.
+            
         }
 
         [Command("exitcombat")]
@@ -181,6 +181,10 @@ namespace DiscomonProject.Discord
             foreach(BasicMon mon in user.Char.Party)
             {
                 mon.Heal();
+                foreach(BasicMove move in mon.ActiveMoves)
+                {
+                    move.Restore();
+                }
             }
 
             await MessageHandler.SendMessage(idList, $"{user.Mention}, your party has been healed!");

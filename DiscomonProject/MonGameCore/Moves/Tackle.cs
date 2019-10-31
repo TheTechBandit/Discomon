@@ -1,10 +1,12 @@
+using System;
+
 namespace DiscomonProject
 {
     public class Tackle : BasicMove
     {
         public override string Name { get; } = "Tackle";
         public override string Description { get; } = "The user tackles their enemy, dealing damage.";
-        public override BasicType Type { get; } = new BeastType();
+        public override BasicType Type { get; } = new BeastType(true);
         public override bool Contact { get; } = true;
         public override int MaxPP { get; } = 35;
         public override int Power { get; } = 40;
@@ -33,9 +35,9 @@ namespace DiscomonProject
             //Hit logic
             else
             {
-            dmg = ApplyPower(inst, owner);
-            enemy.TakeDamage(dmg);
-            enemy.DmgHit = true;
+                dmg = ApplyPower(inst, owner);
+                enemy.TakeDamage(dmg);
+                enemy.DmgHit = true;
             }
             return dmg;
         }

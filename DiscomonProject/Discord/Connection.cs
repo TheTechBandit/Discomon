@@ -76,7 +76,7 @@ namespace DiscomonProject.Discord
         {
             if(reaction.User.Value.IsBot)
                 return;
-
+            
             var message = await cacheMessage.GetOrDownloadAsync();
             var user = UserHandler.GetUser(reaction.UserId);
             ContextIds idList = new ContextIds()
@@ -136,10 +136,8 @@ namespace DiscomonProject.Discord
                         return;
                     }
                     
-                    System.Console.WriteLine("5");
                     if(reaction.Emote.Name == "1\u20E3")
                     {
-                        System.Console.WriteLine("6");
                         if(user.Char.ActiveMon.ActiveMoves[0].Name != "None")
                         {
                             user.ReactionMessages.Remove(message.Id);
@@ -190,8 +188,7 @@ namespace DiscomonProject.Discord
                 System.Console.WriteLine($"Command [{command.Value.Name}] executed for -> [{context.User.Username}]");
                 return;
             }
-                
-
+            
             // failure scenario, let's let the user know
             await context.Channel.SendMessageAsync($"Sorry, {context.User.Username}... something went wrong -> [{result}]!");
         }
