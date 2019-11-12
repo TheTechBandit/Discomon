@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DiscomonProject.Discord;
 using Newtonsoft.Json;
 
 namespace DiscomonProject
@@ -29,15 +30,15 @@ namespace DiscomonProject
         public List<int> Evs;
         public List<double> NatureMods;
         public List<int> CurStats;
+        //Att, Def, Aff, Spd, Accuracy, Evasion
+        public List<int> StatMods;
         public List<string> NatureList;
         public BasicMove SelectedMove;
         public List<BasicMove> ActiveMoves;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
-        public bool DmgHit { get; set; }
         public int CritChance { get; set; }
-        public bool MoveFailed { get; set; }
         public bool Fainted { get; set; }
         public string GenderSymbol { get; set; }
 
@@ -55,11 +56,10 @@ namespace DiscomonProject
             OwnerID = 0;
             InitializeLists();
             ActiveMoves[0] = new Tackle(true);
+            ActiveMoves[1] = new Poke(true);
             GenerateIvs();
             SetRandomNature();
-            DmgHit = false;
             CritChance = 0;
-            MoveFailed = false;
             Heal();
         }
 
@@ -94,6 +94,7 @@ namespace DiscomonProject
             Evs = new List<int>();
             NatureMods =  new List<double>();
             CurStats = new List<int>();
+            StatMods = new List<int>();
             ActiveMoves = new List<BasicMove>();
 
             for(int i = 0; i < 5; i++)
@@ -103,7 +104,10 @@ namespace DiscomonProject
                 Evs.Add(0);
                 NatureMods.Add(1.0);
                 CurStats.Add(0);
+                StatMods.Add(0);
             }
+            //Evasion
+            StatMods.Add(0);
 
             BaseList[0] = BaseHP;
             BaseList[1] = BaseAtt;
@@ -359,6 +363,148 @@ namespace DiscomonProject
             if(CurrentHP < 0) CurrentHP = 0;
         }
 
+        public void ResetStatStages()
+        {
+            for(int i = 0; i < StatMods.Count; i++)
+            {
+                StatMods[i] = 0;
+            }
+        }
+
+        //Determine the stat stage change string
+        public string StatModString(string stat, int stage, int change)
+        {
+            string str = "";
+            if(change > 0)
+            {
+                if(stage >= 6)
+                {
+                    str += $"{Nickname}'s {stat} won't go any higher!";
+                }
+                else if(change == 1)
+                {
+                    str += $"{Nickname}'s {stat} rose!";
+                }
+                else if(change == 2)
+                {
+                    str += $"{Nickname}'s {stat} sharply rose!";
+                }
+                else if(change >= 3)
+                {
+                    str += $"{Nickname}'s {stat} drastically rose!";
+                }
+            }
+            else if(change < 0)
+            {
+                if(stage <= -6)
+                {
+                    str += $"{Nickname}'s {stat} won't go any lower!";
+                }
+                else if(change == -1)
+                {
+                    str += $"{Nickname}'s {stat} fell!";
+                }
+                else if(change == -2)
+                {
+                    str += $"{Nickname}'s {stat} sharply fell!";
+                }
+                else if(change <= -3)
+                {
+                    str += $"{Nickname}'s {stat} drastically fell!";
+                }
+            }
+
+            return str;
+        }
+
+        //Calculate the stat modifier based on stat stages
+        public double StatMod(int stage)
+        {
+            double mod = 0.0;
+            double top = 2.0;
+            double bottom = 2.0;
+            if(stage > 0)
+                top += stage;
+            if(stage < 0)
+                bottom += Math.Abs(stage);
+
+            mod = top/bottom;
+            return mod;
+        }
+
+        //Calculate the stat modifier FOR ACC/EVA based on stat stages
+        public double StatModAccEva(int stage)
+        {
+            double mod = 0.0;
+            double top = 3.0;
+            double bottom = 3.0;
+            if(stage > 0)
+                top += stage;
+            if(stage < 0)
+                bottom += Math.Abs(stage);
+
+            mod = top/bottom;
+            return mod;
+        }
+
+        //Modify this mon's attack stage. Returns the modifier and the change string (if necessary).
+        public (double mod, string msg) ChangeStage(int stat, int amt)
+        {
+            int temp = StatMods[stat];
+            double mod = 1.0;
+            string str = "";
+
+            if(amt > 0 || amt < 0)
+            {
+                str = StatModString("attack", temp, amt);
+            }
+
+            temp += amt;
+            if(temp < -6)
+                temp = -6;
+            if(temp > 6)
+                temp = 6;
+
+            if(stat >= 0 && stat < 4)
+                mod = StatMod(temp);
+            if(stat == 4 || stat == 5)
+                mod = StatModAccEva(temp);
+
+            StatMods[stat] = temp;
+
+            return (mod, str);
+        }
+
+        public (double mod, string msg) ChangeAttStage(int amt)
+        {
+            return ChangeStage(0, amt);
+        }
+
+        public (double mod, string msg) ChangeDefStage(int amt)
+        {
+            return ChangeStage(1, amt);
+        }
+
+        public (double mod, string msg) ChangeAffStage(int amt)
+        {
+            return ChangeStage(2, amt);
+        }
+
+        public (double mod, string msg) ChangeSpdStage(int amt)
+        {
+            return ChangeStage(3, amt);
+        }
+
+        public (double mod, string msg) ChangeAccStage(int amt)
+        {
+            return ChangeStage(4, amt);
+        }
+
+        public (double mod, string msg) ChangeEvaStage(int amt)
+        {
+            return ChangeStage(5, amt);
+        }
+
         public string TypingToString()
         {
             string str = "";
@@ -367,6 +513,20 @@ namespace DiscomonProject
             else
                 str += $"{Typing[0].Type}";
             return str;
+        }
+
+        public List<int> HPGradient()
+        {
+            double perc = (double)CurrentHP/(double)TotalHP;
+            perc *= 100;
+            int g = 2*(int)perc;
+            int r = 200-g;
+            int b = 0;
+
+            return new List<int>()
+            {
+                r, g, b,
+            };
         }
         
     }

@@ -15,7 +15,7 @@ namespace DiscomonProject
         public virtual int Accuracy { get; }
         public bool Disabled { get; set; }
         [JsonIgnore]
-        MoveResult Result { get; set; }
+        public MoveResult Result { get; set; }
 
         public BasicMove()
         {
@@ -26,22 +26,29 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
             Disabled = false;
-            Result.Move = this;
         }
 
-        public virtual int ApplyMove(CombatInstance inst, BasicMon owner)
+        public virtual MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
         {
-            return 0;
+            return Result;
+        }
+
+        public void ResetResult()
+        {
+            Result = new MoveResult();
+            Result.Move = this;
         }
 
         public int ApplyPower(CombatInstance inst, BasicMon owner)
         {
             var enemy = inst.GetOtherMon(owner);
             var mod = CalculateMod(inst, owner, enemy);
-            var damage = (int)(((((((2*owner.Level)/5)+2)*Power*(owner.CurStats[1]/enemy.CurStats[2]))/50)+2)*mod);
+            var damage = (int)(((((((2*owner.Level)/5)+2)*Power*(owner.CurStats[1]*owner.StatMod(0)/enemy.CurStats[2]*enemy.StatMod(1)))/50)+2)*mod);
 
             if(damage < 1)
                 damage = 1;
+
+            Result.EnemyDmg = damage;
 
             return damage;
         }
@@ -49,6 +56,7 @@ namespace DiscomonProject
         public double CalculateMod(CombatInstance inst, BasicMon owner, BasicMon enemy)
         {
             var mod = ModCrit(inst, owner, enemy) * ModRandom() * ModType(enemy);
+            Result.Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
         }
@@ -59,17 +67,31 @@ namespace DiscomonProject
             {
                 case 0:
                     if(RandomGen.PercentChance(6.25))
+                    {
+                        Result.Crit = true;
+                        Result.ModCrit = 1.5;
                         return 1.5;
+                    }
                     break;
                 case 1:
                     if(RandomGen.PercentChance(12.5))
+                    {
+                        Result.Crit = true;
+                        Result.ModCrit = 1.5;
                         return 1.5;
+                    }
                     break;
                 case 2:
                     if(RandomGen.PercentChance(50.0))
+                    {
+                        Result.Crit = true;
+                        Result.ModCrit = 1.5;
                         return 1.5;
+                    }
                     break;
                 default:
+                    Result.Crit = true;
+                    Result.ModCrit = 1.5;
                     return 1.5;
             }
 
@@ -78,18 +100,30 @@ namespace DiscomonProject
 
         public double ModRandom()
         {
-            return RandomGen.RandomDouble(0.85, 1.0);
+            var random = RandomGen.RandomDouble(0.85, 1.0);
+            Result.ModRand = random;
+            return random;
         }
 
         public double ModType(BasicMon enemy)
         {
-            return Type.ParseEffectiveness(enemy.Typing);
+            var type = Type.ParseEffectiveness(enemy.Typing);
+            if(type > 1)
+                Result.SuperEffective = true;
+            if(type < 1)
+                Result.NotEffective = true;
+            if(type == 0)
+                Result.Immune = true;
+            Result.ModType = type;
+            
+            return type;
         }
 
         public void Restore()
         {
             CurrentPP = MaxPP;
             Disabled = false;
+            Result = null;
         }
     }
 }

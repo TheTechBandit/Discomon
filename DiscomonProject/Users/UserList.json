@@ -10,321 +10,16 @@
     "PromptState": -1,
     "ReactionMessages": {}
   },
-  "175698286815084545": {
-    "UserId": 175698286815084545,
-    "DmId": 628696926392549408,
-    "Mention": "<@!175698286815084545>",
-    "Name": "Ghub",
+  "615533301368881152": {
+    "UserId": 615533301368881152,
+    "DmId": 624659680081477632,
+    "Mention": "<@!615533301368881152>",
+    "Name": "Debugger",
     "Char": {
-      "Name": "Ghub",
-      "Mention": "<@!175698286815084545>",
-      "CurrentGuildId": 559927939807051798,
-      "CurrentGuildName": "Ghub's Hideout",
-      "ActiveMon": null,
-      "Party": [
-        {
-          "$type": "DiscomonProject.Snoril, DiscomonProject",
-          "BaseList": [
-            90,
-            65,
-            65,
-            85,
-            15
-          ],
-          "Ivs": [
-            28,
-            19,
-            26,
-            20,
-            8
-          ],
-          "Evs": [
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          "NatureMods": [
-            1.0,
-            1.1,
-            1.0,
-            1.0,
-            0.9
-          ],
-          "CurStats": [
-            25,
-            13,
-            12,
-            14,
-            5
-          ],
-          "NatureList": [
-            "Rash/Att/Def",
-            "Blunt/Att/Aff",
-            "Careful/Att/Spd",
-            "Peaceful/Def/Att",
-            "Stable/Def/Aff",
-            "Sturdy/Def/Spd",
-            "Calm/Aff/Att",
-            "Shy/Aff/Def",
-            "Pensive/Aff/Spd",
-            "Witty/Spd/Att",
-            "Impulsive/Spd/Def",
-            "Hasty/Spd/Aff"
-          ],
-          "SelectedMove": null,
-          "ActiveMoves": [
-            {
-              "$type": "DiscomonProject.Tackle, DiscomonProject",
-              "Name": "Tackle",
-              "Description": "The user tackles their enemy, dealing damage.",
-              "Type": {
-                "$type": "DiscomonProject.BeastType, DiscomonProject",
-                "Type": "Beast",
-                "Advantages": [
-                  {
-                    "$type": "DiscomonProject.NatureType, DiscomonProject",
-                    "Type": "Nature",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  },
-                  {
-                    "$type": "DiscomonProject.PrimalType, DiscomonProject",
-                    "Type": "Primal",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  }
-                ],
-                "Disadvantages": [
-                  {
-                    "$type": "DiscomonProject.FireType, DiscomonProject",
-                    "Type": "Fire",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  },
-                  {
-                    "$type": "DiscomonProject.FeyType, DiscomonProject",
-                    "Type": "Fey",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  },
-                  {
-                    "$type": "DiscomonProject.PsychicType, DiscomonProject",
-                    "Type": "Psychic",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  },
-                  {
-                    "$type": "DiscomonProject.SonicType, DiscomonProject",
-                    "Type": "Sonic",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  }
-                ],
-                "Immunities": [
-                  {
-                    "$type": "DiscomonProject.GhostType, DiscomonProject",
-                    "Type": "Ghost",
-                    "Advantages": null,
-                    "Disadvantages": null,
-                    "Immunities": null,
-                    "Description": ""
-                  }
-                ],
-                "Description": ""
-              },
-              "Contact": true,
-              "MaxPP": 35,
-              "Power": 40,
-              "Accuracy": 100,
-              "CurrentPP": 35,
-              "Disabled": false
-            },
-            {
-              "$type": "DiscomonProject.None, DiscomonProject",
-              "Name": "None",
-              "Description": "",
-              "Type": {
-                "$type": "DiscomonProject.BeastType, DiscomonProject",
-                "Type": "Beast",
-                "Advantages": null,
-                "Disadvantages": null,
-                "Immunities": null,
-                "Description": ""
-              },
-              "Contact": false,
-              "MaxPP": 0,
-              "Power": 0,
-              "Accuracy": 0,
-              "CurrentPP": 0,
-              "Disabled": false
-            },
-            {
-              "$type": "DiscomonProject.None, DiscomonProject",
-              "Name": "None",
-              "Description": "",
-              "Type": {
-                "$type": "DiscomonProject.BeastType, DiscomonProject",
-                "Type": "Beast",
-                "Advantages": null,
-                "Disadvantages": null,
-                "Immunities": null,
-                "Description": ""
-              },
-              "Contact": false,
-              "MaxPP": 0,
-              "Power": 0,
-              "Accuracy": 0,
-              "CurrentPP": 0,
-              "Disabled": false
-            },
-            {
-              "$type": "DiscomonProject.None, DiscomonProject",
-              "Name": "None",
-              "Description": "",
-              "Type": {
-                "$type": "DiscomonProject.BeastType, DiscomonProject",
-                "Type": "Beast",
-                "Advantages": null,
-                "Disadvantages": null,
-                "Immunities": null,
-                "Description": ""
-              },
-              "Contact": false,
-              "MaxPP": 0,
-              "Power": 0,
-              "Accuracy": 0,
-              "CurrentPP": 0,
-              "Disabled": false
-            }
-          ],
-          "Species": "Snoril",
-          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
-          "BaseHP": 90,
-          "BaseAtt": 65,
-          "BaseDef": 65,
-          "BaseAff": 85,
-          "BaseSpd": 15,
-          "Typing": [
-            {
-              "$type": "DiscomonProject.BeastType, DiscomonProject",
-              "Type": "Beast",
-              "Advantages": [
-                {
-                  "$type": "DiscomonProject.NatureType, DiscomonProject",
-                  "Type": "Nature",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                },
-                {
-                  "$type": "DiscomonProject.PrimalType, DiscomonProject",
-                  "Type": "Primal",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                }
-              ],
-              "Disadvantages": [
-                {
-                  "$type": "DiscomonProject.FireType, DiscomonProject",
-                  "Type": "Fire",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                },
-                {
-                  "$type": "DiscomonProject.FeyType, DiscomonProject",
-                  "Type": "Fey",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                },
-                {
-                  "$type": "DiscomonProject.PsychicType, DiscomonProject",
-                  "Type": "Psychic",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                },
-                {
-                  "$type": "DiscomonProject.SonicType, DiscomonProject",
-                  "Type": "Sonic",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                }
-              ],
-              "Immunities": [
-                {
-                  "$type": "DiscomonProject.GhostType, DiscomonProject",
-                  "Type": "Ghost",
-                  "Advantages": null,
-                  "Disadvantages": null,
-                  "Immunities": null,
-                  "Description": ""
-                }
-              ],
-              "Description": ""
-            }
-          ],
-          "DexNum": 999,
-          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
-          "Nickname": "Snoril",
-          "Gender": "Male",
-          "CatcherID": 175698286815084545,
-          "OwnerID": 175698286815084545,
-          "Level": 5,
-          "Nature": "Careful",
-          "TotalHP": 25,
-          "CurrentHP": 5,
-          "DmgHit": true,
-          "MoveFailed": false,
-          "Fainted": false,
-          "GenderSymbol": "♂"
-        }
-      ],
-      "PC": [],
-      "CombatRequest": 0,
-      "InCombatWith": 0,
-      "InCombat": false,
-      "InPvpCombat": false,
-      "CombatId": -1
-    },
-    "AvatarUrl": "https://cdn.discordapp.com/avatars/175698286815084545/a_00d9ca32bf9e4cde5952594244f5a07e.gif?size=128",
-    "HasCharacter": true,
-    "PromptState": 2,
-    "ReactionMessages": {}
-  },
-  "208440011039834113": {
-    "UserId": 208440011039834113,
-    "DmId": 638923483211890728,
-    "Mention": "<@!208440011039834113>",
-    "Name": "AngelOfHonor",
-    "Char": {
-      "Name": "Angelous",
-      "Mention": "<@!208440011039834113>",
-      "CurrentGuildId": 559927939807051798,
-      "CurrentGuildName": "Ghub's Hideout",
+      "Name": "Debugger",
+      "Mention": "<@!615533301368881152>",
+      "CurrentGuildId": 452818303635685386,
+      "CurrentGuildName": "Discomon",
       "ActiveMon": null,
       "Party": [
         {
@@ -337,11 +32,11 @@
             50
           ],
           "Ivs": [
+            14,
+            17,
+            28,
             30,
-            11,
-            22,
-            22,
-            19
+            18
           ],
           "Evs": [
             0,
@@ -352,17 +47,25 @@
           ],
           "NatureMods": [
             1.0,
-            0.9,
             1.0,
+            1.1,
             1.0,
-            1.1
+            0.9
           ],
           "CurStats": [
-            23,
-            11,
-            12,
+            22,
             13,
-            11
+            13,
+            14,
+            9
+          ],
+          "StatMods": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
           ],
           "NatureList": [
             "Rash/Att/Def",
@@ -459,22 +162,81 @@
               "Disabled": false
             },
             {
-              "$type": "DiscomonProject.None, DiscomonProject",
-              "Name": "None",
-              "Description": "",
+              "$type": "DiscomonProject.Poke, DiscomonProject",
+              "Name": "Poke",
+              "Description": "The user pokes their enemy, lowering their defense by one stage.",
               "Type": {
                 "$type": "DiscomonProject.BeastType, DiscomonProject",
                 "Type": "Beast",
-                "Advantages": null,
-                "Disadvantages": null,
-                "Immunities": null,
+                "Advantages": [
+                  {
+                    "$type": "DiscomonProject.NatureType, DiscomonProject",
+                    "Type": "Nature",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PrimalType, DiscomonProject",
+                    "Type": "Primal",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Disadvantages": [
+                  {
+                    "$type": "DiscomonProject.FireType, DiscomonProject",
+                    "Type": "Fire",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.FeyType, DiscomonProject",
+                    "Type": "Fey",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PsychicType, DiscomonProject",
+                    "Type": "Psychic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.SonicType, DiscomonProject",
+                    "Type": "Sonic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Immunities": [
+                  {
+                    "$type": "DiscomonProject.GhostType, DiscomonProject",
+                    "Type": "Ghost",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
                 "Description": ""
               },
-              "Contact": false,
-              "MaxPP": 0,
-              "Power": 0,
-              "Accuracy": 0,
-              "CurrentPP": 0,
+              "Contact": true,
+              "MaxPP": 40,
+              "Power": 20,
+              "Accuracy": 100,
+              "CurrentPP": 40,
               "Disabled": false
             },
             {
@@ -620,31 +382,399 @@
           "DexNum": 999,
           "DexEntry": "Suki travel in flocks, finding sanctuary in numbers. They communicate with other members by transmitting emotions and posturing.",
           "Nickname": "Suki",
-          "Gender": "Female",
-          "CatcherID": 208440011039834113,
-          "OwnerID": 208440011039834113,
+          "Gender": "Male",
+          "CatcherID": 615533301368881152,
+          "OwnerID": 615533301368881152,
           "Level": 5,
-          "Nature": "Witty",
-          "TotalHP": 23,
-          "CurrentHP": 3,
-          "DmgHit": true,
-          "MoveFailed": false,
+          "Nature": "Sturdy",
+          "TotalHP": 22,
+          "CurrentHP": 22,
+          "CritChance": 0,
           "Fainted": false,
-          "GenderSymbol": "♀"
+          "GenderSymbol": "♂"
         }
       ],
       "PC": [],
-      "CombatRequest": 0,
+      "CombatRequest": 175698286815084545,
       "InCombatWith": 0,
       "InCombat": false,
       "InPvpCombat": false,
       "CombatId": -1
     },
-    "AvatarUrl": "https://cdn.discordapp.com/avatars/208440011039834113/92990fecc184f56ab357b893f9dc3836.png?size=128",
+    "AvatarUrl": "https://cdn.discordapp.com/avatars/615533301368881152/9d0b3f207db31fc2495e7bb2668663bb.png?size=128",
     "HasCharacter": true,
-    "PromptState": 2,
-    "ReactionMessages": {
-      "638926014524817418": 1
-    }
+    "PromptState": -1,
+    "ReactionMessages": {}
+  },
+  "175698286815084545": {
+    "UserId": 175698286815084545,
+    "DmId": 628696926392549408,
+    "Mention": "<@!175698286815084545>",
+    "Name": "Ghub",
+    "Char": {
+      "Name": "Ghub",
+      "Mention": "<@!175698286815084545>",
+      "CurrentGuildId": 452818303635685386,
+      "CurrentGuildName": "Discomon",
+      "ActiveMon": null,
+      "Party": [
+        {
+          "$type": "DiscomonProject.Snoril, DiscomonProject",
+          "BaseList": [
+            90,
+            65,
+            65,
+            85,
+            15
+          ],
+          "Ivs": [
+            6,
+            17,
+            17,
+            31,
+            12
+          ],
+          "Evs": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureMods": [
+            1.0,
+            1.0,
+            1.0,
+            0.9,
+            1.1
+          ],
+          "CurStats": [
+            24,
+            12,
+            12,
+            13,
+            7
+          ],
+          "StatMods": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "NatureList": [
+            "Rash/Att/Def",
+            "Blunt/Att/Aff",
+            "Careful/Att/Spd",
+            "Peaceful/Def/Att",
+            "Stable/Def/Aff",
+            "Sturdy/Def/Spd",
+            "Calm/Aff/Att",
+            "Shy/Aff/Def",
+            "Pensive/Aff/Spd",
+            "Witty/Spd/Att",
+            "Impulsive/Spd/Def",
+            "Hasty/Spd/Aff"
+          ],
+          "SelectedMove": null,
+          "ActiveMoves": [
+            {
+              "$type": "DiscomonProject.Tackle, DiscomonProject",
+              "Name": "Tackle",
+              "Description": "The user tackles their enemy, dealing damage.",
+              "Type": {
+                "$type": "DiscomonProject.BeastType, DiscomonProject",
+                "Type": "Beast",
+                "Advantages": [
+                  {
+                    "$type": "DiscomonProject.NatureType, DiscomonProject",
+                    "Type": "Nature",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PrimalType, DiscomonProject",
+                    "Type": "Primal",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Disadvantages": [
+                  {
+                    "$type": "DiscomonProject.FireType, DiscomonProject",
+                    "Type": "Fire",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.FeyType, DiscomonProject",
+                    "Type": "Fey",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PsychicType, DiscomonProject",
+                    "Type": "Psychic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.SonicType, DiscomonProject",
+                    "Type": "Sonic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Immunities": [
+                  {
+                    "$type": "DiscomonProject.GhostType, DiscomonProject",
+                    "Type": "Ghost",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Description": ""
+              },
+              "Contact": true,
+              "MaxPP": 35,
+              "Power": 40,
+              "Accuracy": 100,
+              "CurrentPP": 35,
+              "Disabled": false
+            },
+            {
+              "$type": "DiscomonProject.Poke, DiscomonProject",
+              "Name": "Poke",
+              "Description": "The user pokes their enemy, lowering their defense by one stage.",
+              "Type": {
+                "$type": "DiscomonProject.BeastType, DiscomonProject",
+                "Type": "Beast",
+                "Advantages": [
+                  {
+                    "$type": "DiscomonProject.NatureType, DiscomonProject",
+                    "Type": "Nature",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PrimalType, DiscomonProject",
+                    "Type": "Primal",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Disadvantages": [
+                  {
+                    "$type": "DiscomonProject.FireType, DiscomonProject",
+                    "Type": "Fire",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.FeyType, DiscomonProject",
+                    "Type": "Fey",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.PsychicType, DiscomonProject",
+                    "Type": "Psychic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  },
+                  {
+                    "$type": "DiscomonProject.SonicType, DiscomonProject",
+                    "Type": "Sonic",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Immunities": [
+                  {
+                    "$type": "DiscomonProject.GhostType, DiscomonProject",
+                    "Type": "Ghost",
+                    "Advantages": null,
+                    "Disadvantages": null,
+                    "Immunities": null,
+                    "Description": ""
+                  }
+                ],
+                "Description": ""
+              },
+              "Contact": true,
+              "MaxPP": 40,
+              "Power": 20,
+              "Accuracy": 100,
+              "CurrentPP": 40,
+              "Disabled": false
+            },
+            {
+              "$type": "DiscomonProject.None, DiscomonProject",
+              "Name": "None",
+              "Description": "",
+              "Type": {
+                "$type": "DiscomonProject.BeastType, DiscomonProject",
+                "Type": "Beast",
+                "Advantages": null,
+                "Disadvantages": null,
+                "Immunities": null,
+                "Description": ""
+              },
+              "Contact": false,
+              "MaxPP": 0,
+              "Power": 0,
+              "Accuracy": 0,
+              "CurrentPP": 0,
+              "Disabled": false
+            },
+            {
+              "$type": "DiscomonProject.None, DiscomonProject",
+              "Name": "None",
+              "Description": "",
+              "Type": {
+                "$type": "DiscomonProject.BeastType, DiscomonProject",
+                "Type": "Beast",
+                "Advantages": null,
+                "Disadvantages": null,
+                "Immunities": null,
+                "Description": ""
+              },
+              "Contact": false,
+              "MaxPP": 0,
+              "Power": 0,
+              "Accuracy": 0,
+              "CurrentPP": 0,
+              "Disabled": false
+            }
+          ],
+          "Species": "Snoril",
+          "ArtURL": "https://cdn.discordapp.com/attachments/452818546175770624/589914095390818315/snail.png",
+          "BaseHP": 90,
+          "BaseAtt": 65,
+          "BaseDef": 65,
+          "BaseAff": 85,
+          "BaseSpd": 15,
+          "Typing": [
+            {
+              "$type": "DiscomonProject.BeastType, DiscomonProject",
+              "Type": "Beast",
+              "Advantages": [
+                {
+                  "$type": "DiscomonProject.NatureType, DiscomonProject",
+                  "Type": "Nature",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                },
+                {
+                  "$type": "DiscomonProject.PrimalType, DiscomonProject",
+                  "Type": "Primal",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                }
+              ],
+              "Disadvantages": [
+                {
+                  "$type": "DiscomonProject.FireType, DiscomonProject",
+                  "Type": "Fire",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                },
+                {
+                  "$type": "DiscomonProject.FeyType, DiscomonProject",
+                  "Type": "Fey",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                },
+                {
+                  "$type": "DiscomonProject.PsychicType, DiscomonProject",
+                  "Type": "Psychic",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                },
+                {
+                  "$type": "DiscomonProject.SonicType, DiscomonProject",
+                  "Type": "Sonic",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                }
+              ],
+              "Immunities": [
+                {
+                  "$type": "DiscomonProject.GhostType, DiscomonProject",
+                  "Type": "Ghost",
+                  "Advantages": null,
+                  "Disadvantages": null,
+                  "Immunities": null,
+                  "Description": ""
+                }
+              ],
+              "Description": ""
+            }
+          ],
+          "DexNum": 999,
+          "DexEntry": "Snoril can be found sleeping under shade trees or in small damp caves. They use the glowing orb on their tail to frighten predators. They are born blind and use their excellent sense of hearing and touch to navigate their surroundings.",
+          "Nickname": "Snoril",
+          "Gender": "Female",
+          "CatcherID": 175698286815084545,
+          "OwnerID": 175698286815084545,
+          "Level": 5,
+          "Nature": "Hasty",
+          "TotalHP": 24,
+          "CurrentHP": 24,
+          "CritChance": 0,
+          "Fainted": false,
+          "GenderSymbol": "♀"
+        }
+      ],
+      "PC": [],
+      "CombatRequest": 615533301368881152,
+      "InCombatWith": 0,
+      "InCombat": false,
+      "InPvpCombat": false,
+      "CombatId": -1
+    },
+    "AvatarUrl": "https://cdn.discordapp.com/avatars/175698286815084545/a_7b7e751725c394743ad52f6ae1ac930b.gif?size=128",
+    "HasCharacter": true,
+    "PromptState": -1,
+    "ReactionMessages": {}
   }
 }

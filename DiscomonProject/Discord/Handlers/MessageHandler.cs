@@ -125,19 +125,14 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(context, $"{mon.Nickname} fainted! {user.Mention} wins!");
         }
 
-        public static async Task UseMove(ContextIds context, BasicMon mon, string move)
+        public static async Task UseMove(ContextIds context, BasicMon mon, BasicMon target, string move, string addon)
         {
-            await MessageHandler.SendMessage(context, $"**{mon.Nickname}** used **{move}**!");
+            await MessageHandler.SendEmbedMessage(context, $"**{mon.Nickname}** used **{move}**!"+addon, MonEmbedBuilder.FieldMon(target));
         }
 
-        public static async Task TakesDamage(ContextIds context, BasicMon mon)
+        public static async Task TakesDamage(ContextIds context, BasicMon mon, string addon)
         {
-            await MessageHandler.SendEmbedMessage(context, $"{mon.Nickname} takes damage!", MonEmbedBuilder.FieldMon(mon));
-        }
-
-        public static async Task MoveFailed(ContextIds context, BasicMon mon)
-        {
-            await MessageHandler.SendMessage(context, $"{mon.Nickname}'s {mon.SelectedMove.Name} failed!");
+            await MessageHandler.SendEmbedMessage(context, $"{mon.Nickname} takes damage!"+addon, MonEmbedBuilder.FieldMon(mon));
         }
 
         public static async Task FightScreen(ulong userId)

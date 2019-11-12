@@ -262,31 +262,62 @@ namespace DiscomonProject
             var second = inst.GetOtherPlayer(first);
 
             //PlayerOne's Mon attacks first
-            await MessageHandler.UseMove(inst.Location, first.Char.ActiveMon, first.Char.ActiveMon.SelectedMove.Name);
-            var val = first.Char.ActiveMon.SelectedMove.ApplyMove(inst, first.Char.ActiveMon);
+            MoveResult result1 = first.Char.ActiveMon.SelectedMove.ApplyMove(inst, first.Char.ActiveMon);
 
+            string addon = "";
             //Tests whether or not the moved hit or failed.
-            if(first.Char.ActiveMon.MoveFailed)
-                await MessageHandler.MoveFailed(inst.Location, first.Char.ActiveMon);
+            if(result1.Fail)
+                addon += "\nBut it failed!";
             else
-                await MessageHandler.TakesDamage(inst.Location, second.Char.ActiveMon);
+            {
+                if(result1.Hit)
+                    addon += $"\n{second.Char.ActiveMon.Nickname} takes damage!";
+                if(result1.SuperEffective)
+                    addon += "\nIt's **super effective**!";
+                if(result1.NotEffective)
+                    addon += "\nIt's **not very effective**!";
+                if(result1.Immune)
+                    addon += "\nIt has **no effect**!";
+                if(result1.Crit)
+                    addon += "\n**Critical Hit**!";
+                foreach(string statchange in result1.StatChangeMessages)
+                    addon += $"\n{statchange}";
+            }
 
-            await PostAttackPhase(inst, second.Char.ActiveMon, val);
+            Console.WriteLine(result1.ToString());
+            await MessageHandler.UseMove(inst.Location, first.Char.ActiveMon, second.Char.ActiveMon, first.Char.ActiveMon.SelectedMove.Name, addon);
+
+            await PostAttackPhase(inst, second.Char.ActiveMon, result1);
 
             //PlayerTwo's Mon attacks second
             if(!second.Char.ActiveMon.Fainted)
             {
-                await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name);
-                var val2 = second.Char.ActiveMon.SelectedMove.ApplyMove(inst, second.Char.ActiveMon);
+                MoveResult result2 = second.Char.ActiveMon.SelectedMove.ApplyMove(inst, second.Char.ActiveMon);
 
+                addon = "";
                 //Tests whether or not the moved hit or failed.
-                if(second.Char.ActiveMon.MoveFailed)
-                    await MessageHandler.MoveFailed(inst.Location, second.Char.ActiveMon);
+                if(result2.Fail)
+                    addon += "\nBut it failed!";
                 else
-                    //Replace later
-                    await MessageHandler.TakesDamage(inst.Location, first.Char.ActiveMon);
+                {
+                    if(result2.Hit)
+                        addon += $"\n{first.Char.ActiveMon.Nickname} takes damage!";
+                    if(result2.SuperEffective)
+                        addon += "\nIt's **super effective**!";
+                    if(result2.NotEffective)
+                        addon += "\nIt's **not very effective**!";
+                    if(result2.Immune)
+                        addon += "\nIt has **no effect**!";
+                    if(result2.Crit)
+                        addon += "\n**Critical Hit**!";
+                    foreach(string statchange in result2.StatChangeMessages)
+                        addon += $"\n{statchange}";
+                }
 
-                await PostAttackPhase(inst, second.Char.ActiveMon, val2);
+                Console.WriteLine(result2.ToString());
+                await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, first.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name, addon);
+
+                await PostAttackPhase(inst, second.Char.ActiveMon, result2);
             }
         }
 
@@ -300,13 +331,14 @@ namespace DiscomonProject
         }
 
         //Post attack phase logic. Mon is the mon who was hit.
-        public static async Task PostAttackPhase(CombatInstance inst, BasicMon mon, int val)
+        public static async Task PostAttackPhase(CombatInstance inst, BasicMon mon, MoveResult result)
         {
             //5- Post attack mini-phase. Check for death/on-hit abilities
             var owner = UserHandler.GetUser(mon.OwnerID);
             var enemy = inst.GetOtherMon(mon);
             var enemyOwner = inst.GetOtherPlayer(UserHandler.GetUser(enemy.OwnerID));
-            if(enemy.DmgHit)
+
+            if(result.Hit && result.EnemyDmg > 0)
             {
                 //WHEN HIT LOGIC HERE
             }
@@ -315,11 +347,13 @@ namespace DiscomonProject
             {
                 enemy.Fainted = true;
                 await MessageHandler.Faint(inst.Location, enemyOwner, enemy);
+                enemy.ResetStatStages();
             }
             if(mon.CurrentHP <= 0)
             {
                 mon.Fainted = true;
                 await MessageHandler.Faint(inst.Location, owner, mon);
+                mon.ResetStatStages();
             }
         }
 

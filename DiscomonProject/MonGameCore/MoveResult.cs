@@ -1,14 +1,19 @@
+using System.Collections.Generic;
+
 namespace DiscomonProject
 {
     public class MoveResult
     {
         public BasicMove Move { get; set; }
-        public BasicMon Owner { get; set; }
-        public BasicMon Enemy { get; set; }
+        //public BasicMon Owner { get; set; }
+        //public BasicMon Enemy { get; set; }
         public int EnemyDmg { get; set; }
         public int EnemyHeal { get; set; }
         public int SelfDmg { get; set; }
         public int SelfHeal { get; set; }
+        public List<int> EnemyStatChanges { get; set; }
+        public List<int> SelfStatChanges { get; set; }
+        public List<string> StatChangeMessages { get; set; }
         public bool Hit { get; set; }
         public bool Miss { get; set; }
         public bool Fail { get; set; }
@@ -24,12 +29,21 @@ namespace DiscomonProject
         public MoveResult()
         {
             Move = null;
-            Owner = null;
-            Enemy = null;
+            //Owner = null;
+            //Enemy = null;
             EnemyDmg = 0;
             EnemyHeal = 0;
             SelfDmg = 0;
             SelfHeal = 0;
+            EnemyStatChanges = new List<int>()
+            {
+                0, 0, 0, 0, 0, 0
+            };
+            SelfStatChanges = new List<int>()
+            {
+                0, 0, 0, 0, 0, 0
+            };
+            StatChangeMessages = new List<string>();
             Hit = true;
             Miss = false;
             Fail = false;
@@ -46,7 +60,7 @@ namespace DiscomonProject
         public override string ToString()
         {
             string str = "";
-            str += $"Move: {Move.Name}\nOwner: {Owner.Nickname}\nEnemy: {Enemy.Nickname}\nEnemyDmg: {EnemyDmg}\nEnemyHeal: {EnemyHeal}";
+            str += $"Move: {Move.Name}\nEnemyDmg: {EnemyDmg}\nEnemyHeal: {EnemyHeal}";
             str += $"\nSelfDmg: {SelfDmg}\n SelfHeal: {SelfHeal}\nHit: {Hit}\nMiss: {Miss}\nFail: {Fail}\nCrit: {Crit}";
             str += $"\nSuperEffective: {SuperEffective}\nNotEffective: {NotEffective}\nImmune: {Immune}";
             str += $"\nModCrit: {ModCrit}\nModRand: {ModRand}\nModType: {ModType}";

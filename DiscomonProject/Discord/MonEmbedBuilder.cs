@@ -76,10 +76,14 @@ namespace DiscomonProject.Discord
 
         public static Embed MonSendOut(UserAccount user, BasicMon mon)
         {
+            int r = mon.HPGradient()[0];
+            int g = mon.HPGradient()[1];
+            int b = mon.HPGradient()[2];
+
             var builder = new EmbedBuilder()
 	        .WithTitle($"{user.Name} sends out **{mon.Nickname}**!")
             .WithThumbnailUrl(mon.ArtURL)
-        	.WithColor(255, 62, 62);
+        	.WithColor(r, g, b);
             var embed = builder.Build();
 
             return embed;
@@ -87,10 +91,14 @@ namespace DiscomonProject.Discord
 
         public static Embed FieldMon(BasicMon mon)
         {
+            int r = mon.HPGradient()[0];
+            int g = mon.HPGradient()[1];
+            int b = mon.HPGradient()[2];
+
             var builder = new EmbedBuilder()
 	        .WithTitle($"Lv. {mon.Level}")
             .WithThumbnailUrl(mon.ArtURL)
-        	.WithColor(255, 62, 62)
+        	.WithColor(r, g, b)
             .WithAuthor($"{mon.Nickname} {mon.GenderSymbol}")
             .WithDescription($"{mon.CurrentHP}/{mon.TotalHP} HP");
             var embed = builder.Build();

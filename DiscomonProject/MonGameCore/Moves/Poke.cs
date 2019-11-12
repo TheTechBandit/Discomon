@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Tackle : BasicMove
+    public class Poke : BasicMove
     {
-        public override string Name { get; } = "Tackle";
-        public override string Description { get; } = "The user tackles their enemy, dealing damage.";
+        public override string Name { get; } = "Poke";
+        public override string Description { get; } = "The user pokes their enemy, lowering their defense by one stage.";
         public override BasicType Type { get; } = new BeastType(true);
         public override bool Contact { get; } = true;
-        public override int MaxPP { get; } = 35;
-        public override int Power { get; } = 40;
+        public override int MaxPP { get; } = 40;
+        public override int Power { get; } = 20;
         public override int Accuracy { get; } = 100;
         
-        public Tackle() :base()
+        public Poke() :base()
         {
 
         }
 
-        public Tackle(bool newmove) :base(newmove)
+        public Poke(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -40,6 +40,9 @@ namespace DiscomonProject
                 CurrentPP--;
                 dmg = ApplyPower(inst, owner);
                 enemy.TakeDamage(dmg);
+                (double mod, string mess) = enemy.ChangeDefStage(-1);
+                Result.EnemyStatChanges[1] = -1;
+                Result.StatChangeMessages.Add(mess);
             }
             return Result;
         }
