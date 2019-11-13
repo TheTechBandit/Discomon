@@ -301,9 +301,10 @@ namespace DiscomonProject
             summ += $"\nDefense Stage Mod: {mod}";
             summ += $"\nDefense Modified: {(int)(second.Char.ActiveMon.CurStats[2]*mod)}";
             summ += $"\nModifier: {result1.Mod}";
-            summ += $"\nCrit: {result1.Crit}";
+            summ += $"\nCrit: {result1.ModCrit}";
             summ += $"\nRandom: {result1.ModRand}";
             summ += $"\nType Eff: {result1.ModType}";
+            summ += $"\nDamage: {result1.EnemyDmg}";
             await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ}");
 
             await PostAttackPhase(inst, second.Char.ActiveMon, result1);
@@ -349,9 +350,10 @@ namespace DiscomonProject
                 summ2 += $"\nDefense Stage Mod: {mod}";
                 summ2 += $"\nDefense Modified: {(int)(first.Char.ActiveMon.CurStats[2]*mod)}";
                 summ2 += $"\nModifier: {result2.Mod}";
-                summ2 += $"\nCrit: {result2.Crit}";
+                summ2 += $"\nCrit: {result2.ModCrit}";
                 summ2 += $"\nRandom: {result2.ModRand}";
                 summ2 += $"\nType Eff: {result2.ModType}";
+                summ2 += $"\nDamage: {result2.EnemyDmg}";
                 await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ2}");
 
                 await PostAttackPhase(inst, second.Char.ActiveMon, result2);
