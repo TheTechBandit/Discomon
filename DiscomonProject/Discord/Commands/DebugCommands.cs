@@ -165,5 +165,20 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(idList, str);
         }
 
+        [Command("debugcombat")]
+        public async Task DebugCombat()
+        {
+            ContextIds idList = new ContextIds(Context);
+            var user = UserHandler.GetUser(idList);
+            string str = "";
+            str += $"Owner/Mon: {user.Name}/{user.Char.ActiveMon.Nickname}";
+            str += $"Level: {user.Char.ActiveMon.Level}";
+            str += $"Power: {user.Char.ActiveMon.SelectedMove.Power}";
+            str += $"Attack: {user.Char.ActiveMon.CurStats[1]}";
+            (double mod, string mess) = user.Char.ActiveMon.ChangeAttStage(0);
+            str += $"Attack Stage Mod: {mod}";
+            str += $"Attack Modified: {(int)(user.Char.ActiveMon.CurStats[1]*mod)}";
+        }
+
     }
 }
