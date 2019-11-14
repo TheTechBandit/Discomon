@@ -40,7 +40,7 @@ namespace DiscomonProject
                 CurrentPP--;
                 dmg = ApplyPower(inst, owner);
                 enemy.TakeDamage(dmg);
-                (double mod, string mess) = enemy.ChangeDefStage(-1);
+                (double mod, string mess) = enemy.ChangeAttStage(-1);
                 Result.EnemyStatChanges[1] = -1;
                 Result.StatChangeMessages.Add(mess);
             }

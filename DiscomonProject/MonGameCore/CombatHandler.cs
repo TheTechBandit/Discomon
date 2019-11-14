@@ -284,7 +284,7 @@ namespace DiscomonProject
                     addon += $"\n{statchange}";
             }
 
-            Console.WriteLine(result1.ToString());
+            //Console.WriteLine(result1.ToString());
 
             await MessageHandler.UseMove(inst.Location, first.Char.ActiveMon, second.Char.ActiveMon, first.Char.ActiveMon.SelectedMove.Name, addon);
 
@@ -298,8 +298,8 @@ namespace DiscomonProject
             summ += $"\nAttack Modified: {(int)(first.Char.ActiveMon.CurStats[1]*mod)}";
             summ += $"\nDefense: {second.Char.ActiveMon.CurStats[2]}";
             (double mod2, string mess2) = second.Char.ActiveMon.ChangeDefStage(0);
-            summ += $"\nDefense Stage Mod: {mod}";
-            summ += $"\nDefense Modified: {(int)(second.Char.ActiveMon.CurStats[2]*mod)}";
+            summ += $"\nDefense Stage Mod: {mod2}";
+            summ += $"\nDefense Modified: {(int)(second.Char.ActiveMon.CurStats[2]*mod2)}";
             summ += $"\nModifier: {result1.Mod}";
             summ += $"\nCrit: {result1.ModCrit}";
             summ += $"\nRandom: {result1.ModRand}";
@@ -334,7 +334,7 @@ namespace DiscomonProject
                         addon += $"\n{statchange}";
                 }
 
-                Console.WriteLine(result2.ToString());
+                //Console.WriteLine(result2.ToString());
                 await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, first.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name, addon);
 
                 string summ2 = "";
@@ -343,12 +343,12 @@ namespace DiscomonProject
                 summ2 += $"\nPower: {second.Char.ActiveMon.SelectedMove.Power}";
                 summ2 += $"\nAttack: {second.Char.ActiveMon.CurStats[1]}";
                 (double mod3, string mess3) = second.Char.ActiveMon.ChangeAttStage(0);
-                summ2 += $"\nAttack Stage Mod: {mod}";
-                summ2 += $"\nAttack Modified: {(int)(second.Char.ActiveMon.CurStats[1]*mod)}";
+                summ2 += $"\nAttack Stage Mod: {mod3}";
+                summ2 += $"\nAttack Modified: {(int)(second.Char.ActiveMon.CurStats[1]*mod3)}";
                 summ2 += $"\nDefense: {first.Char.ActiveMon.CurStats[2]}";
                 (double mod4, string mess4) = first.Char.ActiveMon.ChangeDefStage(0);
-                summ2 += $"\nDefense Stage Mod: {mod}";
-                summ2 += $"\nDefense Modified: {(int)(first.Char.ActiveMon.CurStats[2]*mod)}";
+                summ2 += $"\nDefense Stage Mod: {mod4}";
+                summ2 += $"\nDefense Modified: {(int)(first.Char.ActiveMon.CurStats[2]*mod4)}";
                 summ2 += $"\nModifier: {result2.Mod}";
                 summ2 += $"\nCrit: {result2.ModCrit}";
                 summ2 += $"\nRandom: {result2.ModRand}";

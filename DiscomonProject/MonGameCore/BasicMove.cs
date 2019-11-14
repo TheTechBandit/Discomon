@@ -43,7 +43,10 @@ namespace DiscomonProject
         {
             var enemy = inst.GetOtherMon(owner);
             var mod = CalculateMod(inst, owner, enemy);
-            var damage = (int)(((((((2*owner.Level)/5)+2)*Power*(owner.CurStats[1]*owner.StatMod(0)/enemy.CurStats[2]*enemy.StatMod(1)))/50)+2)*mod);
+            (double atkmod, string str) = owner.ChangeAttStage(0);
+            (double defmod, string str2) = enemy.ChangeDefStage(0);
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * Power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            int damage = (int)dmg;
 
             if(damage < 1)
                 damage = 1;

@@ -49,7 +49,7 @@ namespace DiscomonProject
 
         public BasicMon(bool deflt)
         {
-            Level = 5;
+            Level = 80;
             Nickname = Species;
             Gender = RandomGender();
             CatcherID = 0;
@@ -272,6 +272,7 @@ namespace DiscomonProject
         public void Heal()
         {
             CurrentHP = TotalHP;
+            ResetStatStages();
             Fainted = false;
         }
 
