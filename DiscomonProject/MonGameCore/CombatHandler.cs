@@ -288,6 +288,7 @@ namespace DiscomonProject
 
             await MessageHandler.UseMove(inst.Location, first.Char.ActiveMon, second.Char.ActiveMon, first.Char.ActiveMon.SelectedMove.Name, addon);
 
+            /* FOR VALUE TESTING
             string summ = "";
             summ += $"\nOwner/Mon: {first.Name}/{first.Char.ActiveMon.Nickname}";
             summ += $"\nLevel: {first.Char.ActiveMon.Level}";
@@ -306,6 +307,7 @@ namespace DiscomonProject
             summ += $"\nType Eff: {result1.ModType}";
             summ += $"\nDamage: {result1.EnemyDmg}";
             await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ}");
+            */
 
             await PostAttackPhase(inst, second.Char.ActiveMon, result1);
 
@@ -337,6 +339,7 @@ namespace DiscomonProject
                 //Console.WriteLine(result2.ToString());
                 await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, first.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name, addon);
 
+                /* FOR VALUE TESTING
                 string summ2 = "";
                 summ2 += $"\nOwner/Mon: {second.Name}/{second.Char.ActiveMon.Nickname}";
                 summ2 += $"\nLevel: {second.Char.ActiveMon.Level}";
@@ -355,6 +358,7 @@ namespace DiscomonProject
                 summ2 += $"\nType Eff: {result2.ModType}";
                 summ2 += $"\nDamage: {result2.EnemyDmg}";
                 await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ2}");
+                */
 
                 await PostAttackPhase(inst, second.Char.ActiveMon, result2);
             }
