@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DiscomonProject.Discord;
 using Newtonsoft.Json;
 
@@ -8,19 +9,32 @@ namespace DiscomonProject
 {
     public class BasicMon
     {
+        ///<summary>The species name of this mon EX: "Suki"</summary>
         public virtual string Species { get; }
+        ///<summary>The art link for this mon EX: "https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png"</summary>
         public virtual string ArtURL { get; }
+        ///<summary>The Base HP value for this species EX: 65</summary>
         public virtual int BaseHP { get; }
+        ///<summary>The Base Attack value for this species EX: 65</summary>
         public virtual int BaseAtt { get; }
+        ///<summary>The Base Defense value for this species EX: 65</summary>
         public virtual int BaseDef { get; }
+        ///<summary>The Base Affinity value for this species EX: 65</summary>
         public virtual int BaseAff { get; }
+        ///<summary>The Base Speed value for this species EX: 65</summary>
         public virtual int BaseSpd { get; }
+        ///<summary>A list that represents the EVs another mon would gain by defeating this one EX: [0, 1, 0, 2, 0] would boost attack EVs by 1 and affinity EVs by 2</summary>
         [JsonIgnore]
         public virtual List<int> EvGains { get; }
+        ///<summary>The Type(s) of this mon EX: [FireType, RockType]</summary>
         public virtual List<BasicType> Typing { get; set; }
+        ///<summary>The dex number of this mon EX: 23</summary>
         public virtual int DexNum { get; }
+        ///<summary>The dex entry of this mon EX: "Snoril is a very peaceful and calm mon"</summary>
         public virtual string DexEntry { get; }
+        ///<summary>The nickname of this mon EX: "Tim"</summary>
         public string Nickname { get; set; }
+        ///<summary>The gender of this mon</summary>
         public string Gender { get; set; }
         public ulong CatcherID { get; set; }
         public ulong OwnerID { get; set; }
@@ -41,6 +55,7 @@ namespace DiscomonProject
         public int CritChance { get; set; }
         public bool Fainted { get; set; }
         public string GenderSymbol { get; set; }
+        public StatusEffect Status { get; set; }
 
         public BasicMon()
         {
@@ -49,6 +64,7 @@ namespace DiscomonProject
 
         public BasicMon(bool deflt)
         {
+            Status = new StatusEffect(true);
             Level = 80;
             Nickname = Species;
             Gender = RandomGender();
@@ -57,6 +73,8 @@ namespace DiscomonProject
             InitializeLists();
             ActiveMoves[0] = new Tackle(true);
             ActiveMoves[1] = new Poke(true);
+            ActiveMoves[2] = new MeteorStrike(true);
+            ActiveMoves[3] = new Scorch(true);
             GenerateIvs();
             SetRandomNature();
             CritChance = 0;
@@ -65,6 +83,7 @@ namespace DiscomonProject
 
         public BasicMon(int customLvl, List<int> customIvs, List<int> customEvs, string customNature)
         {
+            Status = new StatusEffect(true);
             Level = customLvl;
             Nickname = Species;
             Gender = RandomGender();
@@ -154,6 +173,10 @@ namespace DiscomonProject
                 CurStats[i] = (int)(double)(((2 * (int)BaseList[i] + (int)Ivs[i] + (double)((int)Evs[i] / 4)) * Level) / 100) + 5;
                 CurStats[i] = (int)((int)CurStats[i] * (double)NatureMods[i]);
             }
+
+            //Speed Paralysis adjustment
+            if(Status.Paraylzed)
+                CurStats[4] = (int)((int)CurStats[4] * 0.5);
         }
 
         public void AddEvs(ArrayList gainedEvs)
@@ -273,7 +296,9 @@ namespace DiscomonProject
         {
             CurrentHP = TotalHP;
             ResetStatStages();
+            Status.CureAll();
             Fainted = false;
+            UpdateStats();
         }
 
         public string CurStatsToString()
@@ -434,8 +459,9 @@ namespace DiscomonProject
         }
 
         //Calculate the stat modifier FOR ACC/EVA based on stat stages
-        public double StatModAccEva(int stage)
+        public double StatModAccEva(int enemyEva)
         {
+            var stage = GetAccStage() - enemyEva;
             double mod = 0.0;
             double top = 3.0;
             double bottom = 3.0;
@@ -481,9 +507,29 @@ namespace DiscomonProject
             return ChangeStage(0, amt);
         }
 
+        public int GetAttStage()
+        {
+            return StatMods[0];
+        }
+
+        public double GetAttMod()
+        {
+            return StatMod(GetAttStage());
+        }
+
         public (double mod, string msg) ChangeDefStage(int amt)
         {
             return ChangeStage(1, amt);
+        }
+
+        public int GetDefStage()
+        {
+            return StatMods[1];
+        }
+
+        public double GetDefMod()
+        {
+            return StatMod(GetDefStage());
         }
 
         public (double mod, string msg) ChangeAffStage(int amt)
@@ -491,9 +537,29 @@ namespace DiscomonProject
             return ChangeStage(2, amt);
         }
 
+        public int GetAffStage()
+        {
+            return StatMods[2];
+        }
+
+        public double GetAffMod()
+        {
+            return StatMod(GetAffStage());
+        }
+
         public (double mod, string msg) ChangeSpdStage(int amt)
         {
             return ChangeStage(3, amt);
+        }
+
+        public int GetSpdStage()
+        {
+            return StatMods[3];
+        }
+
+        public double GetSpdMod()
+        {
+            return StatMod(GetSpdStage());
         }
 
         public (double mod, string msg) ChangeAccStage(int amt)
@@ -501,9 +567,46 @@ namespace DiscomonProject
             return ChangeStage(4, amt);
         }
 
+        public int GetAccStage()
+        {
+            return StatMods[4];
+        }
+
+        public double GetAccMod(int enemyEva)
+        {
+            return StatModAccEva(enemyEva);
+        }
+
         public (double mod, string msg) ChangeEvaStage(int amt)
         {
             return ChangeStage(5, amt);
+        }
+
+        public int GetEvaStage()
+        {
+            return StatMods[5];
+        }
+
+        public string SetParalysis()
+        {
+            Status.Paraylzed = true;
+            return "*Paralysis*";
+        }
+
+        public string SetBurned()
+        {
+            Status.Burned = true;
+            return "*Burn*";
+        }
+
+        public string StatusDamage()
+        {
+            if(Status.Burned)
+            {
+                TakeDamage((int)(CurrentHP*0.125));
+                return "Burn";
+            }
+            return "None";
         }
 
         public string TypingToString()

@@ -73,6 +73,14 @@ namespace DiscomonProject.Discord
             await MessageHandler.EmojiTest(idList);
         }
 
+        /*[Command("imagetest")]
+        public async Task ImageTest()
+        {
+            ContextIds idList = new ContextIds(Context);
+
+            ImageGenerator.MergeTwoImages(Context);
+        }*/
+
         [Command("typetest")]
         public async Task TypeTest()
         {
@@ -170,6 +178,7 @@ namespace DiscomonProject.Discord
         {
             ContextIds idList = new ContextIds(Context);
             var user = UserHandler.GetUser(idList);
+            
             string str = "";
             str += $"Owner/Mon: {user.Name}/{user.Char.ActiveMon.Nickname}";
             str += $"Level: {user.Char.ActiveMon.Level}";
@@ -178,6 +187,8 @@ namespace DiscomonProject.Discord
             (double mod, string mess) = user.Char.ActiveMon.ChangeAttStage(0);
             str += $"Attack Stage Mod: {mod}";
             str += $"Attack Modified: {(int)(user.Char.ActiveMon.CurStats[1]*mod)}";
+
+            await MessageHandler.SendMessage(idList, str);
         }
 
     }

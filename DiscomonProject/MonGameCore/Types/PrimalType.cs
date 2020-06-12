@@ -27,8 +27,7 @@ namespace DiscomonProject
             {
                 new BeastType(),
                 new AirType(),
-                new ColdType(),
-                new SonicType()
+                new ColdType()
             };
             Immunities = new List<BasicType>()
             {

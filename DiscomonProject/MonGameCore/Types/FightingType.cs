@@ -2,34 +2,36 @@ using System.Collections.Generic;
 
 namespace DiscomonProject
 {
-    public class GhostType : BasicType
+    public class FightingType : BasicType
     {
-        public override string Type { get; } = "Ghost";
+        public override string Type { get; } = "Fighting";
         public override List<BasicType> Advantages { get; }
         public override List<BasicType> Disadvantages { get; }
         public override List<BasicType> Immunities { get; }
         public override string Description { get; } = "";
 
-        public GhostType() :base()
+        public FightingType() :base()
         {
 
         }
 
-        public GhostType(bool newtype) :base(newtype)
+        public FightingType(bool newtype) :base(newtype)
         {
             Advantages = new List<BasicType>()
             {
-                new FireType(),
-                new GhostType(),
-                new PsychicType()
+                new BeastType(),
+                new RockType(),
+                new ColdType()
             };
             Disadvantages = new List<BasicType>()
             {
-                new FeyType()
+                new AirType(),
+                new MetalType(),
+                new PsychicType()
             };
             Immunities = new List<BasicType>()
             {
-                new BeastType()
+                new ShadeType()
             };
         }
 

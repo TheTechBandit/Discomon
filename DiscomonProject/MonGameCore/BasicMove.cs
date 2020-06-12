@@ -56,15 +56,34 @@ namespace DiscomonProject
             return damage;
         }
 
+        ///<summary>
+        ///Rolls to determine if the move hit or not- true = hit false = miss
+        ///</summary>
+        public bool ApplyAccuracy(CombatInstance inst, BasicMon owner)
+        {
+            var enemy = inst.GetOtherMon(owner);
+            var adjustedAccuracy = Accuracy * owner.StatModAccEva(enemy.GetEvaStage());
+            bool result = RandomGen.PercentChance(adjustedAccuracy);
+            Result.ChanceToHit = adjustedAccuracy;
+            return result;
+        }
+
+        ///<summary>
+        ///Calculates the total damage modifier
+        ///<para>CritMod * RandomMod * TypeMod</para>
+        ///</summary>
         public double CalculateMod(CombatInstance inst, BasicMon owner, BasicMon enemy)
         {
-            var mod = ModCrit(inst, owner, enemy) * ModRandom() * ModType(enemy);
+            var mod = ModCrit(inst, owner) * ModRandom() * ModType(enemy);
             Result.Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
         }
 
-        public double ModCrit(CombatInstance instance, BasicMon owner, BasicMon enemy)
+        ///<summary>
+        ///Rolls for a critical hit based on crit chance. Returns 1.5 if a crit lands.
+        ///</summary>
+        public double ModCrit(CombatInstance instance, BasicMon owner)
         {
             switch(owner.CritChance)
             {
@@ -100,7 +119,10 @@ namespace DiscomonProject
 
             return 1.0;
         }
-
+        
+        ///<summary>
+        ///Rolls for a random modifier between 0.85 and 1.0
+        ///</summary>
         public double ModRandom()
         {
             var random = RandomGen.RandomDouble(0.85, 1.0);
@@ -108,6 +130,9 @@ namespace DiscomonProject
             return random;
         }
 
+        ///<summary>
+        ///Determines the effectiveness of this move against an enemy based on typing.
+        ///</summary>
         public double ModType(BasicMon enemy)
         {
             var type = Type.ParseEffectiveness(enemy.Typing);
@@ -122,11 +147,52 @@ namespace DiscomonProject
             return type;
         }
 
+        ///<summary>
+        ///Sets PP to max, sets disabled to false, and clears the move result
+        ///</summary>
         public void Restore()
         {
             CurrentPP = MaxPP;
             Disabled = false;
             Result = null;
+        }
+
+        public bool DefaultFailLogic(BasicMon enemy, BasicMon owner)
+        {
+            if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted /*|| enemy.Flying*/)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool StatusFailLogic(BasicMon enemy, string type)
+        {
+            if(enemy.TypingToString().Contains(type) || enemy.Status.Burned || enemy.Status.Paraylzed || enemy.Status.Poisoned || enemy.Status.BadlyPoisoned || enemy.Status.Frozen || enemy.Status.Asleep)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool StatusFailCheck(BasicMon owner)
+        {
+            if(owner.Status.Paraylzed == true)
+            {
+                if(RandomGen.PercentChance(25.0))
+                {
+                    Result.FailText = "But it was paralyzed!";
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

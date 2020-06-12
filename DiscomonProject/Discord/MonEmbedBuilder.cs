@@ -95,12 +95,22 @@ namespace DiscomonProject.Discord
             int g = mon.HPGradient()[1];
             int b = mon.HPGradient()[2];
 
+            string statuses = "";
+            if(mon.Status.Paraylzed)
+            {
+                statuses += "<:Paralyzed:716427812558602250>";
+            }
+            if(mon.Status.Burned)
+            {
+                statuses += "<:Burn:717232618327769141>";
+            }
+
             var builder = new EmbedBuilder()
 	        .WithTitle($"Lv. {mon.Level}")
             .WithThumbnailUrl(mon.ArtURL)
         	.WithColor(r, g, b)
             .WithAuthor($"{mon.Nickname} {mon.GenderSymbol}")
-            .WithDescription($"{mon.CurrentHP}/{mon.TotalHP} HP");
+            .WithDescription($"{mon.CurrentHP}/{mon.TotalHP} HP {statuses}");
             var embed = builder.Build();
 
             return embed;

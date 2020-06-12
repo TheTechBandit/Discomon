@@ -6,11 +6,12 @@
     <RootNamespace>DiscomonProject.xUnit.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="xunit" Version="*"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="*"/>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="xunit" Version="*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="*" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiscomonProject\DiscomonProject.csproj"/>
+    <ProjectReference Include="..\DiscomonProject\DiscomonProject.csproj" />
   </ItemGroup>
 </Project>

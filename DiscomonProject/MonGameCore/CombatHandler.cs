@@ -249,6 +249,17 @@ namespace DiscomonProject
             else if(inst.CombatPhase == 6)
             {
                 //6- Post turn phase. Reset necessary data
+
+                //PlayerOne Status damage
+                var damageType = inst.PlayerOne.Char.ActiveMon.StatusDamage();
+                if(damageType == "Burn")
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerOne.Char.ActiveMon.Nickname} takes burn damage!");
+
+                //PlayerTwo Status damage
+                damageType = inst.PlayerTwo.Char.ActiveMon.StatusDamage();
+                if(damageType == "Burn")
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerTwo.Char.ActiveMon.Nickname} takes burn damage!");
+
                 inst.PlayerOne.Char.ActiveMon.SelectedMove = null;
                 inst.PlayerTwo.Char.ActiveMon.SelectedMove = null;
                 inst.CombatPhase = 0;
@@ -263,14 +274,18 @@ namespace DiscomonProject
 
             //PlayerOne's Mon attacks first
             MoveResult result1 = first.Char.ActiveMon.SelectedMove.ApplyMove(inst, first.Char.ActiveMon);
+            first.Char.ActiveMon.UpdateStats();
+            second.Char.ActiveMon.UpdateStats();
 
             string addon = "";
             //Tests whether or not the moved hit or failed.
             if(result1.Fail)
-                addon += "\nBut it failed!";
+                addon += $"\n{result1.FailText}";
+            else if(result1.Miss)
+                addon += "\nBut it missed!";
             else
             {
-                if(result1.Hit)
+                if(result1.Hit && result1.EnemyDmg > 0)
                     addon += $"\n{second.Char.ActiveMon.Nickname} takes damage!";
                 if(result1.SuperEffective)
                     addon += "\nIt's **super effective**!";
@@ -282,30 +297,15 @@ namespace DiscomonProject
                     addon += "\n**Critical Hit**!";
                 foreach(string statchange in result1.StatChangeMessages)
                     addon += $"\n{statchange}";
+                foreach(string status in result1.StatusMessages)
+                    addon += $"\n{second.Char.ActiveMon.Nickname} is afflicted with {status}";
             }
 
             //Console.WriteLine(result1.ToString());
 
             await MessageHandler.UseMove(inst.Location, first.Char.ActiveMon, second.Char.ActiveMon, first.Char.ActiveMon.SelectedMove.Name, addon);
 
-            string summ = "";
-            summ += $"\nOwner/Mon: {first.Name}/{first.Char.ActiveMon.Nickname}";
-            summ += $"\nLevel: {first.Char.ActiveMon.Level}";
-            summ += $"\nPower: {first.Char.ActiveMon.SelectedMove.Power}";
-            summ += $"\nAttack: {first.Char.ActiveMon.CurStats[1]}";
-            (double mod, string mess) = first.Char.ActiveMon.ChangeAttStage(0);
-            summ += $"\nAttack Stage Mod: {mod}";
-            summ += $"\nAttack Modified: {(int)(first.Char.ActiveMon.CurStats[1]*mod)}";
-            summ += $"\nDefense: {second.Char.ActiveMon.CurStats[2]}";
-            (double mod2, string mess2) = second.Char.ActiveMon.ChangeDefStage(0);
-            summ += $"\nDefense Stage Mod: {mod2}";
-            summ += $"\nDefense Modified: {(int)(second.Char.ActiveMon.CurStats[2]*mod2)}";
-            summ += $"\nModifier: {result1.Mod}";
-            summ += $"\nCrit: {result1.ModCrit}";
-            summ += $"\nRandom: {result1.ModRand}";
-            summ += $"\nType Eff: {result1.ModType}";
-            summ += $"\nDamage: {result1.EnemyDmg}";
-            await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ}");
+            //await DebugPrintMoveResult(first, second, result1, inst.Location);
 
             await PostAttackPhase(inst, second.Char.ActiveMon, result1);
 
@@ -313,14 +313,18 @@ namespace DiscomonProject
             if(!second.Char.ActiveMon.Fainted)
             {
                 MoveResult result2 = second.Char.ActiveMon.SelectedMove.ApplyMove(inst, second.Char.ActiveMon);
+                first.Char.ActiveMon.UpdateStats();
+                second.Char.ActiveMon.UpdateStats();
 
                 addon = "";
                 //Tests whether or not the moved hit or failed.
                 if(result2.Fail)
-                    addon += "\nBut it failed!";
+                    addon += $"\n{result2.FailText}";
+                else if(result2.Miss)
+                    addon += "\nBut it missed!";
                 else
                 {
-                    if(result2.Hit)
+                    if(result2.Hit && result2.EnemyDmg > 0)
                         addon += $"\n{first.Char.ActiveMon.Nickname} takes damage!";
                     if(result2.SuperEffective)
                         addon += "\nIt's **super effective**!";
@@ -332,32 +336,48 @@ namespace DiscomonProject
                         addon += "\n**Critical Hit**!";
                     foreach(string statchange in result2.StatChangeMessages)
                         addon += $"\n{statchange}";
+                    foreach(string status in result2.StatusMessages)
+                        addon += $"\n{first.Char.ActiveMon.Nickname} is afflicted with {status}";
                 }
 
                 //Console.WriteLine(result2.ToString());
+
                 await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, first.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name, addon);
 
-                string summ2 = "";
-                summ2 += $"\nOwner/Mon: {second.Name}/{second.Char.ActiveMon.Nickname}";
-                summ2 += $"\nLevel: {second.Char.ActiveMon.Level}";
-                summ2 += $"\nPower: {second.Char.ActiveMon.SelectedMove.Power}";
-                summ2 += $"\nAttack: {second.Char.ActiveMon.CurStats[1]}";
-                (double mod3, string mess3) = second.Char.ActiveMon.ChangeAttStage(0);
-                summ2 += $"\nAttack Stage Mod: {mod3}";
-                summ2 += $"\nAttack Modified: {(int)(second.Char.ActiveMon.CurStats[1]*mod3)}";
-                summ2 += $"\nDefense: {first.Char.ActiveMon.CurStats[2]}";
-                (double mod4, string mess4) = first.Char.ActiveMon.ChangeDefStage(0);
-                summ2 += $"\nDefense Stage Mod: {mod4}";
-                summ2 += $"\nDefense Modified: {(int)(first.Char.ActiveMon.CurStats[2]*mod4)}";
-                summ2 += $"\nModifier: {result2.Mod}";
-                summ2 += $"\nCrit: {result2.ModCrit}";
-                summ2 += $"\nRandom: {result2.ModRand}";
-                summ2 += $"\nType Eff: {result2.ModType}";
-                summ2 += $"\nDamage: {result2.EnemyDmg}";
-                await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ2}");
+                //await DebugPrintMoveResult(second, first, result2, inst.Location);
 
                 await PostAttackPhase(inst, second.Char.ActiveMon, result2);
             }
+        }
+
+        public static async Task DebugPrintMoveResult(UserAccount user, UserAccount otherUser, MoveResult result, ContextIds loc)
+        {
+            string summ = "";
+            summ += $"\nOwner/Mon: {user.Name}/{user.Char.ActiveMon.Nickname}";
+            summ += $"\nLevel: {user.Char.ActiveMon.Level}";
+            summ += $"\nSpeed: {user.Char.ActiveMon.CurStats[4]}";
+            summ += $"\nPower: {user.Char.ActiveMon.SelectedMove.Power}";
+            summ += $"\nAccuracy: {user.Char.ActiveMon.SelectedMove.Accuracy}";
+            summ += $"\nAttack: {user.Char.ActiveMon.CurStats[1]}";
+            (double mod, string mess) = user.Char.ActiveMon.ChangeAttStage(0);
+            summ += $"\nAttack Stage Mod: {mod}";
+            summ += $"\nAttack Modified: {(int)(user.Char.ActiveMon.CurStats[1]*mod)}";
+            summ += $"\nAccuracy Stage: {user.Char.ActiveMon.GetAccStage()}";
+            summ += $"\nOpponent Speed: {otherUser.Char.ActiveMon.CurStats[4]}";
+            summ += $"\nDefense: {otherUser.Char.ActiveMon.CurStats[2]}";
+            (double mod2, string mess2) = otherUser.Char.ActiveMon.ChangeDefStage(0);
+            summ += $"\nDefense Stage Mod: {mod2}";
+            summ += $"\nDefense Modified: {(int)(otherUser.Char.ActiveMon.CurStats[2]*mod2)}";
+            summ += $"\nEvasion Stage: {otherUser.Char.ActiveMon.GetEvaStage()}";
+            summ += $"\nChance To Hit: {result.ChanceToHit}";
+            summ += $"\nModifier: {result.Mod}";
+            summ += $"\nCrit: {result.ModCrit}";
+            summ += $"\nRandom: {result.ModRand}";
+            summ += $"\nType Eff: {result.ModType}";
+            summ += $"\nDamage: {result.EnemyDmg}";
+            summ += $"\nMiss: {result.Miss}";
+            summ += $"\nHit: {result.Hit}";
+            await MessageHandler.SendMessage(loc, $"**Move Summary:**{summ}");
         }
 
         public static void EndCombat(CombatInstance inst)

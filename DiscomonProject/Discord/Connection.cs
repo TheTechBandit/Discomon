@@ -60,16 +60,17 @@ namespace DiscomonProject.Discord
                 message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
                 message.Author.IsBot)
                 return;
+                
             
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
 
+            //Update user's info
+            UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.
             await _commands.ExecuteAsync(context, argPos, services: null);
-
-            //Update user's info
-            UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
         }
 
         public async Task ReactionReceived(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
@@ -79,6 +80,7 @@ namespace DiscomonProject.Discord
             
             var message = await cacheMessage.GetOrDownloadAsync();
             var user = UserHandler.GetUser(reaction.UserId);
+            Console.WriteLine($"Cache {cacheMessage.Id}\nMessage {message.Id}\nReaction: {reaction.MessageId}");
             ContextIds idList = new ContextIds()
             {
                 UserId = reaction.UserId,

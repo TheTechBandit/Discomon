@@ -21,7 +21,7 @@ namespace DiscomonProject
             {
                 new BeastType(),
                 new MetalType(),
-                new GhostType()
+                new ShadeType()
             };
             Disadvantages = new List<BasicType>()
             {

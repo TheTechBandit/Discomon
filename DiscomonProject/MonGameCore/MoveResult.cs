@@ -14,9 +14,12 @@ namespace DiscomonProject
         public List<int> EnemyStatChanges { get; set; }
         public List<int> SelfStatChanges { get; set; }
         public List<string> StatChangeMessages { get; set; }
+        public List<string> StatusMessages { get; set; }
+        public double ChanceToHit { get; set; }
         public bool Hit { get; set; }
         public bool Miss { get; set; }
         public bool Fail { get; set; }
+        public string FailText { get; set; }
         public bool Crit { get; set; }
         public bool SuperEffective { get; set; }
         public bool NotEffective { get; set; }
@@ -44,9 +47,12 @@ namespace DiscomonProject
                 0, 0, 0, 0, 0, 0
             };
             StatChangeMessages = new List<string>();
+            StatusMessages = new List<string>();
+            ChanceToHit = 0.0;
             Hit = true;
             Miss = false;
             Fail = false;
+            FailText = "But it failed!";
             Crit = false;
             SuperEffective = false;
             NotEffective = false;

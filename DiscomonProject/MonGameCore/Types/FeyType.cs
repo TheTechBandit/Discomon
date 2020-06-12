@@ -20,7 +20,7 @@ namespace DiscomonProject
             Advantages = new List<BasicType>()
             {
                 new BeastType(),
-                new GhostType()
+                new ShadeType()
             };
             Disadvantages = new List<BasicType>()
             {

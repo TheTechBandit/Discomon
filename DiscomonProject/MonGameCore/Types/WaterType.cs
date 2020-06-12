@@ -21,8 +21,7 @@ namespace DiscomonProject
             {
                 new FireType(),
                 new AirType(),
-                new RockType(),
-                new SonicType()
+                new RockType()
             };
             Disadvantages = new List<BasicType>()
             {

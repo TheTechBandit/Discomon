@@ -26,12 +26,11 @@ namespace DiscomonProject
             {
                 new FireType(),
                 new FeyType(),
-                new PsychicType(),
-                new SonicType()
+                new PsychicType()
             };
             Immunities = new List<BasicType>()
             {
-                new GhostType()
+                new ShadeType()
             };
         }
 

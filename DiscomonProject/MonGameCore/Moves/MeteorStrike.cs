@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Poke : BasicMove
+    public class MeteorStrike : BasicMove
     {
-        public override string Name { get; } = "Poke";
-        public override string Description { get; } = "The user pokes their enemy, lowering their defense by one stage.";
-        public override BasicType Type { get; } = new BeastType(true);
-        public override bool Contact { get; } = true;
-        public override int MaxPP { get; } = 40;
-        public override int Power { get; } = 20;
-        public override int Accuracy { get; } = 100;
+        public override string Name { get; } = "Meteor Strike";
+        public override string Description { get; } = "The user calls down a meteor, dealing massive damage.";
+        public override BasicType Type { get; } = new FireType(true);
+        public override bool Contact { get; } = false;
+        public override int MaxPP { get; } = 5;
+        public override int Power { get; } = 90;
+        public override int Accuracy { get; } = 50;
         
-        public Poke() :base()
+        public MeteorStrike() :base()
         {
 
         }
 
-        public Poke(bool newmove) :base(newmove)
+        public MeteorStrike(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -45,9 +45,6 @@ namespace DiscomonProject
                 CurrentPP--;
                 dmg = ApplyPower(inst, owner);
                 enemy.TakeDamage(dmg);
-                (double mod, string mess) = enemy.ChangeAttStage(-1);
-                Result.EnemyStatChanges[1] = -1;
-                Result.StatChangeMessages.Add(mess);
             }
             return Result;
         }

@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Tackle : BasicMove
+    public class Scorch : BasicMove
     {
-        public override string Name { get; } = "Tackle";
-        public override string Description { get; } = "The user tackles their enemy, dealing damage.";
-        public override BasicType Type { get; } = new BeastType(true);
-        public override bool Contact { get; } = true;
-        public override int MaxPP { get; } = 35;
-        public override int Power { get; } = 40;
+        public override string Name { get; } = "Scorch";
+        public override string Description { get; } = "The user scorches the target, burning them.";
+        public override BasicType Type { get; } = new FireType(true);
+        public override bool Contact { get; } = false;
+        public override int MaxPP { get; } = 15;
+        public override int Power { get; } = 0;
         public override int Accuracy { get; } = 100;
         
-        public Tackle() :base()
+        public Scorch() :base()
         {
 
         }
 
-        public Tackle(bool newmove) :base(newmove)
+        public Scorch(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -26,25 +26,23 @@ namespace DiscomonProject
         {
             ResetResult();
             var enemy = inst.GetOtherMon(owner);
-            int dmg = 0;
 
             //Fail logic
-            if(DefaultFailLogic(enemy, owner))
+            if(DefaultFailLogic(enemy, owner) || StatusFailLogic(enemy, "Fire"))
             {
                 Result.Fail = true;
                 Result.Hit = false;
             }
-            //Hit logic
             else if(!ApplyAccuracy(inst, owner))
             {
                 Result.Miss = true;
                 Result.Hit = false;
             }
+            //Hit logic
             else
             {
                 CurrentPP--;
-                dmg = ApplyPower(inst, owner);
-                enemy.TakeDamage(dmg);
+                Result.StatusMessages.Add(enemy.SetBurned());
             }
             return Result;
         }

@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Poke : BasicMove
+    public class Zap : BasicMove
     {
-        public override string Name { get; } = "Poke";
-        public override string Description { get; } = "The user pokes their enemy, lowering their defense by one stage.";
-        public override BasicType Type { get; } = new BeastType(true);
+        public override string Name { get; } = "Zap";
+        public override string Description { get; } = "The user zaps the target, paralyzing them.";
+        public override BasicType Type { get; } = new ElectricType(true);
         public override bool Contact { get; } = true;
-        public override int MaxPP { get; } = 40;
-        public override int Power { get; } = 20;
+        public override int MaxPP { get; } = 15;
+        public override int Power { get; } = 0;
         public override int Accuracy { get; } = 100;
         
-        public Poke() :base()
+        public Zap() :base()
         {
 
         }
 
-        public Poke(bool newmove) :base(newmove)
+        public Zap(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -26,10 +26,9 @@ namespace DiscomonProject
         {
             ResetResult();
             var enemy = inst.GetOtherMon(owner);
-            int dmg = 0;
 
             //Fail logic
-            if(DefaultFailLogic(enemy, owner))
+            if(DefaultFailLogic(enemy, owner) || StatusFailLogic(enemy, "Electric"))
             {
                 Result.Fail = true;
                 Result.Hit = false;
@@ -43,11 +42,7 @@ namespace DiscomonProject
             else
             {
                 CurrentPP--;
-                dmg = ApplyPower(inst, owner);
-                enemy.TakeDamage(dmg);
-                (double mod, string mess) = enemy.ChangeAttStage(-1);
-                Result.EnemyStatChanges[1] = -1;
-                Result.StatChangeMessages.Add(mess);
+                Result.StatusMessages.Add(enemy.SetParalysis());
             }
             return Result;
         }

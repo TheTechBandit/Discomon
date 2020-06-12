@@ -20,11 +20,11 @@ namespace DiscomonProject
 
         public static bool PercentChance(double chance)
         {
-            if(RandomDouble(0.0, 99.0) < chance)
+            if(RandomDouble(1.0, 100.0) <= chance)
             {
                 return true;
             }
-            return false;
+            else return false;
         }
     }
 }
