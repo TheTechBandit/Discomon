@@ -307,6 +307,27 @@ namespace DiscomonProject
 
             //await DebugPrintMoveResult(first, second, result1, inst.Location);
 
+            /* FOR VALUE TESTING
+            string summ = "";
+            summ += $"\nOwner/Mon: {first.Name}/{first.Char.ActiveMon.Nickname}";
+            summ += $"\nLevel: {first.Char.ActiveMon.Level}";
+            summ += $"\nPower: {first.Char.ActiveMon.SelectedMove.Power}";
+            summ += $"\nAttack: {first.Char.ActiveMon.CurStats[1]}";
+            (double mod, string mess) = first.Char.ActiveMon.ChangeAttStage(0);
+            summ += $"\nAttack Stage Mod: {mod}";
+            summ += $"\nAttack Modified: {(int)(first.Char.ActiveMon.CurStats[1]*mod)}";
+            summ += $"\nDefense: {second.Char.ActiveMon.CurStats[2]}";
+            (double mod2, string mess2) = second.Char.ActiveMon.ChangeDefStage(0);
+            summ += $"\nDefense Stage Mod: {mod2}";
+            summ += $"\nDefense Modified: {(int)(second.Char.ActiveMon.CurStats[2]*mod2)}";
+            summ += $"\nModifier: {result1.Mod}";
+            summ += $"\nCrit: {result1.ModCrit}";
+            summ += $"\nRandom: {result1.ModRand}";
+            summ += $"\nType Eff: {result1.ModType}";
+            summ += $"\nDamage: {result1.EnemyDmg}";
+            await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ}");
+            */
+
             await PostAttackPhase(inst, second.Char.ActiveMon, result1);
 
             //PlayerTwo's Mon attacks second
@@ -345,6 +366,27 @@ namespace DiscomonProject
                 await MessageHandler.UseMove(inst.Location, second.Char.ActiveMon, first.Char.ActiveMon, second.Char.ActiveMon.SelectedMove.Name, addon);
 
                 //await DebugPrintMoveResult(second, first, result2, inst.Location);
+
+                /* FOR VALUE TESTING
+                string summ2 = "";
+                summ2 += $"\nOwner/Mon: {second.Name}/{second.Char.ActiveMon.Nickname}";
+                summ2 += $"\nLevel: {second.Char.ActiveMon.Level}";
+                summ2 += $"\nPower: {second.Char.ActiveMon.SelectedMove.Power}";
+                summ2 += $"\nAttack: {second.Char.ActiveMon.CurStats[1]}";
+                (double mod3, string mess3) = second.Char.ActiveMon.ChangeAttStage(0);
+                summ2 += $"\nAttack Stage Mod: {mod3}";
+                summ2 += $"\nAttack Modified: {(int)(second.Char.ActiveMon.CurStats[1]*mod3)}";
+                summ2 += $"\nDefense: {first.Char.ActiveMon.CurStats[2]}";
+                (double mod4, string mess4) = first.Char.ActiveMon.ChangeDefStage(0);
+                summ2 += $"\nDefense Stage Mod: {mod4}";
+                summ2 += $"\nDefense Modified: {(int)(first.Char.ActiveMon.CurStats[2]*mod4)}";
+                summ2 += $"\nModifier: {result2.Mod}";
+                summ2 += $"\nCrit: {result2.ModCrit}";
+                summ2 += $"\nRandom: {result2.ModRand}";
+                summ2 += $"\nType Eff: {result2.ModType}";
+                summ2 += $"\nDamage: {result2.EnemyDmg}";
+                await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ2}");
+                */
 
                 await PostAttackPhase(inst, second.Char.ActiveMon, result2);
             }
