@@ -90,11 +90,15 @@ namespace DiscomonProject
 
             //Send out both mons.
             await MessageHandler.SendMessage(inst.Location, $"The duel between {inst.PlayerOne.Mention} and {inst.PlayerTwo.Mention} will now begin!");
-            inst.PlayerOne.Char.ActiveMon = inst.PlayerOne.Char.FirstUsableMon();
-            await MessageHandler.SendEmbedMessage(inst.Location, $"{inst.PlayerOne.Mention} sends out **{inst.PlayerOne.Char.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(inst.PlayerOne.Char.ActiveMon));
 
+            inst.PlayerOne.Char.ActiveMon = inst.PlayerOne.Char.FirstUsableMon();
             inst.PlayerTwo.Char.ActiveMon = inst.PlayerTwo.Char.FirstUsableMon();
+            
+            await MessageHandler.SendEmbedMessage(inst.Location, $"{inst.PlayerOne.Mention} sends out **{inst.PlayerOne.Char.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(inst.PlayerOne.Char.ActiveMon));
+            inst.PlayerOne.Char.ActiveMon.OnEnteredCombat(inst);
+
             await MessageHandler.SendEmbedMessage(inst.Location, $"{inst.PlayerTwo.Mention} sends out **{inst.PlayerTwo.Char.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(inst.PlayerTwo.Char.ActiveMon));
+            inst.PlayerTwo.Char.ActiveMon.OnEnteredCombat(inst);
 
             inst.CombatPhase = 0;
 
@@ -139,6 +143,7 @@ namespace DiscomonProject
                     if(inst.PlayerOne.Char.HasLivingParty())
                     {
                         inst.PlayerOne.Char.ActiveMon = inst.PlayerOne.Char.FirstUsableMon();
+                        inst.PlayerOne.Char.ActiveMon.OnEnteredCombat(inst);
                         await MessageHandler.SendEmbedMessage(inst.Location, $"{inst.PlayerOne.Mention} sends out **{inst.PlayerOne.Char.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(inst.PlayerOne.Char.ActiveMon));
                     }
                     else
@@ -157,6 +162,7 @@ namespace DiscomonProject
                     if(inst.PlayerTwo.Char.HasLivingParty())
                     {
                         inst.PlayerTwo.Char.ActiveMon = inst.PlayerTwo.Char.FirstUsableMon();
+                        inst.PlayerTwo.Char.ActiveMon.OnEnteredCombat(inst);
                         await MessageHandler.SendEmbedMessage(inst.Location, $"{inst.PlayerTwo.Mention} sends out **{inst.PlayerTwo.Char.ActiveMon.Nickname}**!", MonEmbedBuilder.FieldMon(inst.PlayerTwo.Char.ActiveMon));
                     }
                     else

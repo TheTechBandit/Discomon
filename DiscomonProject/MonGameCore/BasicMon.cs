@@ -49,6 +49,7 @@ namespace DiscomonProject
         public List<string> NatureList;
         public BasicMove SelectedMove;
         public List<BasicMove> ActiveMoves;
+        public BasicAbility Ability;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
         public int CurrentHP { get; set; }
@@ -56,6 +57,8 @@ namespace DiscomonProject
         public bool Fainted { get; set; }
         public string GenderSymbol { get; set; }
         public StatusEffect Status { get; set; }
+        public delegate Task CombatEvent(BasicMon owner, BasicMon enemy, CombatInstance inst);
+        public event CombatEvent EnteredCombat;
 
         public BasicMon()
         {
@@ -75,6 +78,7 @@ namespace DiscomonProject
             ActiveMoves[1] = new Poke(true);
             ActiveMoves[2] = new MeteorStrike(true);
             ActiveMoves[3] = new Scorch(true);
+            Ability = new IntimidateAbility(true, this);
             GenerateIvs();
             SetRandomNature();
             CritChance = 0;
@@ -95,6 +99,7 @@ namespace DiscomonProject
             Ivs.AddRange(customIvs);
             Evs.AddRange(customEvs);
             Nature = customNature;
+            Ability = new IntimidateAbility(true, this);
             UpdateNatureMods();
             Heal();
         }
@@ -631,6 +636,11 @@ namespace DiscomonProject
             {
                 r, g, b,
             };
+        }
+
+        public void OnEnteredCombat(CombatInstance inst)
+        {
+            EnteredCombat?.Invoke(this, inst.GetOtherMon(this), inst);
         }
         
     }

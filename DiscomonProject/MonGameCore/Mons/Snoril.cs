@@ -26,7 +26,7 @@ namespace DiscomonProject
 
         public Snoril(bool newmon) : base(newmon)
         {
-
+            
         }
 
         public Snoril(int customLvl, List<int> customIvs, List<int> customEvs, string customNature) :base(customLvl, customIvs, customEvs, customNature)
