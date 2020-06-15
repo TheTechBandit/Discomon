@@ -8,9 +8,9 @@ namespace DiscomonProject
         public override string Description { get; } = "The user tackles their enemy, dealing damage.";
         public override BasicType Type { get; } = new BeastType(true);
         public override bool Contact { get; } = true;
-        public override int MaxPP { get; } = 35;
         public override int Power { get; } = 40;
         public override int Accuracy { get; } = 100;
+        public override int MaxPP { get; } = 35;
         
         public Tackle() :base()
         {
@@ -34,12 +34,13 @@ namespace DiscomonProject
                 Result.Fail = true;
                 Result.Hit = false;
             }
-            //Hit logic
+            //Miss Logic
             else if(!ApplyAccuracy(inst, owner))
             {
                 Result.Miss = true;
                 Result.Hit = false;
             }
+            //Hit Logic
             else
             {
                 CurrentPP--;

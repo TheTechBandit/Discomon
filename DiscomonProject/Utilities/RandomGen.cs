@@ -18,6 +18,13 @@ namespace DiscomonProject
             return random;
         }
 
+        public static int RandomInt(int min, int max)
+        {
+            var random = Gen.Next(min, max+1);
+            Console.WriteLine($"Random int between {min} and {max}: {random}");
+            return random;
+        }
+
         public static bool PercentChance(double chance)
         {
             if(RandomDouble(1.0, 100.0) <= chance)

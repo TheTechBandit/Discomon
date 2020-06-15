@@ -26,12 +26,21 @@ namespace DiscomonProject
 
         public Snoril(bool newmon) : base(newmon)
         {
-            
+            MoveSetup();
+            GenActiveMoves();
         }
 
         public Snoril(int customLvl, List<int> customIvs, List<int> customEvs, string customNature) :base(customLvl, customIvs, customEvs, customNature)
         {
+            MoveSetup();
+            GenActiveMoves();
+        }
 
+        public override void MoveSetup()
+        {
+            Moveset.Add(new MovesetItem(5, new Poke(true)));
+            Moveset.Add(new MovesetItem(7, new Curl(true)));
+            Moveset.Add(new MovesetItem(15, new Drowsy(true)));
         }
     }
 }

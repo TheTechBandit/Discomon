@@ -304,7 +304,13 @@ namespace DiscomonProject
                 foreach(string statchange in result1.StatChangeMessages)
                     addon += $"\n{statchange}";
                 foreach(string status in result1.StatusMessages)
-                    addon += $"\n{second.Char.ActiveMon.Nickname} is afflicted with {status}";
+                    //addon += $"\n{second.Char.ActiveMon.Nickname} is afflicted with {status}";
+                    addon += $"\n{status}";
+                if(result1.Move.Type.Type.Equals("Fire") && second.Char.ActiveMon.Status.Frozen)
+                {
+                    addon += $"\n{second.Char.ActiveMon.Nickname} was unthawed by {first.Char.ActiveMon.Nickname}'s fire type move!";
+                    second.Char.ActiveMon.Status.Frozen = false;
+                }
             }
 
             //Console.WriteLine(result1.ToString());
@@ -364,7 +370,13 @@ namespace DiscomonProject
                     foreach(string statchange in result2.StatChangeMessages)
                         addon += $"\n{statchange}";
                     foreach(string status in result2.StatusMessages)
-                        addon += $"\n{first.Char.ActiveMon.Nickname} is afflicted with {status}";
+                        //addon += $"\n{first.Char.ActiveMon.Nickname} is afflicted with {status}";
+                        addon += $"\n{status}";
+                    if(result2.Move.Type.Type.Equals("Fire") && first.Char.ActiveMon.Status.Frozen)
+                    {
+                        addon += $"\n{first.Char.ActiveMon.Nickname} was unthawed by {second.Char.ActiveMon.Nickname}'s fire type move!";
+                        first.Char.ActiveMon.Status.Frozen = false;
+                    }
                 }
 
                 //Console.WriteLine(result2.ToString());

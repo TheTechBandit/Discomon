@@ -8,9 +8,9 @@ namespace DiscomonProject
         public override string Description { get; } = "The user scorches the target, burning them.";
         public override BasicType Type { get; } = new FireType(true);
         public override bool Contact { get; } = false;
-        public override int MaxPP { get; } = 15;
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = 100;
+        public override int MaxPP { get; } = 15;
         
         public Scorch() :base()
         {
@@ -33,6 +33,7 @@ namespace DiscomonProject
                 Result.Fail = true;
                 Result.Hit = false;
             }
+            //Miss Logic
             else if(!ApplyAccuracy(inst, owner))
             {
                 Result.Miss = true;

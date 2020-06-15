@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Zap : BasicMove
+    public class Drowsy : BasicMove
     {
-        public override string Name { get; } = "Zap";
-        public override string Description { get; } = "The user zaps the target, paralyzing them.";
-        public override BasicType Type { get; } = new ElectricType(true);
-        public override bool Contact { get; } = true;
+        public override string Name { get; } = "Drowsy";
+        public override string Description { get; } = "The user becomes drowsy and falls asleep, healing its HP to full and removing status conditions.";
+        public override BasicType Type { get; } = new BeastType(true);
+        public override bool Contact { get; } = false;
         public override int Power { get; } = 0;
-        public override int Accuracy { get; } = 100;
-        public override int MaxPP { get; } = 15;
+        public override int Accuracy { get; } = -1;
+        public override int MaxPP { get; } = 10;
         
-        public Zap() :base()
+        public Drowsy() :base()
         {
 
         }
 
-        public Zap(bool newmove) :base(newmove)
+        public Drowsy(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -28,7 +28,7 @@ namespace DiscomonProject
             var enemy = inst.GetOtherMon(owner);
 
             //Fail logic
-            if(DefaultFailLogic(enemy, owner) || StatusFailLogic(enemy, "Electric"))
+            if(SelfMoveFailLogic(owner))
             {
                 Result.Fail = true;
                 Result.Hit = false;
@@ -43,7 +43,9 @@ namespace DiscomonProject
             else
             {
                 CurrentPP--;
-                Result.StatusMessages.Add(enemy.SetParalysis());
+                owner.Status.CureAll();
+                Result.StatusMessages.Add(owner.SetAsleep(2));
+                owner.CurrentHP = owner.TotalHP;
             }
             return Result;
         }

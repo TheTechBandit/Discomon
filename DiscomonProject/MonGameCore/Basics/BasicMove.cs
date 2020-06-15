@@ -45,6 +45,35 @@ namespace DiscomonProject
             var mod = CalculateMod(inst, owner, enemy);
             (double atkmod, string str) = owner.ChangeAttStage(0);
             (double defmod, string str2) = enemy.ChangeDefStage(0);
+
+            if(Result.Crit && atkmod < 0)
+                atkmod = 0;
+            if(Result.Crit && defmod > 0)
+                defmod = 0;
+                
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * Power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            int damage = (int)dmg;
+
+            if(damage < 1)
+                damage = 1;
+
+            Result.EnemyDmg = damage;
+
+            return damage;
+        }
+
+        public int ApplyPowerAlwaysCrit(CombatInstance inst, BasicMon owner)
+        {
+            var enemy = inst.GetOtherMon(owner);
+            var mod = CalculateModAlwaysCrit(inst, owner, enemy);
+            (double atkmod, string str) = owner.ChangeAttStage(0);
+            (double defmod, string str2) = enemy.ChangeDefStage(0);
+
+            if(Result.Crit && owner.GetAttStage() < 0)
+                atkmod = 1.0;
+            if(Result.Crit && enemy.GetDefStage() > 0)
+                defmod = 1.0;
+
             double dmg = (((((2.0*owner.Level)/5.0)+2.0) * Power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
             int damage = (int)dmg;
 
@@ -61,11 +90,18 @@ namespace DiscomonProject
         ///</summary>
         public bool ApplyAccuracy(CombatInstance inst, BasicMon owner)
         {
-            var enemy = inst.GetOtherMon(owner);
-            var adjustedAccuracy = Accuracy * owner.StatModAccEva(enemy.GetEvaStage());
-            bool result = RandomGen.PercentChance(adjustedAccuracy);
-            Result.ChanceToHit = adjustedAccuracy;
-            return result;
+            if(Accuracy >= 0)
+            {
+                var enemy = inst.GetOtherMon(owner);
+                var adjustedAccuracy = Accuracy * owner.StatModAccEva(enemy.GetEvaStage());
+                bool result = RandomGen.PercentChance(adjustedAccuracy);
+                Result.ChanceToHit = adjustedAccuracy;
+                return result;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         ///<summary>
@@ -75,6 +111,16 @@ namespace DiscomonProject
         public double CalculateMod(CombatInstance inst, BasicMon owner, BasicMon enemy)
         {
             var mod = ModCrit(inst, owner) * ModRandom() * ModType(enemy);
+            Result.Mod = mod;
+            Console.WriteLine($"Mod: {mod}");
+            return mod;
+        }
+
+        public double CalculateModAlwaysCrit(CombatInstance inst, BasicMon owner, BasicMon enemy)
+        {
+            var mod = 1.5 * ModRandom() * ModType(enemy);
+            Result.Crit = true;
+            Result.ModCrit = 1.5;
             Result.Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
@@ -169,6 +215,18 @@ namespace DiscomonProject
             }
         }
 
+        public bool SelfMoveFailLogic(BasicMon owner)
+        {
+            if(StatusFailCheck(owner) || owner.Fainted)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool StatusFailLogic(BasicMon enemy, string type)
         {
             if(enemy.TypingToString().Contains(type) || enemy.Status.Burned || enemy.Status.Paraylzed || enemy.Status.Poisoned || enemy.Status.BadlyPoisoned || enemy.Status.Frozen || enemy.Status.Asleep)
@@ -188,6 +246,25 @@ namespace DiscomonProject
                 if(RandomGen.PercentChance(25.0))
                 {
                     Result.FailText = "But it was paralyzed!";
+                    return true;
+                }
+            }
+            if(owner.Status.Asleep == true)
+            {
+                Result.FailText = $"{owner.Nickname} is asleep!";
+                owner.Status.SleepTick();
+                return true;
+            }
+            if(owner.Status.Frozen == true)
+            {
+                if(owner.Status.FreezeTick())
+                {
+                    Result.FailText = $"{owner.Nickname} has unthawed!";
+                    return false;
+                }
+                else
+                {
+                    Result.FailText = $"{owner.Nickname} is frozen!";
                     return true;
                 }
             }

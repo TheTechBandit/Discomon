@@ -21,17 +21,26 @@ namespace DiscomonProject
 
         public Suki() :base()
         {
-            
+
         }
         
         public Suki(bool newmon) :base(newmon)
         {
-            
+            MoveSetup();
+            GenActiveMoves();
         }
 
         public Suki(int customLvl, List<int> customIvs, List<int> customEvs, string customNature) :base(customLvl, customIvs, customEvs, customNature)
         {
+            MoveSetup();
+            GenActiveMoves();
+        }
 
+        public override void MoveSetup()
+        {
+            Moveset.Add(new MovesetItem(19, new IceFang(true)));
+            Moveset.Add(new MovesetItem(23, new FrostBreath(true)));
+            Moveset.Add(new MovesetItem(32, new MeteorStrike(true)));
         }
     }
 }

@@ -8,9 +8,9 @@ namespace DiscomonProject
         public override string Description { get; } = "The user calls down a meteor, dealing massive damage.";
         public override BasicType Type { get; } = new FireType(true);
         public override bool Contact { get; } = false;
-        public override int MaxPP { get; } = 5;
         public override int Power { get; } = 90;
         public override int Accuracy { get; } = 50;
+        public override int MaxPP { get; } = 5;
         
         public MeteorStrike() :base()
         {
@@ -34,6 +34,7 @@ namespace DiscomonProject
                 Result.Fail = true;
                 Result.Hit = false;
             }
+            //Miss Logic
             else if(!ApplyAccuracy(inst, owner))
             {
                 Result.Miss = true;

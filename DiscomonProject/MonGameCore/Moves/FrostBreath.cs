@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Poke : BasicMove
+    public class FrostBreath : BasicMove
     {
-        public override string Name { get; } = "Poke";
-        public override string Description { get; } = "The user pokes their enemy, lowering their defense by one stage.";
-        public override BasicType Type { get; } = new BeastType(true);
-        public override bool Contact { get; } = true;
-        public override int Power { get; } = 20;
-        public override int Accuracy { get; } = 100;
-        public override int MaxPP { get; } = 40;
+        public override string Name { get; } = "Frost Breath";
+        public override string Description { get; } = "The user breathes out a torrent of freezing cold air towards the opponent, this move is always a critical hit.";
+        public override BasicType Type { get; } = new ColdType(true);
+        public override bool Contact { get; } = false;
+        public override int Power { get; } = 60;
+        public override int Accuracy { get; } = 95;
+        public override int MaxPP { get; } = 10;
         
-        public Poke() :base()
+        public FrostBreath() :base()
         {
 
         }
 
-        public Poke(bool newmove) :base(newmove)
+        public FrostBreath(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -44,11 +44,10 @@ namespace DiscomonProject
             else
             {
                 CurrentPP--;
-                dmg = ApplyPower(inst, owner);
+                dmg = ApplyPowerAlwaysCrit(inst, owner);
                 enemy.TakeDamage(dmg);
-                (double mod, string mess) = enemy.ChangeAttStage(-1);
-                //Result.EnemyStatChanges[1] = -1;
-                Result.StatChangeMessages.Add(mess);
+                if(RandomGen.PercentChance(10.0))
+                    Result.StatusMessages.Add(enemy.SetFrozen());
             }
             return Result;
         }

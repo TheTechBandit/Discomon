@@ -49,6 +49,7 @@ namespace DiscomonProject
         public List<string> NatureList;
         public BasicMove SelectedMove;
         public List<BasicMove> ActiveMoves;
+        public List<MovesetItem> Moveset;
         public BasicAbility Ability;
         public string Nature { get; set; }
         public int TotalHP { get; set; }
@@ -74,11 +75,7 @@ namespace DiscomonProject
             CatcherID = 0;
             OwnerID = 0;
             InitializeLists();
-            ActiveMoves[0] = new Tackle(true);
-            ActiveMoves[1] = new Poke(true);
-            ActiveMoves[2] = new MeteorStrike(true);
-            ActiveMoves[3] = new Scorch(true);
-            Ability = new IntimidateAbility(true, this);
+            Ability = new NoneAbility(true, this);
             GenerateIvs();
             SetRandomNature();
             CritChance = 0;
@@ -99,7 +96,7 @@ namespace DiscomonProject
             Ivs.AddRange(customIvs);
             Evs.AddRange(customEvs);
             Nature = customNature;
-            Ability = new IntimidateAbility(true, this);
+            Ability = new NoneAbility(true, this);
             UpdateNatureMods();
             Heal();
         }
@@ -120,6 +117,8 @@ namespace DiscomonProject
             CurStats = new List<int>();
             StatMods = new List<int>();
             ActiveMoves = new List<BasicMove>();
+            Moveset = new List<MovesetItem>();
+            Moveset.Add(new MovesetItem(1, new Tackle(true)));
 
             for(int i = 0; i < 5; i++)
             {
@@ -142,6 +141,30 @@ namespace DiscomonProject
             //Fill ActiveMoves with 4 blank moves
             for(int i = 0; i < 4; i++)
                 ActiveMoves.Add(new None());
+        }
+
+        public virtual void MoveSetup()
+        {
+
+        }
+
+        public void GenActiveMoves()
+        {
+            List<BasicMove> validMoves = new List<BasicMove>();
+            foreach(MovesetItem move in Moveset)
+            {
+                if(move.LearnLevel <= Level)
+                    validMoves.Add(move.Move);
+            }
+            
+            for(int i = 0; i < 4; i++)
+            {
+                if(validMoves.Count >= 1)
+                {
+                    ActiveMoves[i] = validMoves[RandomGen.RandomInt(0, validMoves.Count-1)];
+                    validMoves.Remove(ActiveMoves[i]);
+                }
+            }
         }
 
         private void GenerateIvs()
@@ -306,6 +329,7 @@ namespace DiscomonProject
             UpdateStats();
         }
 
+        //Note: -Attack- and +Affinity+ needs to be changed based on nature, not set in stone.
         public string CurStatsToString()
         {
             return $"```diff\nHP:{CurStats[0]}\n-Attack:{CurStats[1]}-\nDefense:{CurStats[2]}\n+Affinity:{CurStats[3]}+\nSpeed:{CurStats[4]}```";
@@ -479,16 +503,29 @@ namespace DiscomonProject
             return mod;
         }
 
-        //Modify this mon's attack stage. Returns the modifier and the change string (if necessary).
+        //Modify a stat stage. Returns the modifier and the change string (if necessary). ATT, DEF, AFF, SPD, ACC, EVA
         public (double mod, string msg) ChangeStage(int stat, int amt)
         {
             int temp = StatMods[stat];
             double mod = 1.0;
             string str = "";
+            string statStr = "";
+            if(stat == 0)
+                statStr = "attack";
+            if(stat == 1)
+                statStr = "defense";
+            if(stat == 2)
+                statStr = "affinity";
+            if(stat == 3)
+                statStr = "speed";
+            if(stat == 4)
+                statStr = "accuracy";
+            if(stat == 5)
+                statStr = "evasion";
 
             if(amt > 0 || amt < 0)
             {
-                str = StatModString("attack", temp, amt);
+                str = StatModString($"{statStr}", temp, amt);
             }
 
             temp += amt;
@@ -595,13 +632,25 @@ namespace DiscomonProject
         public string SetParalysis()
         {
             Status.Paraylzed = true;
-            return "*Paralysis*";
+            return $"{Nickname} has been afflicted with *Paralysis*";
         }
 
         public string SetBurned()
         {
             Status.Burned = true;
-            return "*Burn*";
+            return $"{Nickname} has been afflicted with *Burn*";
+        }
+
+        public string SetAsleep(int num)
+        {
+            Status.FallAsleep(num);
+            return $"{Nickname} has been afflicted with *Sleep*";
+        }
+
+        public string SetFrozen()
+        {
+            Status.Frozen = true;
+            return $"{Nickname} has been afflicted with *Frozen*";
         }
 
         public string StatusDamage()

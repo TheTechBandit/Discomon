@@ -11,8 +11,8 @@ namespace DiscomonProject
         public int EnemyHeal { get; set; }
         public int SelfDmg { get; set; }
         public int SelfHeal { get; set; }
-        public List<int> EnemyStatChanges { get; set; }
-        public List<int> SelfStatChanges { get; set; }
+        //public List<int> EnemyStatChanges { get; set; }
+        //public List<int> SelfStatChanges { get; set; }
         public List<string> StatChangeMessages { get; set; }
         public List<string> StatusMessages { get; set; }
         public double ChanceToHit { get; set; }
@@ -38,6 +38,7 @@ namespace DiscomonProject
             EnemyHeal = 0;
             SelfDmg = 0;
             SelfHeal = 0;
+            /*
             EnemyStatChanges = new List<int>()
             {
                 0, 0, 0, 0, 0, 0
@@ -46,6 +47,7 @@ namespace DiscomonProject
             {
                 0, 0, 0, 0, 0, 0
             };
+            */
             StatChangeMessages = new List<string>();
             StatusMessages = new List<string>();
             ChanceToHit = 0.0;
