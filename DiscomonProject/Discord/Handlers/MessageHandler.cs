@@ -140,7 +140,7 @@ namespace DiscomonProject.Discord
         {
             var user = UserHandler.GetUser(userId);
             
-            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.FightScreen(user.Char.Party[0]));
+            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.FightScreen(user.Char.ActiveMon));
 
             await message.AddReactionAsync(new Emoji("⚔"));
             await message.AddReactionAsync(new Emoji("👜"));
@@ -154,7 +154,7 @@ namespace DiscomonProject.Discord
         {
             var user = UserHandler.GetUser(userId);
             
-            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.MoveScreen(user.Char.Party[0]));
+            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.MoveScreen(user.Char.ActiveMon));
 
             await message.AddReactionAsync(new Emoji("1\u20E3"));
             await message.AddReactionAsync(new Emoji("2\u20E3"));

@@ -16,6 +16,7 @@ namespace DiscomonProject
         public bool Disabled { get; set; }
         [JsonIgnore]
         public MoveResult Result { get; set; }
+        public bool Buffered { get; set; }
 
         public BasicMove()
         {
@@ -26,9 +27,15 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
             Disabled = false;
+            Buffered = false;
         }
 
         public virtual MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        {
+            return Result;
+        }
+
+        public virtual MoveResult ApplyBufferedMove(CombatInstance inst, BasicMon owner)
         {
             return Result;
         }
@@ -43,15 +50,22 @@ namespace DiscomonProject
         {
             var enemy = inst.GetOtherMon(owner);
             var mod = CalculateMod(inst, owner, enemy);
+            var power = Power;
             (double atkmod, string str) = owner.ChangeAttStage(0);
             (double defmod, string str2) = enemy.ChangeDefStage(0);
 
-            if(Result.Crit && atkmod < 0)
-                atkmod = 0;
-            if(Result.Crit && defmod > 0)
-                defmod = 0;
+            if(Result.Crit && owner.GetAttStage() < 0)
+                atkmod = 1.0;
+            if(Result.Crit && enemy.GetDefStage() > 0)
+                defmod = 1.0;
+
+            if(Type.Type == "Electric" && owner.Status.Charged)
+            {
+                power *= 2;
+                owner.Status.Charged = false;
+            }
                 
-            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * Power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
             int damage = (int)dmg;
 
             if(damage < 1)
@@ -66,6 +80,7 @@ namespace DiscomonProject
         {
             var enemy = inst.GetOtherMon(owner);
             var mod = CalculateModAlwaysCrit(inst, owner, enemy);
+            var power = Power;
             (double atkmod, string str) = owner.ChangeAttStage(0);
             (double defmod, string str2) = enemy.ChangeDefStage(0);
 
@@ -74,7 +89,13 @@ namespace DiscomonProject
             if(Result.Crit && enemy.GetDefStage() > 0)
                 defmod = 1.0;
 
-            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * Power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            if(Type.Type == "Electric" && owner.Status.Charged)
+            {
+                power *= 2;
+                owner.Status.Charged = false;
+            }
+
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
             int damage = (int)dmg;
 
             if(damage < 1)
@@ -181,7 +202,12 @@ namespace DiscomonProject
         ///</summary>
         public double ModType(BasicMon enemy)
         {
-            var type = Type.ParseEffectiveness(enemy.Typing);
+            double type = 1.0;
+            if(enemy.OverrideType)
+                type = Type.ParseEffectiveness(enemy.OverrideTyping);
+            else
+                type = Type.ParseEffectiveness(enemy.Typing);
+            
             if(type > 1)
                 Result.SuperEffective = true;
             if(type < 1)
@@ -205,8 +231,30 @@ namespace DiscomonProject
 
         public bool DefaultFailLogic(BasicMon enemy, BasicMon owner)
         {
-            if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted /*|| enemy.Flying*/)
+            if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted || Disabled || enemy.Status.Flying)
             {
+                if(Disabled)
+                    Result.FailText = $"{Name} is disabled!";
+                if(enemy.Status.Flying)
+                    Result.FailText = $"{enemy.Nickname} is flying too high to reach!";
+                Buffered = false;
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DefaultFailLogic(BasicMon enemy, BasicMon owner, bool ignoreFly, bool ignoreUnderground, bool ignoreDive)
+        {
+            if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted || Disabled || (!ignoreFly && enemy.Status.Flying) /*|| (!ignoreUnderground && enemy.Status.Digging) || (!ignoreDive && enemy.Status.Diving)*/)
+            {
+                if(Disabled)
+                    Result.FailText = $"{Name} is disabled!";
+                Buffered = false;
+                
                 return true;
             }
             else
@@ -241,11 +289,17 @@ namespace DiscomonProject
 
         public bool StatusFailCheck(BasicMon owner)
         {
+            if(owner.Status.Flinching == true)
+            {
+                Result.FailText = $"{owner.Nickname} flinched!";
+                owner.Status.Flinching = false;
+                return true;
+            }
             if(owner.Status.Paraylzed == true)
             {
                 if(RandomGen.PercentChance(25.0))
                 {
-                    Result.FailText = "But it was paralyzed!";
+                    Result.FailText = $"{owner.Nickname} is paralyzed!";
                     return true;
                 }
             }
@@ -259,7 +313,7 @@ namespace DiscomonProject
             {
                 if(owner.Status.FreezeTick())
                 {
-                    Result.FailText = $"{owner.Nickname} has unthawed!";
+                    Result.FailText = $"{owner.Nickname} has unfrozen!";
                     return false;
                 }
                 else

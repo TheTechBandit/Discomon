@@ -12,6 +12,59 @@ namespace DiscomonProject.Discord
 {
     public class DebugCommands : ModuleBase<SocketCommandContext>
     {
+        [Command("spawnmon")]
+        public async Task SpawnMon([Remainder]string str)
+        {
+            ContextIds idList = new ContextIds(Context);
+            UserAccount user = UserHandler.GetUser(idList.UserId);
+
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
+
+            if(!user.Char.IsPartyFull())
+            {
+                BasicMon mon = MonRegister.StringToMonRegister(str);
+                mon.CatcherID = user.UserId;
+                mon.OwnerID = user.UserId;
+                user.Char.Party.Add(mon);
+                await MessageHandler.SendMessage(idList, $"{mon.Nickname} has been added to your party.");
+            }
+            else
+            {
+                await MessageHandler.SendMessage(idList, "Your party is full!");
+            }
+        }
+
+        [Command("deletemon")]
+        public async Task DeleteMon(int i)
+        {
+            ContextIds idList = new ContextIds(Context);
+            UserAccount user = UserHandler.GetUser(idList.UserId);
+
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
+
+            string nick = user.Char.Party[i-1].Nickname;
+            user.Char.Party.RemoveAt(i-1);
+            await MessageHandler.SendMessage(idList, $"{nick} has been removed from your party.");
+        }
+
         [Command("ping")]
         public async Task Ping()
         {
@@ -115,30 +168,12 @@ namespace DiscomonProject.Discord
 
             text = text.ToLower();
 
-            if(text.Equals("snoril") || text.Equals("1"))
-            {
-                user.Char.Party.Add(new Snoril(true)
-                {
-                    CatcherID = user.UserId,
-                    OwnerID = user.UserId
-                });
-                user.HasCharacter = true;
-                await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Snoril as your partner! Good luck on your adventure.");
-            }
-            else if(text.Equals("suki") || text.Equals("2"))
-            {
-                user.Char.Party.Add(new Suki(true)
-                {
-                    CatcherID = user.UserId,
-                    OwnerID = user.UserId
-                });
-                user.HasCharacter = true;
-                await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen Suki as your partner! Good luck on your adventure.");
-            }
-            else
-            {
-                await MessageHandler.SendMessage(ids, $"{user.Mention}, please enter either Snoril or Suki.");
-            }
+            BasicMon mon = MonRegister.StringToMonRegister(text);
+            mon.CatcherID = user.UserId;
+            mon.OwnerID = user.UserId;
+            user.Char.Party.Add(mon);
+            user.HasCharacter = true;
+            await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen {mon.Nickname} as your partner! Good luck on your adventure.");
 
             user.PromptState = -1;
         }
@@ -180,13 +215,30 @@ namespace DiscomonProject.Discord
             var user = UserHandler.GetUser(idList);
             
             string str = "";
+            double mod;
+            string mess;
             str += $"Owner/Mon: {user.Name}/{user.Char.ActiveMon.Nickname}";
-            str += $"Level: {user.Char.ActiveMon.Level}";
-            str += $"Power: {user.Char.ActiveMon.SelectedMove.Power}";
-            str += $"Attack: {user.Char.ActiveMon.CurStats[1]}";
-            (double mod, string mess) = user.Char.ActiveMon.ChangeAttStage(0);
-            str += $"Attack Stage Mod: {mod}";
-            str += $"Attack Modified: {(int)(user.Char.ActiveMon.CurStats[1]*mod)}";
+            str += $"\nLevel: {user.Char.ActiveMon.Level}";
+
+            str += $"\n\nAttack: {user.Char.ActiveMon.CurStats[1]}";
+            (mod, mess) = user.Char.ActiveMon.ChangeAttStage(0);
+            str += $"\nAttack Stage Mod: {mod}";
+            str += $"\nAttack Modified: {(int)(user.Char.ActiveMon.CurStats[1]*mod)}";
+
+            str += $"\n\nDefense: {user.Char.ActiveMon.CurStats[2]}";
+            (mod, mess) = user.Char.ActiveMon.ChangeDefStage(0);
+            str += $"\nDefense Stage Mod: {mod}";
+            str += $"\nDefense Modified: {(int)(user.Char.ActiveMon.CurStats[2]*mod)}";
+
+            str += $"\n\nAffinity: {user.Char.ActiveMon.CurStats[3]}";
+            (mod, mess) = user.Char.ActiveMon.ChangeAffStage(0);
+            str += $"\nAffinity Stage Mod: {mod}";
+            str += $"\nAffinity Modified: {(int)(user.Char.ActiveMon.CurStats[3]*mod)}";
+
+            str += $"\n\nSpeed: {user.Char.ActiveMon.CurStats[4]}";
+            (mod, mess) = user.Char.ActiveMon.ChangeSpdStage(0);
+            str += $"\nSpeed Stage Mod: {mod}";
+            str += $"\nSpeed Modified: {(int)(user.Char.ActiveMon.CurStats[4]*mod)}";
 
             await MessageHandler.SendMessage(idList, str);
         }

@@ -55,6 +55,14 @@ namespace DiscomonProject
             PlayerTwo.Char.InCombatWith = PlayerOne.UserId;
         }
 
+        public UserAccount GetPlayer(BasicMon mon)
+        {
+            if(PlayerOne.Char.HasMonInParty(mon))
+                return PlayerOne;
+            else
+                return PlayerTwo;
+        }
+
         public UserAccount GetOtherPlayer(UserAccount player)
         {
             if(player.UserId == PlayerOne.UserId)

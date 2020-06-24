@@ -42,7 +42,13 @@ namespace DiscomonProject
             InCombatWith = 0;
             CombatId = -1;
             foreach(BasicMon mon in Party)
+            {
                 mon.SelectedMove = null;
+                mon.BufferedMove = null;
+                mon.Status.CombatReset();
+                mon.OverrideType = false;
+                mon.OverrideTyping.Clear();
+            }
             ActiveMon = null;
         }
 
@@ -56,6 +62,30 @@ namespace DiscomonProject
                 }
             }
             return null;
+        }
+
+        public BasicMon FirstUsableMon(List<BasicMon> exclude)
+        {
+            for(int i = 0; i < Party.Count; i++)
+            {
+                if(Party[i].CurrentHP > 0)
+                {
+                    foreach(BasicMon exclusion in exclude)
+                        if(Party[i] != exclusion)
+                            return Party[i];
+                }
+            }
+            return null;
+        }
+
+        public bool HasMonInParty(BasicMon mon)
+        {
+            foreach(BasicMon m in Party)
+            {
+                if(mon == m)
+                    return true;
+            }
+            return false;
         }
 
         public bool HasLivingParty()
@@ -74,6 +104,28 @@ namespace DiscomonProject
             }
 
             return true;
+        }
+
+        public int LivingPartyNum()
+        {
+            var living = 0;
+            foreach(BasicMon mon in Party)
+            {
+                if(!mon.Fainted)
+                {
+                    living++;
+                }
+            }
+
+            return living;
+        }
+
+        public bool IsPartyFull()
+        {
+            if(Party.Count >= 6)
+                return true;
+            else
+                return false;
         }
     }
 }

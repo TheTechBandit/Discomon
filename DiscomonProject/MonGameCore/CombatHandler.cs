@@ -187,9 +187,30 @@ namespace DiscomonProject
             {
                 //1- Pre turn, activate weather effects... "It is still raining!" or "The rain cleared up!"
 
+                //Check if both mons are sleepy. If they are, they fall asleep.
+                if(inst.PlayerOne.Char.ActiveMon.SleepyCheck())
+                {
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerOne.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
+                }
+                if(inst.PlayerTwo.Char.ActiveMon.SleepyCheck())
+                {
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerTwo.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
+                }
+                
+
                 //Send fight screens to both players and progress to Phase 2 (wait for input)
-                await MessageHandler.FightScreen(inst.PlayerOne.UserId);
-                await MessageHandler.FightScreen(inst.PlayerTwo.UserId);
+                if(inst.PlayerOne.Char.ActiveMon.BufferedMove == null)
+                    await MessageHandler.FightScreen(inst.PlayerOne.UserId);
+                else
+                {
+                    inst.PlayerOne.Char.ActiveMon.SelectedMove = inst.PlayerOne.Char.ActiveMon.BufferedMove;
+                }
+                if(inst.PlayerTwo.Char.ActiveMon.BufferedMove == null)
+                    await MessageHandler.FightScreen(inst.PlayerTwo.UserId);
+                else
+                {
+                    inst.PlayerTwo.Char.ActiveMon.SelectedMove = inst.PlayerTwo.Char.ActiveMon.BufferedMove;
+                }
                 inst.CombatPhase = 2;
             }
             //PHASE 2
@@ -228,11 +249,11 @@ namespace DiscomonProject
             {
                 //4- Attacks register. Calculate whether it hit, damage, bonus effects of attacks
                 
-                if(inst.PlayerOne.Char.ActiveMon.CurStats[4] > inst.PlayerTwo.Char.ActiveMon.CurStats[4])
+                if(inst.PlayerOne.Char.ActiveMon.GetAdjustedSpd() > inst.PlayerTwo.Char.ActiveMon.GetAdjustedSpd())
                 {
                     await ApplyMoves(inst, inst.PlayerOne);
                 }
-                else if(inst.PlayerOne.Char.ActiveMon.CurStats[4] < inst.PlayerTwo.Char.ActiveMon.CurStats[4])
+                else if(inst.PlayerOne.Char.ActiveMon.GetAdjustedSpd() < inst.PlayerTwo.Char.ActiveMon.GetAdjustedSpd())
                 {
                     await ApplyMoves(inst, inst.PlayerTwo);
                 }
@@ -256,15 +277,19 @@ namespace DiscomonProject
             {
                 //6- Post turn phase. Reset necessary data
 
-                //PlayerOne Status damage
+                //PlayerOne Status ticks
                 var damageType = inst.PlayerOne.Char.ActiveMon.StatusDamage();
                 if(damageType == "Burn")
                     await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerOne.Char.ActiveMon.Nickname} takes burn damage!");
+                if(inst.PlayerOne.Char.ActiveMon.Status.Flinching)
+                    inst.PlayerOne.Char.ActiveMon.Status.Flinching = false;
 
-                //PlayerTwo Status damage
+                //PlayerTwo Status ticks
                 damageType = inst.PlayerTwo.Char.ActiveMon.StatusDamage();
                 if(damageType == "Burn")
                     await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerTwo.Char.ActiveMon.Nickname} takes burn damage!");
+                if(inst.PlayerTwo.Char.ActiveMon.Status.Flinching)
+                    inst.PlayerTwo.Char.ActiveMon.Status.Flinching = false;
 
                 inst.PlayerOne.Char.ActiveMon.SelectedMove = null;
                 inst.PlayerTwo.Char.ActiveMon.SelectedMove = null;
@@ -291,6 +316,8 @@ namespace DiscomonProject
                 addon += "\nBut it missed!";
             else
             {
+                foreach(string message in result1.Messages)
+                    addon += $"\n{message}";
                 if(result1.Hit && result1.EnemyDmg > 0)
                     addon += $"\n{second.Char.ActiveMon.Nickname} takes damage!";
                 if(result1.SuperEffective)
@@ -304,7 +331,6 @@ namespace DiscomonProject
                 foreach(string statchange in result1.StatChangeMessages)
                     addon += $"\n{statchange}";
                 foreach(string status in result1.StatusMessages)
-                    //addon += $"\n{second.Char.ActiveMon.Nickname} is afflicted with {status}";
                     addon += $"\n{status}";
                 if(result1.Move.Type.Type.Equals("Fire") && second.Char.ActiveMon.Status.Frozen)
                 {
@@ -338,7 +364,7 @@ namespace DiscomonProject
             summ += $"\nType Eff: {result1.ModType}";
             summ += $"\nDamage: {result1.EnemyDmg}";
             await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ}");
-            */
+            //*/
 
             await PostAttackPhase(inst, second.Char.ActiveMon, result1);
 
@@ -357,6 +383,8 @@ namespace DiscomonProject
                     addon += "\nBut it missed!";
                 else
                 {
+                    foreach(string message in result2.Messages)
+                        addon += $"\n{message}";
                     if(result2.Hit && result2.EnemyDmg > 0)
                         addon += $"\n{first.Char.ActiveMon.Nickname} takes damage!";
                     if(result2.SuperEffective)
@@ -370,7 +398,6 @@ namespace DiscomonProject
                     foreach(string statchange in result2.StatChangeMessages)
                         addon += $"\n{statchange}";
                     foreach(string status in result2.StatusMessages)
-                        //addon += $"\n{first.Char.ActiveMon.Nickname} is afflicted with {status}";
                         addon += $"\n{status}";
                     if(result2.Move.Type.Type.Equals("Fire") && first.Char.ActiveMon.Status.Frozen)
                     {
@@ -404,7 +431,7 @@ namespace DiscomonProject
                 summ2 += $"\nType Eff: {result2.ModType}";
                 summ2 += $"\nDamage: {result2.EnemyDmg}";
                 await MessageHandler.SendMessage(inst.Location, $"**Move Summary:**{summ2}");
-                */
+                //*/
 
                 await PostAttackPhase(inst, second.Char.ActiveMon, result2);
             }
@@ -455,7 +482,7 @@ namespace DiscomonProject
             //5- Post attack mini-phase. Check for death/on-hit abilities
             var owner = UserHandler.GetUser(mon.OwnerID);
             var enemy = inst.GetOtherMon(mon);
-            var enemyOwner = inst.GetOtherPlayer(UserHandler.GetUser(enemy.OwnerID));
+            var enemyOwner = UserHandler.GetUser(enemy.OwnerID);
 
             if(result.Hit && result.EnemyDmg > 0)
             {
@@ -468,6 +495,14 @@ namespace DiscomonProject
                 await MessageHandler.Faint(inst.Location, enemyOwner, enemy);
                 enemy.ResetStatStages();
             }
+            else if(result.Swapout != null)
+            {
+                enemy.SelectedMove = null;
+                enemy.ResetStatStages();
+                enemyOwner.Char.ActiveMon = result.Swapout;
+                enemyOwner.Char.ActiveMon.OnEnteredCombat(inst);
+            }
+
             if(mon.CurrentHP <= 0)
             {
                 mon.Fainted = true;

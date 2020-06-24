@@ -10,10 +10,13 @@ namespace DiscomonProject
         public bool BadlyPoisoned { get; set; } = false;
         public bool Frozen { get; set; } = false;
         public bool Asleep { get; set; } = false;
+        public bool Sleepy { get; set; } = false;
         public int SleepTurns { get; set; } = 0;
         public bool Confused { get; set; } = false;
         public bool Infatuated { get; set; } = false;
         public bool Flinching { get; set; } = false;
+        public bool Flying { get; set; } = false;
+        public bool Charged { get; set; } =  false;
 
         public StatusEffect() :base()
         {
@@ -25,7 +28,7 @@ namespace DiscomonProject
 
         }
 
-        public void CureAll()
+        public void StatusCure()
         {
             Paraylzed = false;
             Burned = false;
@@ -33,10 +36,32 @@ namespace DiscomonProject
             BadlyPoisoned = false;
             Frozen = false;
             Asleep = false;
+            Sleepy = false;
             SleepTurns = 0;
+        }
+
+        public void CureAll()
+        {
+            StatusCure();
             Confused = false;
             Infatuated = false;
             Flinching = false;
+        }
+
+        public void ResetAll()
+        {
+            CureAll();
+            Flying = false;
+            Charged = false;
+        }
+
+        public void CombatReset()
+        {
+            Confused = false;
+            Infatuated = false;
+            Flinching = false;
+            Flying = false;
+            Charged = false;
         }
 
         public void FallAsleep(int number)

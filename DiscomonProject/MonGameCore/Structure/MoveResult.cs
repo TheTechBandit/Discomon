@@ -7,6 +7,7 @@ namespace DiscomonProject
         public BasicMove Move { get; set; }
         //public BasicMon Owner { get; set; }
         //public BasicMon Enemy { get; set; }
+        public BasicMon Swapout { get; set; }
         public int EnemyDmg { get; set; }
         public int EnemyHeal { get; set; }
         public int SelfDmg { get; set; }
@@ -15,6 +16,7 @@ namespace DiscomonProject
         //public List<int> SelfStatChanges { get; set; }
         public List<string> StatChangeMessages { get; set; }
         public List<string> StatusMessages { get; set; }
+        public List<string> Messages { get; set; }
         public double ChanceToHit { get; set; }
         public bool Hit { get; set; }
         public bool Miss { get; set; }
@@ -34,6 +36,7 @@ namespace DiscomonProject
             Move = null;
             //Owner = null;
             //Enemy = null;
+            Swapout = null;
             EnemyDmg = 0;
             EnemyHeal = 0;
             SelfDmg = 0;
@@ -50,6 +53,7 @@ namespace DiscomonProject
             */
             StatChangeMessages = new List<string>();
             StatusMessages = new List<string>();
+            Messages = new List<string>();
             ChanceToHit = 0.0;
             Hit = true;
             Miss = false;

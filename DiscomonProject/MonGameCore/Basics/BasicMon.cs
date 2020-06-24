@@ -28,6 +28,10 @@ namespace DiscomonProject
         public virtual List<int> EvGains { get; }
         ///<summary>The Type(s) of this mon EX: [FireType, RockType]</summary>
         public virtual List<BasicType> Typing { get; set; }
+        ///<summary>If OverrideType is true, this will be used instead of Typing. EX: [FireType, RockType]</summary>
+        public List<BasicType> OverrideTyping { get; set; }
+        ///<summary>If true, OverrideTyping is used instead of Typing. EX: true</summary>
+        public bool OverrideType { get; set; }
         ///<summary>The dex number of this mon EX: 23</summary>
         public virtual int DexNum { get; }
         ///<summary>The dex entry of this mon EX: "Snoril is a very peaceful and calm mon"</summary>
@@ -48,6 +52,7 @@ namespace DiscomonProject
         public List<int> StatMods;
         public List<string> NatureList;
         public BasicMove SelectedMove;
+        public BasicMove BufferedMove;
         public List<BasicMove> ActiveMoves;
         public List<MovesetItem> Moveset;
         public BasicAbility Ability;
@@ -69,7 +74,7 @@ namespace DiscomonProject
         public BasicMon(bool deflt)
         {
             Status = new StatusEffect(true);
-            Level = 80;
+            Level = 40;
             Nickname = Species;
             Gender = RandomGender();
             CatcherID = 0;
@@ -119,6 +124,8 @@ namespace DiscomonProject
             ActiveMoves = new List<BasicMove>();
             Moveset = new List<MovesetItem>();
             Moveset.Add(new MovesetItem(1, new Tackle(true)));
+            OverrideTyping = new List<BasicType>();
+            OverrideType = false;
 
             for(int i = 0; i < 5; i++)
             {
@@ -151,17 +158,20 @@ namespace DiscomonProject
         public void GenActiveMoves()
         {
             List<BasicMove> validMoves = new List<BasicMove>();
+
             foreach(MovesetItem move in Moveset)
             {
                 if(move.LearnLevel <= Level)
                     validMoves.Add(move.Move);
             }
+
+            validMoves.Reverse();
             
             for(int i = 0; i < 4; i++)
             {
                 if(validMoves.Count >= 1)
                 {
-                    ActiveMoves[i] = validMoves[RandomGen.RandomInt(0, validMoves.Count-1)];
+                    ActiveMoves[i] = validMoves[0];
                     validMoves.Remove(ActiveMoves[i]);
                 }
             }
@@ -324,9 +334,16 @@ namespace DiscomonProject
         {
             CurrentHP = TotalHP;
             ResetStatStages();
-            Status.CureAll();
+            Status.ResetAll();
             Fainted = false;
             UpdateStats();
+        }
+
+        public void Restore(int amt)
+        {
+            CurrentHP += amt;
+            if(CurrentHP > TotalHP)
+                CurrentHP = TotalHP;
         }
 
         //Note: -Attack- and +Affinity+ needs to be changed based on nature, not set in stone.
@@ -415,7 +432,8 @@ namespace DiscomonProject
         public void TakeDamage(int damage)
         {
             CurrentHP -= damage;
-            if(CurrentHP < 0) CurrentHP = 0;
+            if(CurrentHP < 0)
+                CurrentHP = 0;
         }
 
         public void ResetStatStages()
@@ -424,6 +442,7 @@ namespace DiscomonProject
             {
                 StatMods[i] = 0;
             }
+            UpdateStats();
         }
 
         //Determine the stat stage change string
@@ -541,6 +560,7 @@ namespace DiscomonProject
 
             StatMods[stat] = temp;
 
+            UpdateStats();
             return (mod, str);
         }
 
@@ -559,6 +579,11 @@ namespace DiscomonProject
             return StatMod(GetAttStage());
         }
 
+        public int GetAdjustedAtt()
+        {
+            return (int)(CurStats[1]*GetAttMod());
+        }
+
         public (double mod, string msg) ChangeDefStage(int amt)
         {
             return ChangeStage(1, amt);
@@ -572,6 +597,11 @@ namespace DiscomonProject
         public double GetDefMod()
         {
             return StatMod(GetDefStage());
+        }
+
+        public int GetAdjustedDef()
+        {
+            return (int)(CurStats[2]*GetDefMod());
         }
 
         public (double mod, string msg) ChangeAffStage(int amt)
@@ -589,6 +619,11 @@ namespace DiscomonProject
             return StatMod(GetAffStage());
         }
 
+        public int GetAdjustedAff()
+        {
+            return (int)(CurStats[3]*GetAffMod());
+        }
+
         public (double mod, string msg) ChangeSpdStage(int amt)
         {
             return ChangeStage(3, amt);
@@ -602,6 +637,11 @@ namespace DiscomonProject
         public double GetSpdMod()
         {
             return StatMod(GetSpdStage());
+        }
+
+        public int GetAdjustedSpd()
+        {
+            return (int)(CurStats[4]*GetSpdMod());
         }
 
         public (double mod, string msg) ChangeAccStage(int amt)
@@ -647,10 +687,26 @@ namespace DiscomonProject
             return $"{Nickname} has been afflicted with *Sleep*";
         }
 
+        public bool SleepyCheck()
+        {
+            if(Status.Sleepy)
+            {
+                Status.FallAsleep(0);
+                Status.Sleepy = false;
+                return true;
+            }
+            return false;
+        }
+
         public string SetFrozen()
         {
             Status.Frozen = true;
             return $"{Nickname} has been afflicted with *Frozen*";
+        }
+
+        public void SetFlinching()
+        {
+            Status.Flinching = true;
         }
 
         public string StatusDamage()
@@ -666,11 +722,22 @@ namespace DiscomonProject
         public string TypingToString()
         {
             string str = "";
-            if(Typing.Count > 1)
-                str += $"{Typing[0].Type}/{Typing[1].Type}";
+            if(!OverrideType)
+            {
+                if(Typing.Count > 1)
+                    str = $"{Typing[0].Type}/{Typing[1].Type}";
+                else
+                    str = $"{Typing[0].Type}";
+                return str;
+            }
             else
-                str += $"{Typing[0].Type}";
-            return str;
+            {
+                if(OverrideTyping.Count > 1)
+                    str = $"{OverrideTyping[0].Type}/{OverrideTyping[1].Type}";
+                else
+                    str = $"{OverrideTyping[0].Type}";
+                return str;
+            }
         }
 
         public List<int> HPGradient()
@@ -685,6 +752,39 @@ namespace DiscomonProject
             {
                 r, g, b,
             };
+        }
+
+        public bool HasDisabledMove()
+        {
+            foreach(BasicMove move in ActiveMoves)
+            {
+                if(move.Disabled)
+                    return true;
+            }
+            return false;
+        }
+
+        ///<summary>Returns true if this mon has a typing with a name equal to the string parameter. Uses OverrideTyping if OverrideType is true.</summary>
+        public bool HasType(string type)
+        {
+            if(OverrideType)
+            {
+                foreach(BasicType t in OverrideTyping)
+                {
+                    if(t.Type == type)
+                        return true;
+                }
+            }
+            else
+            {
+                foreach(BasicType t in Typing)
+                {
+                    if(t.Type == type)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         public void OnEnteredCombat(CombatInstance inst)

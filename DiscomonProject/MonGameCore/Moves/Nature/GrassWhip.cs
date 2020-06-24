@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class MeteorStrike : BasicMove
+    public class GrassWhip : BasicMove
     {
-        public override string Name { get; } = "Meteor Strike";
-        public override string Description { get; } = "The user calls down a meteor, dealing massive damage.";
-        public override BasicType Type { get; } = new FireType(true);
-        public override bool Contact { get; } = false;
-        public override int Power { get; } = 90;
-        public override int Accuracy { get; } = 50;
-        public override int MaxPP { get; } = 5;
+        public override string Name { get; } = "Grass Whip";
+        public override string Description { get; } = "The user attacks its opponent with vines, dealing damage.";
+        public override BasicType Type { get; } = new NatureType(true);
+        public override bool Contact { get; } = true;
+        public override int Power { get; } = 45;
+        public override int Accuracy { get; } = 100;
+        public override int MaxPP { get; } = 25;
         
-        public MeteorStrike() :base()
+        public GrassWhip() :base()
         {
 
         }
 
-        public MeteorStrike(bool newmove) :base(newmove)
+        public GrassWhip(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -40,7 +40,7 @@ namespace DiscomonProject
                 Result.Miss = true;
                 Result.Hit = false;
             }
-            //Hit logic
+            //Hit Logic
             else
             {
                 CurrentPP--;
