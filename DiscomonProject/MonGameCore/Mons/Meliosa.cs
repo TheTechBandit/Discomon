@@ -42,6 +42,8 @@ namespace DiscomonProject
             Moveset.Add(new MovesetItem(13, new Forgiveness(true)));
             Moveset.Add(new MovesetItem(16, new SparkleStrike(true)));
             Moveset.Add(new MovesetItem(22, new Wish(true)));
+            //Moveset.Add(new MovesetItem(30, new Sunshine(true)));
+            //Moveset.Add(new MovesetItem(30, new Heatwave(true)));
         }
     }
 }

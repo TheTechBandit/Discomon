@@ -10,7 +10,7 @@ namespace DiscomonProject
         public bool BadlyPoisoned { get; set; } = false;
         public bool Frozen { get; set; } = false;
         public bool Asleep { get; set; } = false;
-        public bool Sleepy { get; set; } = false;
+        public int Sleepy { get; set; } = 0;
         public int SleepTurns { get; set; } = 0;
         public bool Confused { get; set; } = false;
         public bool Infatuated { get; set; } = false;
@@ -36,7 +36,7 @@ namespace DiscomonProject
             BadlyPoisoned = false;
             Frozen = false;
             Asleep = false;
-            Sleepy = false;
+            Sleepy = 0;
             SleepTurns = 0;
         }
 

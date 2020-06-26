@@ -131,7 +131,8 @@ namespace DiscomonProject
         ///</summary>
         public double CalculateMod(CombatInstance inst, BasicMon owner, BasicMon enemy)
         {
-            var mod = ModCrit(inst, owner) * ModRandom() * ModType(enemy);
+            var mod = ModCrit(inst, owner) * ModRandom() * ModType(enemy) * ModWeather(inst);
+            
             Result.Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
@@ -139,11 +140,38 @@ namespace DiscomonProject
 
         public double CalculateModAlwaysCrit(CombatInstance inst, BasicMon owner, BasicMon enemy)
         {
-            var mod = 1.5 * ModRandom() * ModType(enemy);
+            var mod = 1.5 * ModRandom() * ModType(enemy) * ModWeather(inst);
+
             Result.Crit = true;
             Result.ModCrit = 1.5;
             Result.Mod = mod;
             Console.WriteLine($"Mod: {mod}");
+            return mod;
+        }
+
+        public double ModWeather(CombatInstance inst)
+        {
+            double mod = 1.0;
+            if(Type.Type == "Nature" && inst.Environment.Sunrise)
+            {
+                mod = 1.5;
+            }
+
+            if(Type.Type == "Fire" && inst.Environment.Heatwave)
+            {
+                mod = 1.5;
+            }
+
+            if(Type.Type == "Water" && inst.Environment.Heatwave)
+            {
+                mod = 0.5;
+            }
+
+            if(Type.Type == "Shade" && inst.Environment.Moonrise)
+            {
+                mod = 1.5;
+            }
+
             return mod;
         }
 

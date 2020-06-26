@@ -187,17 +187,6 @@ namespace DiscomonProject
             {
                 //1- Pre turn, activate weather effects... "It is still raining!" or "The rain cleared up!"
 
-                //Check if both mons are sleepy. If they are, they fall asleep.
-                if(inst.PlayerOne.Char.ActiveMon.SleepyCheck())
-                {
-                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerOne.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
-                }
-                if(inst.PlayerTwo.Char.ActiveMon.SleepyCheck())
-                {
-                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerTwo.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
-                }
-                
-
                 //Send fight screens to both players and progress to Phase 2 (wait for input)
                 if(inst.PlayerOne.Char.ActiveMon.BufferedMove == null)
                     await MessageHandler.FightScreen(inst.PlayerOne.UserId);
@@ -240,6 +229,8 @@ namespace DiscomonProject
             else if(inst.CombatPhase == 3)
             {
                 //Pre-attack phase, activate necessary abilities
+                if(!inst.Environment.Clear)
+                    await MessageHandler.SendMessage(inst.Location, inst.Environment.WeatherToString());
 
                 inst.CombatPhase = 4;
                 await ResolvePhase(inst);
@@ -276,6 +267,16 @@ namespace DiscomonProject
             else if(inst.CombatPhase == 6)
             {
                 //6- Post turn phase. Reset necessary data
+
+                //Check if both mons are sleepy. If they are, they fall asleep.
+                if(inst.PlayerOne.Char.ActiveMon.SleepyCheck())
+                {
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerOne.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
+                }
+                if(inst.PlayerTwo.Char.ActiveMon.SleepyCheck())
+                {
+                    await MessageHandler.SendMessage(inst.Location, $"{inst.PlayerTwo.Char.ActiveMon.Nickname} has been afflicted with *Sleep*");
+                }
 
                 //PlayerOne Status ticks
                 var damageType = inst.PlayerOne.Char.ActiveMon.StatusDamage();

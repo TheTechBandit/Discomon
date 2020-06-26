@@ -689,11 +689,14 @@ namespace DiscomonProject
 
         public bool SleepyCheck()
         {
-            if(Status.Sleepy)
+            if(Status.Sleepy >= 1)
             {
-                Status.FallAsleep(0);
-                Status.Sleepy = false;
-                return true;
+                Status.Sleepy++;
+                if(Status.Sleepy >= 3)
+                {
+                    Status.Sleepy = 0;
+                    return true;
+                }
             }
             return false;
         }

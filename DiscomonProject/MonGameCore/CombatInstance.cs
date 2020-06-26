@@ -9,6 +9,7 @@ namespace DiscomonProject
         public ContextIds Location { get; set; }
         public UserAccount PlayerOne { get; set; }
         public UserAccount PlayerTwo { get; set; }
+        public Environment Environment { get; set; }
         /*
         CombatPhase determines what step of combat is currently happening
         PHASES:
@@ -38,6 +39,7 @@ namespace DiscomonProject
             Location = loc;
             PlayerOne = one;
             PlayerTwo = two;
+            Environment = new Environment(true);
             IsPvP = true;
             IsDoubleBattle = false;
             CombatPhase = -1;

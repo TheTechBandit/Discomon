@@ -6,6 +6,7 @@ namespace DiscomonProject
         public bool Moonrise { get; set; } = false;
         public bool Sunrise { get; set; } = false;
         public bool Heatwave { get; set; } = false;
+        public bool Drought { get; set; } = false;
         public bool Eclipse { get; set; } = false;
         public bool Rain { get; set; } = false;
         public bool Hail { get; set; } = false;
@@ -36,6 +37,7 @@ namespace DiscomonProject
             Moonrise = false;
             Sunrise =  false;
             Heatwave = false;
+            Drought = false;
             Eclipse = false;
             Rain = false;
             Hail = false;
@@ -55,8 +57,8 @@ namespace DiscomonProject
         {
             if(Sunrise)
             {
+                ClearAllWeather();
                 Eclipse = true;
-                Sunrise = false;
                 Clear = false;
                 WeatherLevel = 2;
                 return "The moon eclipses the sun!";
@@ -65,11 +67,62 @@ namespace DiscomonProject
             {
                 return $"The {WeatherNameToString()} prevented moonrise!";
             }
-
+            else if(Moonrise)
+                return "The moon has already risen!";
+            
+            ClearAllWeather();
             Moonrise = true;
             Clear = false;
             WeatherLevel = 1;
             return "The moon rises!";
+        }
+
+        public string AttemptSunrise()
+        {
+            if(Moonrise)
+            {
+                ClearAllWeather();
+                Eclipse = true;
+                Clear = false;
+                WeatherLevel = 2;
+                return "The moon eclipses the sun!";
+            }
+            else if(WeatherLevel >= 2)
+            {
+                return $"The {WeatherNameToString()} prevented sunrise!";
+            }
+            else if(Sunrise)
+                return "The sun has already risen!";
+
+            ClearAllWeather();
+            Sunrise = true;
+            Clear = false;
+            WeatherLevel = 1;
+            return "The sun shines brightly!";
+        }
+
+        public string AttemptHeatwave()
+        {
+            if(Sunrise)
+            {
+                ClearAllWeather();
+                Drought = true;
+                Clear = false;
+                WeatherLevel = 2;
+                return "A heatwave hits and causes a drought!";
+            }
+            else if(WeatherLevel >= 2)
+            {
+                return $"The {WeatherNameToString()} prevented the heatwave!";
+            }
+            else if(Heatwave)
+                return "There is already a heatwave!";
+
+            ClearAllWeather();
+            Heatwave = true;
+            Clear = false;
+            WeatherLevel = 1;
+            return "The heat grows unbearable!";
         }
 
         public string WeatherToString()

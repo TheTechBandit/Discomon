@@ -41,6 +41,7 @@ namespace DiscomonProject
             Moveset.Add(new MovesetItem(6, new GrassWhip(true)));
             Moveset.Add(new MovesetItem(8, new Bite(true)));
             Moveset.Add(new MovesetItem(12, new Leech(true)));
+            Moveset.Add(new MovesetItem(15, new Sunshine(true)));
         }
     }
 }

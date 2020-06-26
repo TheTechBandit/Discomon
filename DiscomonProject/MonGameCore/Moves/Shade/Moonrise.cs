@@ -2,22 +2,22 @@ using System;
 
 namespace DiscomonProject
 {
-    public class Lullaby : BasicMove
+    public class Moonrise : BasicMove
     {
-        public override string Name { get; } = "Lullaby";
-        public override string Description { get; } = "The user sings a soothing melody, making the target fall asleep after one turn.";
-        public override BasicType Type { get; } = new PsychicType(true);
+        public override string Name { get; } = "Moonrise";
+        public override string Description { get; } = "The user performs a ritual, raising the moon and darkening the area.";
+        public override BasicType Type { get; } = new ShadeType(true);
         public override bool Contact { get; } = false;
         public override int Power { get; } = 0;
-        public override int Accuracy { get; } = 100;
-        public override int MaxPP { get; } = 10;
+        public override int Accuracy { get; } = -1;
+        public override int MaxPP { get; } = 5;
         
-        public Lullaby() :base()
+        public Moonrise() :base()
         {
 
         }
 
-        public Lullaby(bool newmove) :base(newmove)
+        public Moonrise(bool newmove) :base(newmove)
         {
             CurrentPP = MaxPP;
         }
@@ -28,7 +28,7 @@ namespace DiscomonProject
             var enemy = inst.GetOtherMon(owner);
 
             //Fail logic
-            if(DefaultFailLogic(enemy, owner) || enemy.Status.Asleep || enemy.Status.Sleepy >= 1)
+            if(DefaultFailLogic(enemy, owner))
             {
                 Result.Fail = true;
                 Result.Hit = false;
@@ -43,8 +43,7 @@ namespace DiscomonProject
             else
             {
                 CurrentPP--;
-                enemy.Status.Sleepy = 1;
-                Result.Messages.Add($"{enemy.Nickname} is feeling sleepy...");
+                Result.Messages.Add(inst.Environment.AttemptMoonrise());
             }
             return Result;
         }
