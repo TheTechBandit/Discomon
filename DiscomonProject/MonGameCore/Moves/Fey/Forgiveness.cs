@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = 100;
         public override int MaxPP { get; } = 10;
+        public override string TargetType { get; } = "SingleEnemy";
         
         public Forgiveness() :base()
         {
@@ -22,34 +24,39 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
+            
+            foreach(BasicMon t in targets)
+            {
+                AddResult();
+                
+                //Fail logic
+                if(DefaultFailLogic(t, owner))
+                {
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Miss Logic
+                else if(!ApplyAccuracy(inst, owner, t))
+                {
+                    Result[TargetNum].Miss = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Hit logic
+                else
+                {
+                    CurrentPP--;
+                    var amount = t.TotalHP/4;
+                    t.Restore(amount);
+                    (double mod, string mess) = t.ChangeAttStage(-2);
+                    Result[TargetNum].StatChangeMessages.Add(mess);
 
-            //Fail logic
-            if(DefaultFailLogic(enemy, owner))
-            {
-                Result.Fail = true;
-                Result.Hit = false;
+                    Result[TargetNum].EnemyHeal = amount;
+                }
             }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
-            }
-            //Hit logic
-            else
-            {
-                CurrentPP--;
-                var amount = enemy.TotalHP/4;
-                enemy.Restore(amount);
-                (double mod, string mess) = enemy.ChangeAttStage(-2);
-                Result.StatChangeMessages.Add(mess);
-
-                Result.EnemyHeal = amount;
-            }
+            
             return Result;
         }
     }

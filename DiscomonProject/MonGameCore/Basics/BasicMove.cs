@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace DiscomonProject
@@ -13,10 +14,14 @@ namespace DiscomonProject
         public int CurrentPP { get; set; }
         public virtual int Power { get; }
         public virtual int Accuracy { get; }
+        public virtual string TargetType { get; }
         public bool Disabled { get; set; }
         [JsonIgnore]
-        public MoveResult Result { get; set; }
+        public List<MoveResult> Result { get; set; }
         public bool Buffered { get; set; }
+        public List<BasicMon> Targets { get; set; }
+        public List<BasicMon> ValidTargets { get; set; }
+        public int TargetNum { get; set; }
 
         public BasicMove()
         {
@@ -27,36 +32,57 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
             Disabled = false;
+            Result = new List<MoveResult>();
             Buffered = false;
+            Targets = new List<BasicMon>();
+            ValidTargets = new List<BasicMon>();
+            TargetNum = -1;
         }
 
-        public virtual MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        //public virtual List<MoveResult> ApplyMove(CombatInstance inst, BasicMon owner)
+        //{
+            //return Result;
+        //}
+
+        public virtual List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             return Result;
         }
 
-        public virtual MoveResult ApplyBufferedMove(CombatInstance inst, BasicMon owner)
+        public virtual List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner)
+        {
+            return Result;
+        }
+
+        public virtual List<MoveResult> ApplyBufferedMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             return Result;
         }
 
         public void ResetResult()
         {
-            Result = new MoveResult();
-            Result.Move = this;
+            Result.Clear();
+            TargetNum = -1;
         }
 
-        public int ApplyPower(CombatInstance inst, BasicMon owner)
+        public void AddResult()
         {
-            var enemy = inst.GetOtherMon(owner);
-            var mod = CalculateMod(inst, owner, enemy);
+            Result.Add(new MoveResult());
+            TargetNum++;
+            Result[TargetNum].Move = this;
+            Result[TargetNum].Target = Targets[TargetNum];
+        }
+
+        public int ApplyPower(CombatInstance2 inst, BasicMon owner, BasicMon target)
+        {
+            var mod = CalculateMod(inst, owner, target);
             var power = Power;
             (double atkmod, string str) = owner.ChangeAttStage(0);
-            (double defmod, string str2) = enemy.ChangeDefStage(0);
+            (double defmod, string str2) = target.ChangeDefStage(0);
 
-            if(Result.Crit && owner.GetAttStage() < 0)
+            if(Result[TargetNum].Crit && owner.GetAttStage() < 0)
                 atkmod = 1.0;
-            if(Result.Crit && enemy.GetDefStage() > 0)
+            if(Result[TargetNum].Crit && target.GetDefStage() > 0)
                 defmod = 1.0;
 
             if(Type.Type == "Electric" && owner.Status.Charged)
@@ -65,28 +91,27 @@ namespace DiscomonProject
                 owner.Status.Charged = false;
             }
                 
-            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)target.CurStats[2]*defmod))/50)+2)*mod;
             int damage = (int)dmg;
 
             if(damage < 1)
                 damage = 1;
 
-            Result.EnemyDmg = damage;
+            Result[TargetNum].EnemyDmg = damage;
 
             return damage;
         }
 
-        public int ApplyPowerAlwaysCrit(CombatInstance inst, BasicMon owner)
+        public int ApplyPowerAlwaysCrit(CombatInstance2 inst, BasicMon owner, BasicMon target)
         {
-            var enemy = inst.GetOtherMon(owner);
-            var mod = CalculateModAlwaysCrit(inst, owner, enemy);
+            var mod = CalculateModAlwaysCrit(inst, owner, target);
             var power = Power;
             (double atkmod, string str) = owner.ChangeAttStage(0);
-            (double defmod, string str2) = enemy.ChangeDefStage(0);
+            (double defmod, string str2) = target.ChangeDefStage(0);
 
-            if(Result.Crit && owner.GetAttStage() < 0)
+            if(Result[TargetNum].Crit && owner.GetAttStage() < 0)
                 atkmod = 1.0;
-            if(Result.Crit && enemy.GetDefStage() > 0)
+            if(Result[TargetNum].Crit && target.GetDefStage() > 0)
                 defmod = 1.0;
 
             if(Type.Type == "Electric" && owner.Status.Charged)
@@ -95,13 +120,13 @@ namespace DiscomonProject
                 owner.Status.Charged = false;
             }
 
-            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)enemy.CurStats[2]*defmod))/50)+2)*mod;
+            double dmg = (((((2.0*owner.Level)/5.0)+2.0) * power * (((double)owner.CurStats[1]*atkmod)/((double)target.CurStats[2]*defmod))/50)+2)*mod;
             int damage = (int)dmg;
 
             if(damage < 1)
                 damage = 1;
 
-            Result.EnemyDmg = damage;
+            Result[TargetNum].EnemyDmg = damage;
 
             return damage;
         }
@@ -109,14 +134,13 @@ namespace DiscomonProject
         ///<summary>
         ///Rolls to determine if the move hit or not- true = hit false = miss
         ///</summary>
-        public bool ApplyAccuracy(CombatInstance inst, BasicMon owner)
+        public bool ApplyAccuracy(CombatInstance2 inst, BasicMon owner, BasicMon target)
         {
             if(Accuracy >= 0)
             {
-                var enemy = inst.GetOtherMon(owner);
-                var adjustedAccuracy = Accuracy * owner.StatModAccEva(enemy.GetEvaStage());
+                var adjustedAccuracy = Accuracy * owner.StatModAccEva(target.GetEvaStage());
                 bool result = RandomGen.PercentChance(adjustedAccuracy);
-                Result.ChanceToHit = adjustedAccuracy;
+                Result[TargetNum].ChanceToHit = adjustedAccuracy;
                 return result;
             }
             else
@@ -129,27 +153,27 @@ namespace DiscomonProject
         ///Calculates the total damage modifier
         ///<para>CritMod * RandomMod * TypeMod</para>
         ///</summary>
-        public double CalculateMod(CombatInstance inst, BasicMon owner, BasicMon enemy)
+        public double CalculateMod(CombatInstance2 inst, BasicMon owner, BasicMon enemy)
         {
             var mod = ModCrit(inst, owner) * ModRandom() * ModType(enemy) * ModWeather(inst);
             
-            Result.Mod = mod;
+            Result[TargetNum].Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
         }
 
-        public double CalculateModAlwaysCrit(CombatInstance inst, BasicMon owner, BasicMon enemy)
+        public double CalculateModAlwaysCrit(CombatInstance2 inst, BasicMon owner, BasicMon enemy)
         {
             var mod = 1.5 * ModRandom() * ModType(enemy) * ModWeather(inst);
 
-            Result.Crit = true;
-            Result.ModCrit = 1.5;
-            Result.Mod = mod;
+            Result[TargetNum].Crit = true;
+            Result[TargetNum].ModCrit = 1.5;
+            Result[TargetNum].Mod = mod;
             Console.WriteLine($"Mod: {mod}");
             return mod;
         }
 
-        public double ModWeather(CombatInstance inst)
+        public double ModWeather(CombatInstance2 inst)
         {
             double mod = 1.0;
             if(Type.Type == "Nature" && inst.Environment.Sunrise)
@@ -178,37 +202,37 @@ namespace DiscomonProject
         ///<summary>
         ///Rolls for a critical hit based on crit chance. Returns 1.5 if a crit lands.
         ///</summary>
-        public double ModCrit(CombatInstance instance, BasicMon owner)
+        public double ModCrit(CombatInstance2 instance, BasicMon owner)
         {
             switch(owner.CritChance)
             {
                 case 0:
                     if(RandomGen.PercentChance(6.25))
                     {
-                        Result.Crit = true;
-                        Result.ModCrit = 1.5;
+                        Result[TargetNum].Crit = true;
+                        Result[TargetNum].ModCrit = 1.5;
                         return 1.5;
                     }
                     break;
                 case 1:
                     if(RandomGen.PercentChance(12.5))
                     {
-                        Result.Crit = true;
-                        Result.ModCrit = 1.5;
+                        Result[TargetNum].Crit = true;
+                        Result[TargetNum].ModCrit = 1.5;
                         return 1.5;
                     }
                     break;
                 case 2:
                     if(RandomGen.PercentChance(50.0))
                     {
-                        Result.Crit = true;
-                        Result.ModCrit = 1.5;
+                        Result[TargetNum].Crit = true;
+                        Result[TargetNum].ModCrit = 1.5;
                         return 1.5;
                     }
                     break;
                 default:
-                    Result.Crit = true;
-                    Result.ModCrit = 1.5;
+                    Result[TargetNum].Crit = true;
+                    Result[TargetNum].ModCrit = 1.5;
                     return 1.5;
             }
 
@@ -221,7 +245,7 @@ namespace DiscomonProject
         public double ModRandom()
         {
             var random = RandomGen.RandomDouble(0.85, 1.0);
-            Result.ModRand = random;
+            Result[TargetNum].ModRand = random;
             return random;
         }
 
@@ -237,12 +261,12 @@ namespace DiscomonProject
                 type = Type.ParseEffectiveness(enemy.Typing);
             
             if(type > 1)
-                Result.SuperEffective = true;
+                Result[TargetNum].SuperEffective = true;
             if(type < 1)
-                Result.NotEffective = true;
+                Result[TargetNum].NotEffective = true;
             if(type == 0)
-                Result.Immune = true;
-            Result.ModType = type;
+                Result[TargetNum].Immune = true;
+            Result[TargetNum].ModType = type;
             
             return type;
         }
@@ -259,12 +283,13 @@ namespace DiscomonProject
 
         public bool DefaultFailLogic(BasicMon enemy, BasicMon owner)
         {
+            Result[TargetNum].Owner = owner;
             if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted || Disabled || enemy.Status.Flying)
             {
                 if(Disabled)
-                    Result.FailText = $"{Name} is disabled!";
+                    Result[TargetNum].FailText = $"{Name} is disabled!";
                 if(enemy.Status.Flying)
-                    Result.FailText = $"{enemy.Nickname} is flying too high to reach!";
+                    Result[TargetNum].FailText = $"{enemy.Nickname} is flying too high to reach!";
                 Buffered = false;
                 
                 return true;
@@ -277,10 +302,11 @@ namespace DiscomonProject
 
         public bool DefaultFailLogic(BasicMon enemy, BasicMon owner, bool ignoreFly, bool ignoreUnderground, bool ignoreDive)
         {
+            Result[TargetNum].Owner = owner;
             if(StatusFailCheck(owner) || enemy.Fainted || enemy == null || owner.Fainted || Disabled || (!ignoreFly && enemy.Status.Flying) /*|| (!ignoreUnderground && enemy.Status.Digging) || (!ignoreDive && enemy.Status.Diving)*/)
             {
                 if(Disabled)
-                    Result.FailText = $"{Name} is disabled!";
+                    Result[TargetNum].FailText = $"{Name} is disabled!";
                 Buffered = false;
                 
                 return true;
@@ -293,7 +319,21 @@ namespace DiscomonProject
 
         public bool SelfMoveFailLogic(BasicMon owner)
         {
+            Result[TargetNum].Owner = owner;
             if(StatusFailCheck(owner) || owner.Fainted)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool SelfMoveFailLogicIgnoreStatus(BasicMon owner)
+        {
+            Result[TargetNum].Owner = owner;
+            if(VolatileStatusFailCheck(owner) || owner.Fainted)
             {
                 return true;
             }
@@ -315,11 +355,23 @@ namespace DiscomonProject
             }
         }
 
+        public bool VolatileStatusFailCheck(BasicMon owner)
+        {
+            if(owner.Status.Flinching == true)
+            {
+                Result[TargetNum].FailText = $"{owner.Nickname} flinched!";
+                owner.Status.Flinching = false;
+                return true;
+            }
+
+            return false;
+        }
+
         public bool StatusFailCheck(BasicMon owner)
         {
             if(owner.Status.Flinching == true)
             {
-                Result.FailText = $"{owner.Nickname} flinched!";
+                Result[TargetNum].FailText = $"{owner.Nickname} flinched!";
                 owner.Status.Flinching = false;
                 return true;
             }
@@ -327,31 +379,130 @@ namespace DiscomonProject
             {
                 if(RandomGen.PercentChance(25.0))
                 {
-                    Result.FailText = $"{owner.Nickname} is paralyzed!";
+                    Result[TargetNum].FailText = $"{owner.Nickname} is paralyzed!";
                     return true;
                 }
             }
             if(owner.Status.Asleep == true)
             {
-                Result.FailText = $"{owner.Nickname} is asleep!";
-                owner.Status.SleepTick();
-                return true;
+                if(owner.Status.SleepTick())
+                {
+                    Result[TargetNum].Messages.Add($"{owner.Nickname} has woken up!");
+                    return false;
+                }
+                else
+                {
+                    Result[TargetNum].FailText = $"{owner.Nickname} is asleep!";
+                    return true;
+                }
             }
             if(owner.Status.Frozen == true)
             {
                 if(owner.Status.FreezeTick())
                 {
-                    Result.FailText = $"{owner.Nickname} has unfrozen!";
+                    Result[TargetNum].Messages.Add($"{owner.Nickname} has unfrozen!");
                     return false;
                 }
                 else
                 {
-                    Result.FailText = $"{owner.Nickname} is frozen!";
+                    Result[TargetNum].FailText = $"{owner.Nickname} is frozen!";
                     return true;
                 }
             }
 
             return false;
         }
+
+        public bool DoesMoveRequireTargets()
+        {
+            if(TargetType == "None" || TargetType == "Self")
+                return false;
+            else
+                return true;
+        }
+
+        public bool DoesMoveRequireTargetingMenu(List<BasicMon> targets)
+        {
+            if(!DoesMoveRequireTargets() || TargetType == "AllEnemies" || TargetType == "AllAllies" || TargetType == "All" || targets.Count <= 1)
+                return false;
+            else if(TargetType.Contains("Single") && targets.Count > 1)
+                return true;
+            return true;
+        }
+
+        public List<BasicMon> DetermineValidTargets(CombatInstance2 inst, BasicMon owner)
+        {
+            List<BasicMon> targets = new List<BasicMon>();
+
+            switch(TargetType)
+            {
+                case "None":
+                    return targets;
+                case "Self":
+                    targets.Add(owner);
+                    return targets;
+                case "SingleEnemy":
+                case "AllEnemies":
+                    foreach(Team t in inst.Teams)
+                    {
+                        if(!t.Members.Contains(inst.GetPlayer(owner)))
+                        {
+                            foreach(UserAccount u in t.Members)
+                            {
+                                foreach(BasicMon mon in u.Char.ActiveMons)
+                                {
+                                    if(!mon.Fainted && mon != null)
+                                        targets.Add(mon);
+                                }
+                            }
+                        }
+                    }
+                    return targets;
+                case "SingleAlly":
+                case "AllAllies":
+                    foreach(Team t in inst.Teams)
+                    {
+                        if(t.Members.Contains(inst.GetPlayer(owner)))
+                        {
+                            foreach(UserAccount u in t.Members)
+                            {
+                                foreach(BasicMon mon in u.Char.ActiveMons)
+                                {
+                                    if(!mon.Fainted && mon != null)
+                                        targets.Add(mon);
+                                }
+                            }
+                        }
+                    }
+                    return targets;
+                case "All":
+                case "SingleAll":
+                    foreach(Team t in inst.Teams)
+                    {
+                        foreach(UserAccount u in t.Members)
+                        {
+                            foreach(BasicMon mon in u.Char.ActiveMons)
+                            {
+                                if(!mon.Fainted && mon != null && mon != owner)
+                                    targets.Add(mon);
+                            }
+                        }
+                    }
+                    return targets;
+                default:
+                    Console.WriteLine($"The move {Name} has an unkown TargetType.");
+                    break;
+            }
+
+            ValidTargets = targets;
+            return targets;
+        }
+
+        public void WipeTargets()
+        {
+            ValidTargets.Clear();
+            Targets.Clear();
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = -1;
         public override int MaxPP { get; } = 5;
+        public override string TargetType { get; } = "SingleAlly";
         
         public Wish() :base()
         {
@@ -22,38 +24,37 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
-
-            //Fail logic
-            if(SelfMoveFailLogic(owner))
+            
+            foreach(BasicMon t in targets)
             {
-                Result.Fail = true;
-                Result.Hit = false;
-            }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
-            }
-            //Hit logic
-            else
-            {
-                CurrentPP--;
-                owner.Status.StatusCure();
-                var amount = owner.TotalHP/10;
-                owner.Restore(amount);
-                Result.SelfHeal = amount;
+                AddResult();
 
-                (double mod, string mess) = owner.ChangeAttStage(1);
-                Result.StatChangeMessages.Add(mess);
+                //Fail logic
+                if(SelfMoveFailLogic(owner))
+                {
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Hit logic
+                else
+                {
+                    CurrentPP--;
+                    t.Status.StatusCure();
+                    var amount = t.TotalHP/10;
+                    t.Restore(amount);
+                    Result[TargetNum].SelfHeal = amount;
 
-                (double mod1, string mess1) = owner.ChangeAffStage(1);
-                Result.StatChangeMessages.Add(mess1);
+                    (double mod, string mess) = t.ChangeAttStage(1);
+                    Result[TargetNum].StatChangeMessages.Add(mess);
+
+                    (double mod1, string mess1) = t.ChangeAffStage(1);
+                    Result[TargetNum].StatChangeMessages.Add(mess1);
+                }
             }
+            
             return Result;
         }
     }

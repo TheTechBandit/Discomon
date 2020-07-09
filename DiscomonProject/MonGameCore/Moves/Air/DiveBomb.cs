@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 90;
         public override int Accuracy { get; } = 95;
         public override int MaxPP { get; } = 15;
+        public override string TargetType { get; } = "SingleEnemy";
         
         public DiveBomb() :base()
         {
@@ -22,24 +24,18 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             if(!Buffered)
             {
                 ResetResult();
-                var enemy = inst.GetOtherMon(owner);
+                AddResult();
 
                 //Fail logic
                 if(SelfMoveFailLogic(owner))
                 {
-                    Result.Fail = true;
-                    Result.Hit = false;
-                }
-                //Miss Logic
-                else if(!ApplyAccuracy(inst, owner))
-                {
-                    Result.Miss = true;
-                    Result.Hit = false;
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
                 }
                 //Hit logic
                 else
@@ -48,36 +44,48 @@ namespace DiscomonProject
                     owner.BufferedMove = this;
                     owner.Status.Flying = true;
                     Buffered = true;
-                    Result.Messages.Add($"{owner.Nickname} flew up high!");
+                    Result[TargetNum].Messages.Add($"{owner.Nickname} flew up high!");
                 }
                 return Result;
             }
             else
-                return ApplyBufferedMove(inst, owner);
+                return ApplyBufferedMove(inst, owner, targets);
         }
 
-        public override MoveResult ApplyBufferedMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyBufferedMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
-            int dmg = 0;
 
-            //Fail logic
-            if(DefaultFailLogic(enemy, owner))
+            foreach(BasicMon t in targets)
             {
-                Result.Fail = true;
-                Result.Hit = false;
-            }
-            //Hit logic
-            else
-            {
-                CurrentPP--;
-                dmg = ApplyPower(inst, owner);
-                enemy.TakeDamage(dmg);
+                int dmg = 0;
+                AddResult();
+
+                //Fail logic
+                if(DefaultFailLogic(t, owner))
+                {
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Miss Logic
+                else if(!ApplyAccuracy(inst, owner, t))
+                {
+                    Result[TargetNum].Miss = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Hit logic
+                else
+                {
+                    CurrentPP--;
+                    dmg = ApplyPower(inst, owner, t);
+                    t.TakeDamage(dmg);
+                }
+
                 owner.BufferedMove = null;
                 owner.Status.Flying = false;
                 Buffered = false;
             }
+
             return Result;
         }
     }

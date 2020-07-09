@@ -109,7 +109,7 @@ namespace DiscomonProject.Discord
 	        .WithTitle($"Lv. {mon.Level}")
             .WithThumbnailUrl(mon.ArtURL)
         	.WithColor(r, g, b)
-            .WithAuthor($"{mon.Nickname} {mon.GenderSymbol}")
+            .WithAuthor($"{UserHandler.GetUser(mon.OwnerID).Char.Name}'s {mon.Nickname} {mon.GenderSymbol}")
             .WithDescription($"{mon.CurrentHP}/{mon.TotalHP} HP {statuses}");
             var embed = builder.Build();
 
@@ -153,6 +153,39 @@ namespace DiscomonProject.Discord
             .AddField(mon.ActiveMoves[1].Name, mon.ActiveMoves[1].Description + $"\nPP: {mon.ActiveMoves[1].CurrentPP}/{mon.ActiveMoves[1].MaxPP}", true)
             .AddField(mon.ActiveMoves[2].Name, mon.ActiveMoves[2].Description + $"\nPP: {mon.ActiveMoves[2].CurrentPP}/{mon.ActiveMoves[2].MaxPP}", true)
             .AddField(mon.ActiveMoves[3].Name, mon.ActiveMoves[3].Description + $"\nPP: {mon.ActiveMoves[3].CurrentPP}/{mon.ActiveMoves[3].MaxPP}", true);
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed MoveScreenNew(BasicMon mon)
+        {
+            var builder = new EmbedBuilder()
+	        .WithTitle("**Moves**")
+        	.WithColor(62, 255, 62)
+            .WithThumbnailUrl(mon.ArtURL)
+            .AddField("1\u20E3 " + mon.ActiveMoves[0].Name, mon.ActiveMoves[0].Description + $"\nPP: {mon.ActiveMoves[0].CurrentPP}/{mon.ActiveMoves[0].MaxPP}", false)
+            .AddField("2\u20E3 " + mon.ActiveMoves[1].Name, mon.ActiveMoves[1].Description + $"\nPP: {mon.ActiveMoves[1].CurrentPP}/{mon.ActiveMoves[1].MaxPP}", false)
+            .AddField("3\u20E3 " + mon.ActiveMoves[2].Name, mon.ActiveMoves[2].Description + $"\nPP: {mon.ActiveMoves[2].CurrentPP}/{mon.ActiveMoves[2].MaxPP}", false)
+            .AddField("4\u20E3 " + mon.ActiveMoves[3].Name, mon.ActiveMoves[3].Description + $"\nPP: {mon.ActiveMoves[3].CurrentPP}/{mon.ActiveMoves[3].MaxPP}", false);
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed TargetingScreen(UserAccount user, BasicMon mon)
+        {
+            var builder = new EmbedBuilder()
+            .WithTitle("**Choose A Target**")
+        	.WithColor(62, 255, 62)
+            .WithFooter($"Pg. {user.Char.TargetPage+1}/{Math.Ceiling(mon.SelectedMove.ValidTargets.Count/9.0)}");
+            for(int i = user.Char.TargetPage*9; i < mon.SelectedMove.ValidTargets.Count; i++)
+            {
+                if(i > (user.Char.TargetPage*9)+8)
+                    break;
+                var target = mon.SelectedMove.ValidTargets[i];
+                builder.AddField($"{i+1}\u20E3 - {UserHandler.GetUser(target.OwnerID).Char.Name}'s {target.Nickname}", false);
+            }
             var embed = builder.Build();
 
             return embed;

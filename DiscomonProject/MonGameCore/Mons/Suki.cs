@@ -10,7 +10,8 @@ namespace DiscomonProject
         public override string Species { get; } = "Suki";
         public override List<BasicType> Typing { get; set; } = new List<BasicType>() {new ColdType(true), new AirType(true)};
         public override string ArtURL { get; } = "https://cdn.discordapp.com/attachments/516760928423772163/601482394045775882/suki.png";
-        public override int BaseHP { get; } = 60;
+        //public override int BaseHP { get; } = 60;
+        public override int BaseHP { get; } = 600;
         public override int BaseAtt { get; } = 70;
         public override int BaseDef { get; } = 55;
         public override int BaseAff { get; } = 70;

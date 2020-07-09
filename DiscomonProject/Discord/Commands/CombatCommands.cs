@@ -33,6 +33,7 @@ namespace DiscomonProject.Discord
                 return;
             }
 
+
             //Check that the user did not target themself with the command
             if(fromUser.UserId != toUser.UserId)
             {
@@ -72,10 +73,10 @@ namespace DiscomonProject.Discord
 
                         await CombatHandler.StartCombat(fromUser.Char.Combat);
                         */
-                        CombatInstance combat = new CombatInstance(idList, fromUser, toUser);
+                        CombatInstance2 combat = new CombatInstance2(idList, fromUser, toUser);
 
-                        CombatHandler.StoreInstance(CombatHandler.NumberOfInstances(), combat);
-                        await CombatHandler.StartCombat(combat);
+                        CombatHandler2.StoreInstance(CombatHandler2.NumberOfInstances(), combat);
+                        await combat.StartCombat();
                     }
                 }
                 else

@@ -5,8 +5,8 @@ namespace DiscomonProject
     public class MoveResult
     {
         public BasicMove Move { get; set; }
-        //public BasicMon Owner { get; set; }
-        //public BasicMon Enemy { get; set; }
+        public BasicMon Owner { get; set; }
+        public BasicMon Target { get; set; }
         public BasicMon Swapout { get; set; }
         public int EnemyDmg { get; set; }
         public int EnemyHeal { get; set; }
@@ -34,8 +34,8 @@ namespace DiscomonProject
         public MoveResult()
         {
             Move = null;
-            //Owner = null;
-            //Enemy = null;
+            Owner = null;
+            Target = null;
             Swapout = null;
             EnemyDmg = 0;
             EnemyHeal = 0;

@@ -101,6 +101,11 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(context, $"{user.Mention}, your attack has been entered. Awaiting other player.");
         }
 
+        public static async Task AttackEnteredTextNew(ContextIds context, UserAccount user, int num)
+        {
+            await MessageHandler.SendMessage(context, $"{user.Mention}, your attack has been entered. Awaiting {num} other player(s).");
+        }
+
         public static async Task AttackAlreadyEntered(ContextIds context, UserAccount user)
         {
             await MessageHandler.SendMessage(context, $"{user.Mention}, you already entered an attack! Waiting on other player.");
@@ -129,6 +134,11 @@ namespace DiscomonProject.Discord
         public static async Task UseMove(ContextIds context, BasicMon mon, BasicMon target, string move, string addon)
         {
             await MessageHandler.SendEmbedMessage(context, $"**{mon.Nickname}** used **{move}**!"+addon, MonEmbedBuilder.FieldMon(target));
+        }
+
+        public static async Task UseMoveNew(ContextIds context, BasicMon target, string addon)
+        {
+            await MessageHandler.SendEmbedMessage(context, addon, MonEmbedBuilder.FieldMon(target));
         }
 
         public static async Task TakesDamage(ContextIds context, BasicMon mon, string addon)
@@ -163,6 +173,57 @@ namespace DiscomonProject.Discord
 
             user.ReactionMessages.Add(message.Id, 1);
         }
+
+        public static async Task FightScreenNew(ulong userId)
+        {
+            var user = UserHandler.GetUser(userId);
+            
+            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.FightScreen(user.Char.ActiveMons[0]));
+
+            await message.AddReactionAsync(new Emoji("⚔"));
+            await message.AddReactionAsync(new Emoji("👜"));
+            await message.AddReactionAsync(new Emoji("🔁"));
+            await message.AddReactionAsync(new Emoji("🏃"));
+
+            user.ReactionMessages.Add(message.Id, 2);
+        }
+
+        public static async Task MoveScreenNew(ulong userId)
+        {
+            var user = UserHandler.GetUser(userId);
+
+            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.MoveScreenNew(user.Char.ActiveMons[user.Char.MoveScreenNum]));
+
+            await message.AddReactionAsync(new Emoji("1\u20E3"));
+            await message.AddReactionAsync(new Emoji("2\u20E3"));
+            await message.AddReactionAsync(new Emoji("3\u20E3"));
+            await message.AddReactionAsync(new Emoji("4\u20E3"));
+            await message.AddReactionAsync(new Emoji("⏮"));
+
+            user.ReactionMessages.Add(message.Id, 3);
+        }
+
+        public static async Task TargetingScreen(ulong userId)
+        {
+            var user = UserHandler.GetUser(userId);
+            
+            var message = await _client.GetUser(userId).SendMessageAsync("", false, MonEmbedBuilder.TargetingScreen(user, user.Char.ActiveMons[user.Char.MoveScreenNum]));
+
+            await message.AddReactionAsync(new Emoji("1\u20E3"));
+            await message.AddReactionAsync(new Emoji("2\u20E3"));
+            await message.AddReactionAsync(new Emoji("3\u20E3"));
+            await message.AddReactionAsync(new Emoji("4\u20E3"));
+            await message.AddReactionAsync(new Emoji("5\u20E3"));
+            await message.AddReactionAsync(new Emoji("6\u20E3"));
+            await message.AddReactionAsync(new Emoji("7\u20E3"));
+            await message.AddReactionAsync(new Emoji("8\u20E3"));
+            await message.AddReactionAsync(new Emoji("9\u20E3"));
+            await message.AddReactionAsync(new Emoji("⏮"));
+            await message.AddReactionAsync(new Emoji("⏭️"));
+
+            user.ReactionMessages.Add(message.Id, 4);
+        }
+
 
         public static async Task EmojiTest(ContextIds context)
         {

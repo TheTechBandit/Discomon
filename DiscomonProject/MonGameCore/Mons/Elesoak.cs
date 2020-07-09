@@ -38,7 +38,6 @@ namespace DiscomonProject
 
         public override void MoveSetup()
         {
-            Moveset.Add(new MovesetItem(6, new GrassWhip(true)));
             Moveset.Add(new MovesetItem(7, new Drench(true)));
             Moveset.Add(new MovesetItem(25, new Torrent(true)));
             Moveset.Add(new MovesetItem(33, new HydroJet(true)));

@@ -12,13 +12,18 @@ namespace DiscomonProject
         public ulong CurrentGuildId { get; set; }
         public string CurrentGuildName { get; set; }
         public BasicMon ActiveMon { get; set; }
+        public List<BasicMon> ActiveMons { get; set; }
         public List<BasicMon> Party { get; set; }
         public List<BasicMon> PC { get; set; }
         public ulong CombatRequest { get; set; }
         public ulong InCombatWith { get; set; }
         public bool InCombat { get; set; }
         public bool InPvpCombat { get; set; }
+        public bool CombatEliminated { get; set; }
         public int CombatId { get; set; }
+        public int MoveScreenNum { get; set; }
+        public int TargetPage { get; set; }
+        public bool CombatMovesEntered { get; set; }
 
         public Character()
         {
@@ -27,36 +32,42 @@ namespace DiscomonProject
 
         public Character(bool newchar)
         {
+            ActiveMons = new List<BasicMon>();
             Party = new List<BasicMon>();
             PC = new List<BasicMon>();
             InCombat = false;
             InPvpCombat = false;
+            CombatEliminated = false;
             CombatId = -1;
+            MoveScreenNum = 0;
+            TargetPage = 0;
+            CombatMovesEntered = false;
         }
 
         public void ExitCombat()
         {
             InCombat = false;
             InPvpCombat = false;
+            CombatEliminated = false;
             CombatRequest = 0;
             InCombatWith = 0;
             CombatId = -1;
+            MoveScreenNum = 0;
+            TargetPage = 0;
+            CombatMovesEntered = false;
             foreach(BasicMon mon in Party)
             {
-                mon.SelectedMove = null;
-                mon.BufferedMove = null;
-                mon.Status.CombatReset();
-                mon.OverrideType = false;
-                mon.OverrideTyping.Clear();
+                mon.ExitCombat();
             }
             ActiveMon = null;
+            ActiveMons.Clear();
         }
 
         public BasicMon FirstUsableMon()
         {
             for(int i = 0; i < Party.Count; i++)
             {
-                if(Party[i].CurrentHP > 0)
+                if(Party[i].CurrentHP > 0 && !Party[i].IsCombatActive)
                 {
                     return Party[i];
                 }
@@ -68,7 +79,7 @@ namespace DiscomonProject
         {
             for(int i = 0; i < Party.Count; i++)
             {
-                if(Party[i].CurrentHP > 0)
+                if(Party[i].CurrentHP > 0 && !Party[i].IsCombatActive)
                 {
                     foreach(BasicMon exclusion in exclude)
                         if(Party[i] != exclusion)
@@ -76,6 +87,19 @@ namespace DiscomonProject
                 }
             }
             return null;
+        }
+
+        public bool HasUsableMon()
+        {
+            for(int i = 0; i < Party.Count; i++)
+            {
+                if(Party[i].CurrentHP > 0 && !Party[i].IsCombatActive)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public bool HasMonInParty(BasicMon mon)

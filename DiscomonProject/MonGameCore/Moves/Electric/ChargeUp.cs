@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = -1;
         public override int MaxPP { get; } = 10;
+        public override string TargetType { get; } = "Self";
         
         public ChargeUp() :base()
         {
@@ -22,30 +24,25 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
+            AddResult();
 
             //Fail logic
-            if(DefaultFailLogic(enemy, owner) || owner.Status.Charged)
+            if(SelfMoveFailLogic(owner) || owner.Status.Charged)
             {
-                Result.Fail = true;
-                Result.Hit = false;
-            }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
+                Result[TargetNum].Fail = true;
+                Result[TargetNum].Hit = false;
             }
             //Hit logic
             else
             {
                 CurrentPP--;
                 owner.Status.Charged = true;
-                Result.Messages.Add($"{owner.Nickname} charges up!");
+                Result[TargetNum].Messages.Add($"{owner.Nickname} charges up!");
             }
+            
             return Result;
         }
     }

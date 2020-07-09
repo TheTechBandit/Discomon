@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 0;
         public override int Accuracy { get; } = 100;
         public override int MaxPP { get; } = 20;
+        public override string TargetType { get; } = "SingleEnemy";
         
         public Drench() :base()
         {
@@ -22,31 +24,36 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
+            
+            foreach(BasicMon t in targets)
+            {
+                AddResult();
 
-            //Fail logic
-            if(DefaultFailLogic(enemy, owner) || enemy.HasType("Water"))
-            {
-                Result.Fail = true;
-                Result.Hit = false;
+                //Fail logic
+                if(DefaultFailLogic(t, owner) || t.HasType("Water"))
+                {
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Miss Logic
+                else if(!ApplyAccuracy(inst, owner, t))
+                {
+                    Result[TargetNum].Miss = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Hit logic
+                else
+                {
+                    CurrentPP--;
+                    t.OverrideType = true;
+                    t.OverrideTyping.Add(new WaterType(true));
+                    Result[TargetNum].Messages.Add($"{t.Nickname} is now a **Water** type!");
+                }
             }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
-            }
-            //Hit logic
-            else
-            {
-                CurrentPP--;
-                enemy.OverrideType = true;
-                enemy.OverrideTyping.Add(new WaterType(true));
-                Result.Messages.Add($"{enemy.Nickname} is now a **Water** type!");
-            }
+            
             return Result;
         }
     }

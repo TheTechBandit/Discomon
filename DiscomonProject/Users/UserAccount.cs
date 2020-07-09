@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DiscomonProject.Discord;
 using Newtonsoft.Json;
 
@@ -19,6 +20,9 @@ namespace DiscomonProject
         /* meaning behind each int
         0- attack screen main
         1- move selection screen
+        2- attack screen rework
+        3- move selection screen rework
+        4- targeting screen rework
          */
         public Dictionary<ulong, int> ReactionMessages { get; set; }
 

@@ -107,7 +107,7 @@ namespace DiscomonProject.Discord
             ContextIds idList = new ContextIds(Context);
             await MessageHandler.SendMessage(idList, "User data cleared. Reboot bot to take effect.");
             UserHandler.ClearUserData();
-            CombatHandler.ClearCombatData();
+            CombatHandler2.ClearCombatData();
         }
 
         [Command("whisper")]

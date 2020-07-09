@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DiscomonProject
 {
     public class None : BasicMove
@@ -20,7 +22,7 @@ namespace DiscomonProject
 
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner)
         {
             return Result;
         }

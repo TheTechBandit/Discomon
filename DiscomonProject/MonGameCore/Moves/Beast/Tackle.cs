@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 40;
         public override int Accuracy { get; } = 100;
         public override int MaxPP { get; } = 35;
+        public override string TargetType { get; } = "SingleEnemy";
         
         public Tackle() :base()
         {
@@ -22,31 +24,52 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
-            int dmg = 0;
+            Console.WriteLine($"TA");
 
-            //Fail logic
-            if(DefaultFailLogic(enemy, owner))
+            foreach(BasicMon t in targets)
             {
-                Result.Fail = true;
-                Result.Hit = false;
+                Console.WriteLine($"TB");
+                int dmg = 0;
+                Console.WriteLine($"TC");
+                AddResult();
+                Console.WriteLine($"TD");
+
+                //Fail logic
+                if(DefaultFailLogic(t, owner))
+                {
+                    Console.WriteLine($"TE");
+                    Result[TargetNum].Fail = true;
+                    Console.WriteLine($"TF");
+                    Result[TargetNum].Hit = false;
+                    Console.WriteLine($"TG");
+                }
+                //Miss Logic
+                else if(!ApplyAccuracy(inst, owner, t))
+                {
+                    Console.WriteLine($"TH");
+                    Result[TargetNum].Miss = true;
+                    Console.WriteLine($"TI");
+                    Result[TargetNum].Hit = false;
+                    Console.WriteLine($"TJ");
+                }
+                //Hit Logic
+                else
+                {
+                    Console.WriteLine($"TK");
+                    CurrentPP--;
+                    Console.WriteLine($"TL");
+                    dmg = ApplyPower(inst, owner, t);
+                    Console.WriteLine($"TM");
+                    t.TakeDamage(dmg);
+                    Console.WriteLine($"TN");
+                }
+                Console.WriteLine($"TO");
             }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
-            }
-            //Hit Logic
-            else
-            {
-                CurrentPP--;
-                dmg = ApplyPower(inst, owner);
-                enemy.TakeDamage(dmg);
-            }
+            Console.WriteLine($"TP");
+            
             return Result;
         }
     }

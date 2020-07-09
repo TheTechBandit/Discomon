@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DiscomonProject
 {
@@ -11,6 +12,7 @@ namespace DiscomonProject
         public override int Power { get; } = 80;
         public override int Accuracy { get; } = 90;
         public override int MaxPP { get; } = 15;
+        public override string TargetType { get; } = "SingleEnemy";
         
         public Lightning() :base()
         {
@@ -22,31 +24,36 @@ namespace DiscomonProject
             CurrentPP = MaxPP;
         }
 
-        public override MoveResult ApplyMove(CombatInstance inst, BasicMon owner)
+        public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
-            var enemy = inst.GetOtherMon(owner);
-            int dmg = 0;
 
-            //Fail logic
-            if(DefaultFailLogic(enemy, owner))
+            foreach(BasicMon t in targets)
             {
-                Result.Fail = true;
-                Result.Hit = false;
+                int dmg = 0;
+                AddResult();
+
+                //Fail logic
+                if(DefaultFailLogic(t, owner))
+                {
+                    Result[TargetNum].Fail = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Miss Logic
+                else if(!ApplyAccuracy(inst, owner, t))
+                {
+                    Result[TargetNum].Miss = true;
+                    Result[TargetNum].Hit = false;
+                }
+                //Hit logic
+                else
+                {
+                    CurrentPP--;
+                    dmg = ApplyPower(inst, owner, t);
+                    t.TakeDamage(dmg);
+                }
             }
-            //Miss Logic
-            else if(!ApplyAccuracy(inst, owner))
-            {
-                Result.Miss = true;
-                Result.Hit = false;
-            }
-            //Hit logic
-            else
-            {
-                CurrentPP--;
-                dmg = ApplyPower(inst, owner);
-                enemy.TakeDamage(dmg);
-            }
+            
             return Result;
         }
     }

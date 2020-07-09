@@ -20,10 +20,13 @@ namespace DiscomonProject
             owner.EnteredCombat += mon_EnteredCombat;
         }
 
-        public override async Task mon_EnteredCombat(BasicMon owner, BasicMon enemy, CombatInstance inst)
+        public override async Task mon_EnteredCombat(BasicMon owner, CombatInstance2 inst)
         {
-            enemy.ChangeAttStage(-1);
-            await MessageHandler.SendMessage(inst.Location, $"{owner.Nickname} intimidates {enemy.Nickname}, lowering their attack by one stage!");
+            foreach(BasicMon enemy in inst.GetAllEnemies(owner))
+            {
+                enemy.ChangeAttStage(-1);
+                await MessageHandler.SendMessage(inst.Location, $"{owner.Nickname} intimidates {enemy.Nickname}, lowering their attack by one stage!");
+            }
         }
 
     }

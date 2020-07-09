@@ -19,7 +19,7 @@ namespace DiscomonProject
 
         }
 
-        public virtual async Task mon_EnteredCombat(BasicMon owner, BasicMon enemy, CombatInstance inst)
+        public virtual async Task mon_EnteredCombat(BasicMon owner, CombatInstance2 inst)
         {
             await Task.Run(null);
         }

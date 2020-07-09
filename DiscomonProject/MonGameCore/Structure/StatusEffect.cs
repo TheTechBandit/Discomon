@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 namespace DiscomonProject
@@ -76,12 +77,17 @@ namespace DiscomonProject
                 SleepTurns = number;
             }
         }
- 
-        public void SleepTick()
+
+        //Returns true if awake
+        public bool SleepTick()
         {
             SleepTurns--;
             if(SleepTurns <= 0)
+            {
                 Asleep = false;
+                return true;
+            }
+            return false;
         }
 
         //Returns true if unfrozen
@@ -89,6 +95,7 @@ namespace DiscomonProject
         {
             if(RandomGen.PercentChance(20.0))
             {
+                Console.WriteLine("freeze tick");
                 Frozen = false;
                 return true;
             }

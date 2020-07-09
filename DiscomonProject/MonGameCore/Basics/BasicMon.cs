@@ -61,9 +61,10 @@ namespace DiscomonProject
         public int CurrentHP { get; set; }
         public int CritChance { get; set; }
         public bool Fainted { get; set; }
+        public bool IsCombatActive { get; set; }
         public string GenderSymbol { get; set; }
         public StatusEffect Status { get; set; }
-        public delegate Task CombatEvent(BasicMon owner, BasicMon enemy, CombatInstance inst);
+        public delegate Task CombatEvent(BasicMon owner, CombatInstance2 inst);
         public event CombatEvent EnteredCombat;
 
         public BasicMon()
@@ -790,9 +791,21 @@ namespace DiscomonProject
             return false;
         }
 
-        public void OnEnteredCombat(CombatInstance inst)
+        public void ExitCombat()
         {
-            EnteredCombat?.Invoke(this, inst.GetOtherMon(this), inst);
+            IsCombatActive = false;
+            SelectedMove.WipeTargets();
+            SelectedMove = null;
+            BufferedMove = null;
+            Status.CombatReset();
+            OverrideType = false;
+            OverrideTyping.Clear();
+            ResetStatStages();
+        }
+
+        public void OnEnteredCombat(CombatInstance2 inst)
+        {
+            EnteredCombat?.Invoke(this, inst);
         }
         
     }
