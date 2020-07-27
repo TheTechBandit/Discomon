@@ -80,11 +80,10 @@ namespace DiscomonProject
                     dmg = ApplyPower(inst, owner, t);
                     t.TakeDamage(dmg);
                 }
-
-                owner.BufferedMove = null;
-                owner.Status.Flying = false;
-                Buffered = false;
             }
+            owner.BufferedMove = null;
+            owner.Status.Flying = false;
+            Buffered = false;
 
             return Result;
         }

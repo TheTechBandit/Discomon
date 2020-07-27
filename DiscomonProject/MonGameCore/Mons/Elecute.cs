@@ -8,7 +8,7 @@ namespace DiscomonProject
     public class Elecute : BasicMon
     {
         public override string Species { get; } = "Elecute";
-        public override List<BasicType> Typing { get; set; } = new List<BasicType>() {new WaterType(true)};
+        public override List<BasicType> Typing { get; set; } = new List<BasicType>() {new ElectricType(true)};
         public override string ArtURL { get; } = "https://cdn.discordapp.com/attachments/438843122361827331/723274102499967046/Elecute.jpg";
         public override int BaseHP { get; } = 45;
         public override int BaseAtt { get; } = 60;

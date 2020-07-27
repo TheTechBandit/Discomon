@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Threading.Tasks;
 using DiscomonProject.Storage.Implementations;
 using Discord;
@@ -12,6 +13,58 @@ namespace DiscomonProject.Discord
 {
     public class DebugCommands : ModuleBase<SocketCommandContext>
     {
+        [Command("getids")]
+        public async Task GetIds()
+        {
+            ContextIds idList = new ContextIds(Context);
+
+            await MessageHandler.SendMessage(idList, $"Guild ID: {idList.GuildId}\nChannel ID: {idList.ChannelId}\nMessage ID:{idList.MessageId}");
+        }
+
+        [Command("partytest")]
+        public async Task PartyTest()
+        {
+            var user = UserHandler.GetUser(Context.User.Id);
+            Bitmap image = ImageGenerator.PartyMenu(user.Char.Party);
+
+            using(MemoryStream stream = new MemoryStream())
+            {
+                image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                stream.Seek(0, SeekOrigin.Begin);
+                image.Dispose();
+                await Context.Channel.SendFileAsync(stream, "Party.png");
+                stream.Close();
+            }
+        }
+
+        [Command("imagetest")]
+        public async Task ImageTest()
+        {
+            ContextIds idList = new ContextIds(Context);
+            Bitmap image = ImageGenerator.MergeTwoImages(Context);
+
+            using(MemoryStream stream = new MemoryStream())
+            {
+                image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                stream.Seek(0, SeekOrigin.Begin);
+                image.Dispose();
+                await Context.Channel.SendFileAsync(stream, "Text.jpg");
+            }
+        }
+
+        [Command("hurtme")]
+        public async Task HurtMe(int amt)
+        {
+            ContextIds idList = new ContextIds(Context);
+            var user = UserHandler.GetUser(Context.User.Id);
+            foreach(BasicMon m in user.Char.Party)
+            {
+                m.CurrentHP -= amt;
+            }
+
+            await MessageHandler.SendMessage(idList, $"Your entire party has been injured by {amt}");
+        }
+
         [Command("spawnmon")]
         public async Task SpawnMon([Remainder]string str)
         {
@@ -126,13 +179,13 @@ namespace DiscomonProject.Discord
             await MessageHandler.EmojiTest(idList);
         }
 
-        /*[Command("imagetest")]
-        public async Task ImageTest()
+        [Command("modifyasynctest")]
+        public async Task ModifyAsyncTest()
         {
             ContextIds idList = new ContextIds(Context);
 
-            ImageGenerator.MergeTwoImages(Context);
-        }*/
+            await MessageHandler.ModifyAsyncTest(idList, Context.User.Id);
+        }
 
         [Command("typetest")]
         public async Task TypeTest()
@@ -176,6 +229,44 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(ids, $"{user.Mention}, you have chosen {mon.Nickname} as your partner! Good luck on your adventure.");
 
             user.PromptState = -1;
+        }
+
+        [Command("quickduel")]
+        public async Task QuickDuel(string mon, string mon2, SocketGuildUser target)
+        {
+            var fromUser = UserHandler.GetUser(Context.User.Id);
+            var toUser = UserHandler.GetUser(target.Id);
+            ContextIds ids = new ContextIds(Context);
+
+            fromUser.Char = new Character(true);
+            fromUser.Char.CurrentGuildId = ids.GuildId;
+            fromUser.Char.CurrentGuildName = Context.Guild.Name;
+            fromUser.Char.Name = fromUser.Name;
+            mon = mon.ToLower();
+            BasicMon m = MonRegister.StringToMonRegister(mon);
+            m.CatcherID = fromUser.UserId;
+            m.OwnerID = fromUser.UserId;
+            fromUser.Char.Party.Add(m);
+            fromUser.HasCharacter = true;
+            await MessageHandler.SendMessage(ids, $"{fromUser.Mention}, you have chosen {m.Nickname} as your partner! Good luck on your adventure.");
+            fromUser.PromptState = -1;
+
+            toUser.Char = new Character(true);
+            toUser.Char.CurrentGuildId = ids.GuildId;
+            toUser.Char.CurrentGuildName = target.Guild.Name;
+            toUser.Char.Name = toUser.Name;
+            mon2 = mon2.ToLower();
+            BasicMon m2 = MonRegister.StringToMonRegister(mon2);
+            m2.CatcherID = toUser.UserId;
+            m2.OwnerID = toUser.UserId;
+            toUser.Char.Party.Add(m2);
+            toUser.HasCharacter = true;
+            await MessageHandler.SendMessage(ids, $"{toUser.Mention}, you have chosen {m2.Nickname} as your partner! Good luck on your adventure.");
+            toUser.PromptState = -1;
+
+            CombatInstance2 combat = new CombatInstance2(ids, fromUser, toUser);
+            CombatHandler2.StoreInstance(CombatHandler2.NumberOfInstances(), combat);
+            await combat.StartCombat();
         }
 
         [Command("commands")]

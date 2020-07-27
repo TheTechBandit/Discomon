@@ -696,6 +696,7 @@ namespace DiscomonProject
                 if(Status.Sleepy >= 3)
                 {
                     Status.Sleepy = 0;
+                    SetAsleep(0);
                     return true;
                 }
             }
@@ -746,7 +747,7 @@ namespace DiscomonProject
 
         public List<int> HPGradient()
         {
-            double perc = (double)CurrentHP/(double)TotalHP;
+            double perc = HealthPercentage();
             perc *= 100;
             int g = 2*(int)perc;
             int r = 200-g;
@@ -756,6 +757,11 @@ namespace DiscomonProject
             {
                 r, g, b,
             };
+        }
+
+        public double HealthPercentage()
+        {
+            return (double)CurrentHP/(double)TotalHP;
         }
 
         public bool HasDisabledMove()
@@ -794,7 +800,8 @@ namespace DiscomonProject
         public void ExitCombat()
         {
             IsCombatActive = false;
-            SelectedMove.WipeTargets();
+            if(SelectedMove != null)
+                SelectedMove.WipeTargets();
             SelectedMove = null;
             BufferedMove = null;
             Status.CombatReset();

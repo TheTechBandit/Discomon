@@ -42,7 +42,7 @@ namespace DiscomonProject
                 (double mod, string mess) = owner.ChangeEvaStage(1);
                 Result[TargetNum].StatChangeMessages.Add(mess);
             }
-
+            
             return Result;
         }
     }

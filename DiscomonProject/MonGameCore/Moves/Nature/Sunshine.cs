@@ -26,20 +26,29 @@ namespace DiscomonProject
 
         public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
+            Console.WriteLine("SA");
             ResetResult();
+            Console.WriteLine("SB");
             AddResult();
+            Console.WriteLine("SC");
 
             //Fail logic
             if(SelfMoveFailLogic(owner))
             {
+                Console.WriteLine("SD");
                 Result[TargetNum].Fail = true;
+                Console.WriteLine("SE");
                 Result[TargetNum].Hit = false;
+                Console.WriteLine("SF");
             }
             //Hit logic
             else
             {
+                Console.WriteLine("SG");
                 CurrentPP--;
+                Console.WriteLine("SH");
                 Result[TargetNum].Messages.Add(inst.Environment.AttemptSunrise());
+                Console.WriteLine("SI");
             }
             
             return Result;

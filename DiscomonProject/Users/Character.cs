@@ -24,6 +24,8 @@ namespace DiscomonProject
         public int MoveScreenNum { get; set; }
         public int TargetPage { get; set; }
         public bool CombatMovesEntered { get; set; }
+        public int SwapMonNum { get; set; }
+        public bool SwapMode { get; set; }
 
         public Character()
         {
@@ -42,6 +44,8 @@ namespace DiscomonProject
             MoveScreenNum = 0;
             TargetPage = 0;
             CombatMovesEntered = false;
+            SwapMonNum = -1;
+            SwapMode = false;
         }
 
         public void ExitCombat()

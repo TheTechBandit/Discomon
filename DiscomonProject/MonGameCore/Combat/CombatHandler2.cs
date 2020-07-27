@@ -100,7 +100,20 @@ namespace DiscomonProject
                     }
                     else
                     {
-                        await MessageHandler.MoveScreenNew(user.UserId);
+                        if(user.Char.ActiveMons[monnum].BufferedMove == null)
+                        {
+                            await MessageHandler.MoveScreenNew(user.UserId);
+                        }
+                        else
+                        {
+                            user.Char.MoveScreenNum++;
+                            if(user.Char.MoveScreenNum > inst.GetTeam(user).MultiNum-1)
+                            {
+                                user.Char.MoveScreenNum = 0;
+                            }
+                            else
+                                await MessageHandler.MoveScreenNew(user.UserId);
+                        }
                     }
                 }
                 await inst.ResolvePhase();

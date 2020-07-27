@@ -76,6 +76,12 @@ namespace DiscomonProject
             return newteam;
         }
 
+        public void AddTeam(Team team)
+        {
+            Teams.Add(team);
+            team.TeamNum = Teams.Count;
+        }
+
         public Team GetTeam(UserAccount player)
         {
             foreach(Team t in Teams)
@@ -319,6 +325,8 @@ namespace DiscomonProject
                             await MessageHandler.SendMessage(Location, $"{u.Mention} has run out of mons!");
                             Console.WriteLine($"17");
                             await CheckTeamElimination(GetTeam(u));
+                            if(CombatOver)
+                                return;
                             Console.WriteLine($"18");
                         }
                     }
@@ -345,10 +353,24 @@ namespace DiscomonProject
                     Console.WriteLine($"22");
                     foreach(UserAccount u in t.Members)
                     {
-                        Console.WriteLine($"23");
-                        u.Char.CombatMovesEntered = false;
-                        await MessageHandler.FightScreenNew(u.UserId);
-                        Console.WriteLine($"24");
+                        var allbuffered = true;
+                        foreach(BasicMon m in u.Char.ActiveMons)
+                        {
+                            if(m.BufferedMove == null)
+                                allbuffered = false;
+                            else
+                                m.SelectedMove = m.BufferedMove;
+                        }
+                            
+                        if(allbuffered)
+                        {
+                            u.Char.CombatMovesEntered = true;
+                        }
+                        else
+                        {
+                            u.Char.CombatMovesEntered = false;
+                            await MessageHandler.FightScreenNew(u.UserId);
+                        }
                     }
                     Console.WriteLine($"25");
                 }
@@ -487,7 +509,8 @@ namespace DiscomonProject
                 foreach(BasicMon mon in mons)
                 {
                     Console.WriteLine($"59");
-                    await ApplyMoves(mon);
+                    if(!mon.Fainted)
+                        await ApplyMoves(mon);
                     Console.WriteLine($"60");
                 }
                 Console.WriteLine($"61");
@@ -516,8 +539,9 @@ namespace DiscomonProject
                     if(mon.Status.Flinching)
                         mon.Status.Flinching = false;
                     Console.WriteLine($"67");
-                    
-                    mon.SelectedMove.WipeTargets();
+                    if(mon.SelectedMove != null)
+                        if(!mon.SelectedMove.Buffered)
+                            mon.SelectedMove.WipeTargets();
                     Console.WriteLine($"68");
                     mon.SelectedMove = null;
                     Console.WriteLine($"69");
@@ -531,7 +555,7 @@ namespace DiscomonProject
 
         public async Task ApplyMoves(BasicMon mon)
         {
-            Console.WriteLine($"70");
+            Console.WriteLine($"70 - {mon.SelectedMove.Targets.Count}");
             List<MoveResult> results = mon.SelectedMove.ApplyMove(this, mon, mon.SelectedMove.Targets);
             Console.WriteLine($"71 - ResultsCount: {results.Count} SelectedMove: {mon.SelectedMove.Name}");
             var allmons =  GetAllMons();
@@ -649,13 +673,16 @@ namespace DiscomonProject
                     }
                 }
                 Console.WriteLine($"98");
-                await MessageHandler.UseMoveNew(Location, result.Target, addon);
+                if(result.EnemyDmg > 0 && result.Target != null)
+                    await MessageHandler.UseMoveNew(Location, result.Target, addon);
+                else
+                    await MessageHandler.SendMessage(Location, addon);
                 Console.WriteLine($"99");
             }
             Console.WriteLine($"100");
 
             await PostAttackPhase(mon, mon.SelectedMove.Targets, results);
-            Console.WriteLine($"101");
+            Console.WriteLine($"122");
 
             //Console.WriteLine(result1.ToString());
 
@@ -686,49 +713,76 @@ namespace DiscomonProject
         //Post attack phase logic. Target is the list of mon who were hit.
         public async Task PostAttackPhase(BasicMon moveUser, List<BasicMon> targets, List<MoveResult> results)
         {
+            Console.WriteLine($"101");
             //5- Post attack mini-phase. Check for death/on-hit abilities
             var userOwner = UserHandler.GetUser(moveUser.OwnerID);
+            Console.WriteLine($"102");
 
             var swapout = false;
+            Console.WriteLine($"103");
             BasicMon swapMon = null;
+            Console.WriteLine($"104");
             foreach(MoveResult result in results)
             {
+                Console.WriteLine($"105");
                 if(result.Swapout != null)
                 {
+                    Console.WriteLine($"106");
                     swapout = true;
+                    Console.WriteLine($"107");
                     swapMon = result.Swapout;
                 }
+                Console.WriteLine($"108");
 
                 if(result.Hit && result.EnemyDmg > 0)
                 {
+                    Console.WriteLine($"109");
                     //WHEN HIT LOGIC HERE
                 }
+                Console.WriteLine($"110");
             }
 
             if(moveUser.CurrentHP <= 0)
             {
+                Console.WriteLine($"111");
                 moveUser.Fainted = true;
+                Console.WriteLine($"112");
                 await MessageHandler.Faint(Location, userOwner, moveUser);
+                Console.WriteLine($"113");
                 moveUser.ExitCombat();
+                Console.WriteLine($"114");
             }
             else if(swapout)
             {
+                Console.WriteLine($"115");
                 moveUser.ExitCombat();
+                Console.WriteLine($"116");
                 var index = userOwner.Char.ActiveMons.IndexOf(moveUser);
+                Console.WriteLine($"117");
                 userOwner.Char.ActiveMons[index] = swapMon;
+                Console.WriteLine($"118");
                 userOwner.Char.ActiveMons[index].OnEnteredCombat(this);
             }
+            Console.WriteLine($"119");
 
             foreach(BasicMon t in targets)
             {
-                var tOwner = UserHandler.GetUser(t.OwnerID);
                 if(t.CurrentHP <= 0)
                 {
-                    t.Fainted = true;
-                    await MessageHandler.Faint(Location, tOwner, t);
-                    moveUser.ExitCombat();
+                    Console.WriteLine($"120");
+                    await FaintMon(t);
+                    Console.WriteLine($"121");
                 }
             }
+        }
+
+        public async Task FaintMon(BasicMon mon)
+        {
+            var user = UserHandler.GetUser(mon.OwnerID);
+            mon.Fainted = true;
+            await MessageHandler.Faint(Location, user, mon);
+            user.Char.ActiveMons.Remove(mon);
+            mon.ExitCombat();
         }
 
     }

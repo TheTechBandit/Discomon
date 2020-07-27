@@ -190,5 +190,97 @@ namespace DiscomonProject.Discord
 
             return embed;
         }
+
+        public static Embed MainMenu()
+        {
+            var builder = new EmbedBuilder()
+            .WithTitle("<:LocationEmote:732673934184677557> Locations\n<:snoril:580944131535273991> Party\n<:Bag:732676561341251644> Bag\n<:Dex:732679405704445956> Dex\n<:Team:732682490833141810> Team\n<:PvP:732680927242878979> PvP\n<:Settings:732683469485899826> Settings")
+        	.WithColor(62, 255, 62);
+            /*
+            .AddField("<:LocationEmote:732673934184677557>", "Locations", false)
+            .AddField("<:snoril:580944131535273991>", "Party", false)
+            .AddField("<:Bag:732676561341251644>", "Bag", false)
+            .AddField("<:Dex:732679405704445956>", "Dex", false)
+            .AddField("<:Team:732682490833141810>", "Teams", false)
+            .AddField("<:PvP:732680927242878979>", "PvP", false)
+            .AddField("<:Settings:732683469485899826>", "Settings", false);
+            */
+
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed ModifyAsyncTestPageOne()
+        {
+            var builder = new EmbedBuilder()
+            .WithTitle("**Top 3 Anime Deaths**")
+        	.WithColor(62, 255, 62)
+            .WithFooter($"Page 1/2")
+            .AddField("1. Spongebob", false)
+            .AddField("2. Hank Hill", false)
+            .AddField("3. Ghub", false);
+
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed ModifyAsyncTestPageTwo()
+        {
+            var builder = new EmbedBuilder()
+            .WithTitle("**Top 3 Anime Betrayals**")
+        	.WithColor(62, 255, 62)
+            .WithFooter($"Page 2/2")
+            .AddField("1. Patrick kills Spongebob", false)
+            .AddField("2. Bobby Hill kills Hank Hill", false)
+            .AddField("3. Zsaur kills Ghub", false);
+
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed PartyMenu(string image)
+        {
+            var builder = new EmbedBuilder()
+            .WithTitle("Party")
+        	.WithColor(62, 255, 62)
+            .WithImageUrl(image);
+
+            var embed = builder.Build();
+
+            return embed;
+        }
+
+        public static Embed TeamMenu(UserAccount user)
+        {
+            Team t = user.GetTeam();
+            var builder = new EmbedBuilder();
+
+            if(t != null)
+            {
+                string members = "";
+                foreach(UserAccount u in t.Members)
+                {
+                    members += $"{u.Char.Name}\n";
+                }
+
+                builder.WithTitle($"**{t.TeamName}**")
+                .AddField($"**Members**", $"{members}", false)
+                .WithColor(t.TeamR, t.TeamG, t.TeamB);
+            }
+            else
+            {
+                builder.WithTitle($"**Team**")
+                .AddField($"You Do Not Have A Team", $"To create a team, press the Team button or use the \"createteam\" command.", false)
+                .WithColor(62, 255, 62);
+            }
+
+            var embed = builder.Build();
+
+            return embed;
+        }
+        
     }
 }

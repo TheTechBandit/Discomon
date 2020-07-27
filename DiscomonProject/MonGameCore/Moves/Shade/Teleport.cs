@@ -32,7 +32,7 @@ namespace DiscomonProject
             var chara = player.Char;
 
             //Fail logic
-            if(SelfMoveFailLogic(owner) || chara.LivingPartyNum() <= 1)
+            if(SelfMoveFailLogic(owner) || !chara.HasUsableMon())
             {
                 Result[TargetNum].Fail = true;
                 Result[TargetNum].Hit = false;
@@ -44,6 +44,23 @@ namespace DiscomonProject
                 var mon = chara.FirstUsableMon(new List<BasicMon> {owner});
                 Result[TargetNum].Swapout = mon;
                 Result[TargetNum].Messages.Add($"**{owner.Nickname}** teleports away and {player.Mention} sends out **{mon.Nickname}**!");
+
+                foreach(BasicMon m in inst.GetAllMons())
+                {
+                    if(m.SelectedMove != null)
+                    {
+                        for(int i = 0; i < m.SelectedMove.Targets.Count; i++)
+                        {
+                            if(m.SelectedMove.Targets[i] == owner)
+                                m.SelectedMove.Targets[i] = mon;
+                        }
+                        for(int i = 0; i < m.SelectedMove.ValidTargets.Count; i++)
+                        {
+                            if(m.SelectedMove.ValidTargets[i] == owner)
+                                m.SelectedMove.ValidTargets[i] = mon;
+                        }
+                    }
+                }
             }
             
             return Result;

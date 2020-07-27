@@ -12,6 +12,62 @@ namespace DiscomonProject.Discord
 {
     public class BasicCommands : ModuleBase<SocketCommandContext>
     {
+        [Command("menu")]
+        [Alias("m")]
+        public async Task Menu()
+        {
+            ContextIds idList = new ContextIds(Context);
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
+
+            await MessageHandler.Menu(idList);
+        }
+
+        [Command("party")]
+        [Alias("p")]
+        public async Task PartyMenu()
+        {
+            ContextIds idList = new ContextIds(Context);
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
+
+            await MessageHandler.PartyMenu(idList);
+        }
+
+        [Command("team")]
+        [Alias("t")]
+        public async Task TeamMenu()
+        {
+            ContextIds idList = new ContextIds(Context);
+            //Tests each case to make sure all circumstances for the execution of this command are valid (character exists, in correct location)
+            try
+            {
+                await UserHandler.CharacterExists(idList);
+                await UserHandler.ValidCharacterLocation(idList);
+            }
+            catch(InvalidCharacterStateException)
+            {
+                return;
+            }
+
+            await MessageHandler.TeamMenu(idList);
+        }
 
         [Command("monstat")]
         public async Task MonStat([Remainder]int num)
@@ -36,8 +92,8 @@ namespace DiscomonProject.Discord
             .ConfigureAwait(false);
         }
 
-        [Command("party")]
-        public async Task Party()
+        [Command("oldparty")]
+        public async Task OldParty()
         {
             ContextIds idList = new ContextIds(Context);
             var user = UserHandler.GetUser(idList.UserId);

@@ -1,0 +1,12 @@
+{
+  "0": {
+    "Location": null,
+    "Teams": null,
+    "Players": null,
+    "Environment": null,
+    "CombatPhase": 0,
+    "IsPvP": false,
+    "IsOneOnOne": false,
+    "CombatOver": false
+  }
+}

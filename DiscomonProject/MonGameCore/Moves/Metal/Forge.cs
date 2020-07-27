@@ -30,7 +30,7 @@ namespace DiscomonProject
             AddResult();
 
             //Fail logic
-            if(SelfMoveFailLogic(owner))
+            if(SelfMoveFailLogicIgnoreStatus(owner))
             {
                 Result[TargetNum].Fail = true;
                 Result[TargetNum].Hit = false;

@@ -337,3 +337,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 DiscomonProject/Config/BotToken.json
+DiscomonProject/Assets
+DiscomonProject/Towns/TownList.json
+DiscomonProject/Users/UserList.json

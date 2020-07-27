@@ -32,22 +32,16 @@ namespace DiscomonProject
             //Fail logic
             if(SelfMoveFailLogicIgnoreStatus(owner))
             {
-                Console.WriteLine("DRFAILA");
                 Result[TargetNum].Fail = true;
                 Result[TargetNum].Hit = false;
             }
             //Hit logic
             else
             {
-                Console.WriteLine("DRA");
                 CurrentPP--;
-                Console.WriteLine("DRB");
                 owner.Status.StatusCure();
-                Console.WriteLine("DRC");
                 Result[TargetNum].StatusMessages.Add(owner.SetAsleep(2));
-                Console.WriteLine("DRD");
                 owner.CurrentHP = owner.TotalHP;
-                Console.WriteLine("DRE");
             }
             
             return Result;

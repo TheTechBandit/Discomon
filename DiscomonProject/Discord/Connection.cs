@@ -81,12 +81,6 @@ namespace DiscomonProject.Discord
             var message = await cacheMessage.GetOrDownloadAsync();
             var user = UserHandler.GetUser(reaction.UserId);
             Console.WriteLine($"Cache {cacheMessage.Id}\nMessage {message.Id}\nReaction: {reaction.MessageId}");
-            ContextIds idList = new ContextIds()
-            {
-                UserId = reaction.UserId,
-                ChannelId = reaction.Channel.Id,
-                GuildId = 0
-            };
             
             if(user.ReactionMessages.ContainsKey(message.Id))
             {

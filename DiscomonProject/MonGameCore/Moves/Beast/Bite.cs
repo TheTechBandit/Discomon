@@ -27,6 +27,7 @@ namespace DiscomonProject
         public override List<MoveResult> ApplyMove(CombatInstance2 inst, BasicMon owner, List<BasicMon> targets)
         {
             ResetResult();
+            
             foreach(BasicMon t in targets)
             {
                 int dmg = 0;

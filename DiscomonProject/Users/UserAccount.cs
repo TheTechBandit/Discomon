@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DiscomonProject.Discord;
 using Newtonsoft.Json;
@@ -25,6 +26,10 @@ namespace DiscomonProject
         4- targeting screen rework
          */
         public Dictionary<ulong, int> ReactionMessages { get; set; }
+        /*
+        
+        */
+        public List<int> ExpectedInputs { get; set; }
 
         public UserAccount()
         {
@@ -35,6 +40,23 @@ namespace DiscomonProject
             HasCharacter = false;
             PromptState = -1;
             ReactionMessages = new Dictionary<ulong, int>();
+            List<int> ExpectedInputs = new List<int>();
+        }
+
+        public void RemoveAllReactionMessages(int type)
+        {
+            if(ReactionMessages.ContainsValue(type))
+            {
+                foreach(var item in ReactionMessages.Where(kvp => kvp.Value == type).ToList())
+                {
+                    ReactionMessages.Remove(item.Key);
+                }
+            }
+        }
+
+        public Team GetTeam()
+        {
+            return TownHandler.GetTown(Char.CurrentGuildId).GetTeam(this);
         }
 
         public string DebugString()

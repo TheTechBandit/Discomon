@@ -51,7 +51,7 @@ namespace DiscomonProject
                     CurrentPP--;
                     dmg = ApplyPower(inst, owner, t);
                     t.TakeDamage(dmg);
-                    if(RandomGen.PercentChance(100.0))
+                    if(RandomGen.PercentChance(10.0))
                         Result[TargetNum].StatusMessages.Add(t.SetFrozen());
                 }
             }

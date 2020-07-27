@@ -61,8 +61,11 @@ namespace DiscomonProject
 
         public void ResetResult()
         {
+            Console.WriteLine($"EVCLEAR");
             Result.Clear();
+            Console.WriteLine($"EVTARGET");
             TargetNum = -1;
+            Console.WriteLine($"EVPOSTTARGET");
         }
 
         public void AddResult()
@@ -70,7 +73,8 @@ namespace DiscomonProject
             Result.Add(new MoveResult());
             TargetNum++;
             Result[TargetNum].Move = this;
-            Result[TargetNum].Target = Targets[TargetNum];
+            if(Targets.Count > 0 && TargetNum < Targets.Count)
+                Result[TargetNum].Target = Targets[TargetNum];
         }
 
         public int ApplyPower(CombatInstance2 inst, BasicMon owner, BasicMon target)
@@ -278,7 +282,7 @@ namespace DiscomonProject
         {
             CurrentPP = MaxPP;
             Disabled = false;
-            Result = null;
+            Result.Clear();
         }
 
         public bool DefaultFailLogic(BasicMon enemy, BasicMon owner)
@@ -307,6 +311,8 @@ namespace DiscomonProject
             {
                 if(Disabled)
                     Result[TargetNum].FailText = $"{Name} is disabled!";
+                if(enemy.Status.Flying)
+                    Result[TargetNum].FailText = $"{enemy.Nickname} is flying too high to reach!";
                 Buffered = false;
                 
                 return true;
