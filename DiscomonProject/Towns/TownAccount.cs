@@ -22,6 +22,14 @@ namespace DiscomonProject
             Teams = new List<Team>();
         }
 
+        public void UpdateTeams()
+        {
+            foreach(Team t in Teams)
+            {
+                t.LoadUsers();
+            }
+        }
+
         public Team GetTeam(UserAccount user)
         {
             foreach(Team t in Teams)

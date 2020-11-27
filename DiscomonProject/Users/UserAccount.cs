@@ -26,21 +26,30 @@ namespace DiscomonProject
         4- targeting screen rework
          */
         public Dictionary<ulong, int> ReactionMessages { get; set; }
+        //ulong- Message ID. ulong- User ID. Compare with ReactionMessages to decide what type of invite it is
+        public Dictionary<ulong, ulong> InviteMessages { get; set; }
         /*
-        
+        0- Invite player(s) to team
+        1- Kick player(s) from team
+        2- Change team name
+        5- Join open team
         */
-        public List<int> ExpectedInputs { get; set; }
+        public int ExpectedInput { get; set; }
+        public ulong ExpectedInputLocation { get; set; }
 
         public UserAccount()
         {
 
         }
+        
         public UserAccount(bool newuser)
         {
             HasCharacter = false;
             PromptState = -1;
             ReactionMessages = new Dictionary<ulong, int>();
-            List<int> ExpectedInputs = new List<int>();
+            InviteMessages = new Dictionary<ulong, ulong>();
+            ExpectedInput = -1;
+            ExpectedInputLocation = 0;
         }
 
         public void RemoveAllReactionMessages(int type)
@@ -56,7 +65,9 @@ namespace DiscomonProject
 
         public Team GetTeam()
         {
-            return TownHandler.GetTown(Char.CurrentGuildId).GetTeam(this);
+            if(Char != null)
+                return TownHandler.GetTown(Char.CurrentGuildId).GetTeam(this);
+            return null;
         }
 
         public string DebugString()

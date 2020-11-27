@@ -48,43 +48,72 @@ namespace DiscomonProject.Discord
 
         private async Task MessageRecieved(SocketMessage messageParam)
         {
-            // Don't process the command if it was a system message
-            var message = messageParam as SocketUserMessage;
-            if (message == null) return;
-
-            // Create a number to track where the prefix ends and the command begins
-            int argPos = 0;
-
-            // Determine if the message is a command based on the prefix and make sure no bots trigger commands
-            if (!(message.HasCharPrefix('!', ref argPos) || 
-                message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
-                return;
+            try
+            {
+                //TO BE REMOVED- SAVE TOWNS EVERY 5-10 MINS INSTEAD. CREATE SAFE SHUTDOWN METHOD THAT SAVES TOWNS/USERS ETC.
+                TownHandler.SaveTowns();
                 
-            
-            // Create a WebSocket-based command context based on the message
-            var context = new SocketCommandContext(_client, message);
+                //Don't process the command if it was a system message
+                var message = messageParam as SocketUserMessage;
+                if (message == null) return;
 
-            //Update user's info
-            UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+                //Create a number to track where the prefix ends and the command begins
+                int argPos = 0;
 
-            // Execute the command with the command context we just
-            // created, along with the service provider for precondition checks.
-            await _commands.ExecuteAsync(context, argPos, services: null);
+                //If the user who sent that message is expecting input, parse the message for inputs.
+                var user = UserHandler.GetUser(message.Author.Id);
+                if(user.ExpectedInput != -1)
+                {
+                    var con = new SocketCommandContext(_client, message);
+                    await MessageHandler.ParseExpectedInput(message, user, con);
+                }
+
+                // Determine if the message is a command based on the prefix and make sure no bots trigger commands
+                if (!(message.HasCharPrefix('!', ref argPos) || 
+                    message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
+                    message.Author.IsBot)
+                    return;
+                    
+                // Create a WebSocket-based command context based on the message
+                var context = new SocketCommandContext(_client, message);
+
+                //Update user's info
+                UserHandler.UpdateUserInfo(context.User.Id, context.User.GetOrCreateDMChannelAsync().Result.Id, context.User.Username, context.User.Mention, context.User.GetAvatarUrl());
+
+                // Execute the command with the command context we just
+                // created, along with the service provider for precondition checks.
+                await _commands.ExecuteAsync(context, argPos, services: null);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
+            }
         }
 
         public async Task ReactionReceived(Cacheable<IUserMessage, ulong> cacheMessage, ISocketMessageChannel channel, SocketReaction reaction)
         {
-            if(reaction.User.Value.IsBot)
-                return;
-            
-            var message = await cacheMessage.GetOrDownloadAsync();
-            var user = UserHandler.GetUser(reaction.UserId);
-            Console.WriteLine($"Cache {cacheMessage.Id}\nMessage {message.Id}\nReaction: {reaction.MessageId}");
-            
-            if(user.ReactionMessages.ContainsKey(message.Id))
+            try
             {
-                await EmoteCommands.ParseEmote(user, message, reaction);
+                if(reaction.User.Value.IsBot)
+                    return;
+
+                //TO BE REMOVED- SAVE TOWNS EVERY 5-10 MINS INSTEAD. CREATE SAFE SHUTDOWN METHOD THAT SAVES TOWNS/USERS ETC.
+                TownHandler.SaveTowns();
+                
+                var message = await cacheMessage.GetOrDownloadAsync();
+                var user = UserHandler.GetUser(reaction.UserId);
+                //Console.WriteLine($"Cache {cacheMessage.Id}\nMessage {message.Id}\nReaction: {reaction.MessageId}");
+                
+                if(user.ReactionMessages.ContainsKey(message.Id))
+                {
+                    await EmoteCommands.ParseEmote(user, message, reaction);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.Message);
             }
         }
 

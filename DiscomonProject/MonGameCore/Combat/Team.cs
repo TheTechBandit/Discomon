@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace DiscomonProject
 {
     public class Team
     {
         public string TeamName { get; set; }
+        public List<ulong> MemberIDs { get; set; }
+        //Members should not be stored. This causes problems with the Team Member User Objects not having the same Object ID as the UserHandler User Objects.
+        [JsonIgnore]
         public List<UserAccount> Members { get; set; }
         public int TeamNum { get; set; }
         public int MultiNum { get; set; }
@@ -16,31 +21,61 @@ namespace DiscomonProject
         //OwnerOnly - only the team owner can send invites
         //AllMembers - anyone can send invites
         //NoPerms - anyone can send invites or kick or edit settings
-        public string InvitePerms { get; set; }
+        public string Permissions { get; set; }
         public bool OpenInvite { get; set; }
 
         public Team()
         {
-
+            
         }
 
         public Team(bool newteam)
         {
             TeamName = NameGenerator();
+            MemberIDs = new List<ulong>();
             Members = new List<UserAccount>();
             MultiNum = 1;
             Eliminated = false;
-            TeamR = 62;
-            TeamG = 255;
-            TeamB = 62;
+            TeamR = RandomGen.RandomInt(0, 255);
+            TeamG = RandomGen.RandomInt(0, 255);
+            TeamB = RandomGen.RandomInt(0, 255);
             Picture = "https://cdn.discordapp.com/emojis/732682490833141810.png?v=1";
-            InvitePerms = "OwnerOnly";
+            Permissions = "OwnerOnly";
             OpenInvite = false;
         }
 
         public void AddMember(UserAccount user)
         {
+            MemberIDs.Add(user.UserId);
             Members.Add(user);
+        }
+
+        public void KickMember(UserAccount user)
+        {
+            Console.WriteLine($"Z {Members.Count}\n{ToString()}");
+            if(Members.Contains(user))
+            {
+                Console.WriteLine($"A {Members.Count}");
+                MemberIDs.Remove(user.UserId);
+                Members.Remove(user);
+                Console.WriteLine($"B {Members.Count}");
+            }
+            Console.WriteLine("C");
+        }
+
+        /*
+        FIXES THE OBJECT IDS OF THE TEAM VARIABLES
+        This needs to be done because when the bot shuts down and boots back up, user objects that are saved in the team
+        become desynchronized from the user objects saved in the UserHandler.
+        */
+        public void LoadUsers()
+        {
+            Members = new List<UserAccount>();
+
+            for(int i = 0; i < MemberIDs.Count; i++)
+            {
+                Members.Add(UserHandler.GetUser(MemberIDs[i]));
+            }
         }
 
         public UserAccount TeamLeader()
@@ -65,21 +100,21 @@ namespace DiscomonProject
 
         public bool CanInvite(UserAccount user)
         {
-            if(IsTeamLeader(user) || InvitePerms.Contains("AllMembers") || InvitePerms.Contains("NoPerms"))
+            if(IsTeamLeader(user) || Permissions.Contains("AllMembers") || Permissions.Contains("NoPerms"))
                 return true;
             return false;
         }
 
         public bool CanKick(UserAccount user)
         {
-            if(IsTeamLeader(user) || InvitePerms.Contains("NoPerms"))
+            if(IsTeamLeader(user) || Permissions.Contains("NoPerms"))
                 return true;
             return false;
         }
 
         public bool CanAccessSettings(UserAccount user)
         {
-            if(IsTeamLeader(user) || InvitePerms.Contains("NoPerms"))
+            if(IsTeamLeader(user) || Permissions.Contains("NoPerms"))
                 return true;
             return false;
         }
@@ -97,15 +132,18 @@ namespace DiscomonProject
             {
                 "Angry", "Snoozy", "Smug", "Sad", "Poofy", "Extraordinary", "Raging", "Ecstatic", "Amazing", "Strong", "Pouty", "Muddy", 
                 "Drenched", "Flawless", "Tricky", "Pushy", "Greasy", "Elegant", "Scared", "Wonderful", "Hungry", "Brave", "Happy", "Clumsy", 
-                "Overwhelming", "Smart", "Smelly", "Handsome", "Cute", "Sleepy", "Sweet", "Slippery", "Envious", "Wiggly", "Silent", "Sneaky"
+                "Overwhelming", "Smart", "Smelly", "Handsome", "Cute", "Sleepy", "Sweet", "Slippery", "Envious", "Wiggly", "Silent", "Sneaky",
+                "Spicy", "Colossal", "Weary", "Clever", "Wandering", "Dry", "Fluffy", "Midnight", "Sparkling", "Temporary", "Fearless", "League of"
             };
-
+            //Console.WriteLine($"Adjectives: {adjs.Count}");
             List<string> nouns = new List<string> 
             {
                 "Snorils", "Sukis", "Ooks", "Arness", "Elecutes", "Grasipups", "Meliosas", "Psygoats", "Sedimo", "Smoledge", "Stebbles", 
-                "Trees", "Tomatos", "Mountains", "Leaves", "River", "Lake", "Stars", "Moons", "Wagons", "Apples", "Pineapples", "Swords",
-                "Bucklers", "Bookshelves", "Lamps", "Grass", "Cactus"
+                "Trees", "Tomatos", "Mountains", "Leaves", "River", "Lakes", "Stars", "Moons", "Wagons", "Apples", "Pineapples", "Swords",
+                "Bucklers", "Bookshelves", "Lamps", "Grass", "Cactus", "Code", "Gamers", "Pirates", "Dreamers", "Society", "Fellowship",
+                "Cheese", "Garbage", "Poets", "Soldiers", "Kings", "Queens", "Vagabonds", "Cookies", "Receptionists", "Secretaries"
             };
+            //Console.WriteLine($"Nouns: {nouns.Count}");
 
             string name = $"Team {adjs[RandomGen.RandomInt(0, adjs.Count-1)]} {nouns[RandomGen.RandomInt(0, nouns.Count-1)]}";
 

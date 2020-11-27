@@ -43,10 +43,14 @@ namespace DiscomonProject.Discord
                 //await TargetingScreen(user, message.Id, reaction.Emote, idList);
             if(messageType == 7)
                 await TeamMenu(user, message, reaction.Emote, idList);
-            //if(messageType == 8) TEAM SETTINGS
-                //await TargetingScreen(user, message.Id, reaction.Emote, idList);
+            if(messageType == 8)
+                await TeamSettingsMenu(user, message, reaction.Emote, idList);
             if(messageType == 9)
                 await CreateTeamMenu(user, message, reaction.Emote, idList);
+            if(messageType == 10)
+                await TeamInviteMenu(user, message, reaction.Emote, idList);
+            if(messageType == 11)
+                await PvPMainMenu(user, message, reaction.Emote, idList);
             if(messageType == 13)
                 await ModifyAsyncTest(user, message, reaction.Emote, idList);
         }
@@ -294,18 +298,12 @@ namespace DiscomonProject.Discord
                 case "snoril":
                     user.RemoveAllReactionMessages(1);
                     user.RemoveAllReactionMessages(5);
+
                     await message.RemoveAllReactionsAsync();
                     string url = MessageHandler.GetImageURL(ImageGenerator.PartyMenu(user.Char.Party)).Result;
                     await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.PartyMenu(url); m.Content = "";});
-                    //Back Arrow
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(735583967046271016));
-                    //Numbers
-                    for(int i = 1; i <= user.Char.Party.Count; i++)
-                    {
-                        await message.AddReactionAsync(new Emoji($"{i}\u20E3"));
-                    }
-                    //Swap
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(736070692373659730));
+                    await MessageHandler.PartyMenuEmojis(message, user);
+
                     user.ReactionMessages.Add(message.Id, 5);
                     break;
                 case "bag":
@@ -319,46 +317,20 @@ namespace DiscomonProject.Discord
                     user.RemoveAllReactionMessages(8);
                     user.RemoveAllReactionMessages(9);
                     user.RemoveAllReactionMessages(1);
+
                     await message.RemoveAllReactionsAsync();
                     await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
-                    Team t = user.GetTeam();
-                    //Back
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(735583967046271016));
-                    if(t != null)
-                    {
-                        if(t.CanInvite(user))
-                        {
-                            //Invite
-                            await message.AddReactionAsync(await MessageHandler.GetEmoji(736476027886501888));
-                        }
-                        if(t.CanKick(user))
-                        {
-                            //Kick
-                            await message.AddReactionAsync(await MessageHandler.GetEmoji(736476054427795509));
-                        }
-                        //Leave team
-                        await message.AddReactionAsync(await MessageHandler.GetEmoji(736485364700545075));
-                        if(t.CanAccessSettings(user))
-                        {
-                            //Settings
-                            await message.AddReactionAsync(await MessageHandler.GetEmoji(732683469485899826));
-                        }
-                        if(t.CanDisband(user))
-                        {
-                            //Disband Team
-                            await message.AddReactionAsync(await MessageHandler.GetEmoji(736487511655841802));
-                        }
-                        user.ReactionMessages.Add(message.Id, 8);
-                    }
-                    else
-                    {
-                        //Create Team
-                        await message.AddReactionAsync(await MessageHandler.GetEmoji(732682490833141810));
-                        user.ReactionMessages.Add(message.Id, 9);
-                    }
+                    await MessageHandler.TeamMenuEmojis(message, user);
+                    //Reactionmessage added within TeamMenuEmojis() method
                     break;
                 case "pvp":
-                    await MessageHandler.NotImplemented(idList, "pvp");
+                    user.RemoveAllReactionMessages(11);
+                    user.RemoveAllReactionMessages(1);
+
+                    await message.RemoveAllReactionsAsync();
+                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.PvPMainMenu(); m.Content = "";});
+                    await MessageHandler.PvPMainMenuEmojis(message);
+                    user.ReactionMessages.Add(message.Id, 11);
                     break;
                 case "settings":
                     await MessageHandler.NotImplemented(idList, "settings");
@@ -375,22 +347,11 @@ namespace DiscomonProject.Discord
                 case "back1":
                     user.RemoveAllReactionMessages(5);
                     user.RemoveAllReactionMessages(1);
+
                     await message.RemoveAllReactionsAsync();
-                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(); m.Content = "";});
-                    //Locations
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732673934184677557));
-                    //Party
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(580944131535273991));
-                    //Bag
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732676561341251644));
-                    //Dex
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732679405704445956));
-                    //Team
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732682490833141810));
-                    //PvP
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732680927242878979));
-                    //Settings
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732683469485899826));
+                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(user); m.Content = "";});
+                    await MessageHandler.MenuEmojis(message);
+
                     user.ReactionMessages.Add(message.Id, 1);
                     user.Char.SwapMode = false;
                     user.Char.SwapMonNum = -1;
@@ -452,46 +413,165 @@ namespace DiscomonProject.Discord
 
         public static async Task TeamMenu(UserAccount user, IUserMessage message, IEmote emote, ContextIds idList)
         {
-            switch(emote.Name.ToLower())
+            Team team = user.GetTeam();
+            if(team != null)
             {
-                case "back1":
-                    user.RemoveAllReactionMessages(7);
-                    user.RemoveAllReactionMessages(1);
-                    await message.RemoveAllReactionsAsync();
-                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(); m.Content = "";});
-                    //Locations
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732673934184677557));
-                    //Party
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(580944131535273991));
-                    //Bag
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732676561341251644));
-                    //Dex
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732679405704445956));
-                    //Team
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732682490833141810));
-                    //PvP
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732680927242878979));
-                    //Settings
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732683469485899826));
-                    user.ReactionMessages.Add(message.Id, 1);
-                    break;
-                case "invite":
-                    await MessageHandler.NotImplemented(idList, "invite");
-                    break;
-                case "kick_player":
-                    await MessageHandler.NotImplemented(idList, "kick_player");
-                    break;
-                case "exit":
-                    await MessageHandler.NotImplemented(idList, "exit");
-                    break;
-                case "settings":
-                    await MessageHandler.NotImplemented(idList, "settings");
-                    break;
-                case "disband":
-                    await MessageHandler.NotImplemented(idList, "disband");
-                    break;
-                default:
-                    break;
+                switch(emote.Name.ToLower())
+                {
+                    case "back1":
+                        user.RemoveAllReactionMessages(7);
+                        user.RemoveAllReactionMessages(1);
+
+                        await message.RemoveAllReactionsAsync();
+                        await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(user); m.Content = "";});
+                        await MessageHandler.MenuEmojis(message);
+
+                        user.ReactionMessages.Add(message.Id, 1);
+                        break;
+                    case "invite":
+                        if(team.CanInvite(user))
+                        {
+                            await message.ModifyAsync(m => {m.Content = "**Please tag the player(s) you wish to invite.**";});
+                            user.ExpectedInput = 0;
+                            user.ExpectedInputLocation = message.Channel.Id;
+                        }
+                        break;
+                    case "kick_player":
+                        if(team.CanKick(user))
+                        {
+                            await message.ModifyAsync(m => {m.Content = "**Please tag the player(s) you wish to kick.**";});
+                            user.ExpectedInput = 1;
+                            user.ExpectedInputLocation = message.Channel.Id;
+                        }
+                        break;
+                    case "exit":
+                        bool leader = false;
+                        if(team.Members.IndexOf(user) == 0)
+                            leader = true;
+                            
+                        team.KickMember(user);
+
+                        if(team.Members.Count > 0)
+                        {
+                            if(leader)
+                                await MessageHandler.SendMessage(user.Char.CurrentGuildId, message.Channel.Id, $"{team.Members[0].Mention}, you are now the team leader.");
+                        }
+                        else
+                        {
+                            TownHandler.GetTown(user.Char.CurrentGuildId).Teams.Remove(team);
+                        }
+
+                        user.RemoveAllReactionMessages(9);
+                        user.RemoveAllReactionMessages(7);
+
+                        await message.RemoveAllReactionsAsync();
+                        await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
+                        await MessageHandler.TeamMenuEmojis(message, user);
+
+                        break;
+                    case "settings":
+                        if(team.CanAccessSettings(user))
+                        {
+                            user.RemoveAllReactionMessages(7);
+                            user.RemoveAllReactionMessages(8);
+
+                            await message.RemoveAllReactionsAsync();
+                            await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamSettingsMenu(user); m.Content = "";});
+                            await MessageHandler.TeamSettingsEmojis(message, user);
+
+                            user.ReactionMessages.Add(message.Id, 8);
+                        }
+                        break;
+                    case "disband":
+                        if(team.CanDisband(user))
+                        {
+                            TownHandler.GetTown(user.Char.CurrentGuildId).Teams.Remove(team);
+
+                            user.RemoveAllReactionMessages(9);
+                            user.RemoveAllReactionMessages(7);
+
+                            await message.RemoveAllReactionsAsync();
+                            await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
+                            await MessageHandler.TeamMenuEmojis(message, user);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public static async Task TeamSettingsMenu(UserAccount user, IUserMessage message, IEmote emote, ContextIds idList)
+        {
+            Team team = user.GetTeam();
+            if(team != null)
+            {
+                switch(emote.Name.ToLower())
+                {
+                    case "back1":
+                        user.RemoveAllReactionMessages(8);
+                        user.RemoveAllReactionMessages(7);
+
+                        await message.RemoveAllReactionsAsync();
+                        await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
+                        await MessageHandler.TeamMenuEmojis(message, user);
+                        break;
+                    case "edit":
+                        if(team.CanAccessSettings(user))
+                        {
+                            await message.ModifyAsync(m => {m.Content = "**Type your team's name. It must be less than 64 charcters.**";});
+                            user.ExpectedInput = 2;
+                            user.ExpectedInputLocation = message.Channel.Id;
+                        }
+                        break;
+                    case "addpicturegreen":
+                        if(team.CanAccessSettings(user))
+                        {
+                            await message.ModifyAsync(m => {m.Content = "**Enter your team's picture as an image URL**";});
+                            user.ExpectedInput = 3;
+                            user.ExpectedInputLocation = message.Channel.Id;
+                        }
+                        break;
+                    case "rgb":
+                        if(team.CanAccessSettings(user))
+                        {
+                            await message.ModifyAsync(m => {m.Content = "**Enter RGB values separated with spaces. Ex: 91 255 10**";});
+                            user.ExpectedInput = 4;
+                            user.ExpectedInputLocation = message.Channel.Id;
+                        }
+                        break;
+                    case "permissions":
+                        if(team.CanAccessSettings(user))
+                        {
+                            if(team.Permissions == "OwnerOnly")
+                            {
+                                team.Permissions = "AllMembers";
+                            }
+                            else if(team.Permissions == "AllMembers")
+                            {
+                                team.Permissions = "NoPerms";
+                            }
+                            else if(team.Permissions == "NoPerms")
+                            {
+                                team.Permissions = "OwnerOnly";
+                            }
+                            await MessageHandler.UpdateMenu(user, (ISocketMessageChannel)message.Channel, 8, "");
+                        }
+                        break;
+                    case "locked":
+                    case "unlocked":
+                        if(team.CanAccessSettings(user))
+                        {
+                            if(team.OpenInvite)
+                                team.OpenInvite = false;
+                            else
+                                team.OpenInvite = true;
+                            await MessageHandler.UpdateMenu(user, (ISocketMessageChannel)message.Channel, 8, "");
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -502,22 +582,11 @@ namespace DiscomonProject.Discord
                 case "back1":
                     user.RemoveAllReactionMessages(9);
                     user.RemoveAllReactionMessages(1);
+
                     await message.RemoveAllReactionsAsync();
-                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(); m.Content = "";});
-                    //Locations
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732673934184677557));
-                    //Party
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(580944131535273991));
-                    //Bag
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732676561341251644));
-                    //Dex
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732679405704445956));
-                    //Team
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732682490833141810));
-                    //PvP
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732680927242878979));
-                    //Settings
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732683469485899826));
+                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(user); m.Content = "";});
+                    await MessageHandler.MenuEmojis(message);
+
                     user.ReactionMessages.Add(message.Id, 1);
                     break;
                 case "team":
@@ -525,23 +594,102 @@ namespace DiscomonProject.Discord
                     t.AddMember(user);
                     TownHandler.GetTown(user.Char.CurrentGuildId).Teams.Add(t);
 
+                    if(user.ExpectedInput == 5)
+                    {
+                        user.ExpectedInput = -1;
+                        user.ExpectedInputLocation = 0;
+                    }
+
                     user.RemoveAllReactionMessages(9);
                     user.RemoveAllReactionMessages(7);
+
                     await message.RemoveAllReactionsAsync();
                     await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
-                    //Back
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(735583967046271016));
-                    //Invite
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(736476027886501888));
-                    //Kick
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(736476054427795509));
-                    //Leave team
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(736485364700545075));
-                    //Settings
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(732683469485899826));
-                    //Disband Team
-                    await message.AddReactionAsync(await MessageHandler.GetEmoji(736487511655841802));
-                    user.ReactionMessages.Add(message.Id, 7);
+                    await MessageHandler.TeamMenuEmojis(message, user);
+                    break;
+                case "invite":
+                    await message.ModifyAsync(m => {m.Content = "**Tag someone in the team you want to join. The team must be open.**";});
+                    user.ExpectedInput = 5;
+                    user.ExpectedInputLocation = message.Channel.Id;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static async Task TeamInviteMenu(UserAccount user, IUserMessage message, IEmote emote, ContextIds idList)
+        {
+            switch(emote.Name.ToLower())
+            {
+                case "check":
+                    if(user.GetTeam() == null)
+                    {
+                        if(user.InviteMessages.ContainsKey(message.Id))
+                        {
+                            var otherUser = UserHandler.GetUser(user.InviteMessages[message.Id]);
+                            if(otherUser.GetTeam() != null)
+                            {
+                                user.InviteMessages.Remove(message.Id);
+                                user.RemoveAllReactionMessages(10);
+                                otherUser.GetTeam().AddMember(user);
+                                await message.RemoveAllReactionsAsync();
+                                //FOR FUTURE USE- When bot has no permissions, this can be used to remove bot-only reactions
+                                //await message.RemoveReactionAsync(await MessageHandler.GetEmoji(736480922152730665), message.Author);
+                                await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(user); m.Content = "";});
+                                await MessageHandler.TeamMenuEmojis(message, user);
+
+                                //Update the menu of the person who sent the invite
+                                foreach(KeyValuePair<ulong, int> kvp in otherUser.ReactionMessages)
+                                {
+                                    if(kvp.Value == 7)
+                                    {
+                                        IMessage teamMess = await message.Channel.GetMessageAsync(kvp.Key);
+                                        if(teamMess is IUserMessage)
+                                        {
+                                            IUserMessage userTeamMess = (IUserMessage)teamMess;
+                                            await userTeamMess.ModifyAsync(m => {m.Embed = MonEmbedBuilder.TeamMenu(otherUser); m.Content = "";});
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "redx":
+                    user.InviteMessages.Remove(message.Id);
+                    user.RemoveAllReactionMessages(10);
+                    await message.ModifyAsync(m => {m.Content = "Invite Declined.";});
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static async Task PvPMainMenu(UserAccount user, IUserMessage message, IEmote emote, ContextIds idList)
+        {
+            switch(emote.Name.ToLower())
+            {
+                case "back1":
+                    user.RemoveAllReactionMessages(11);
+                    user.RemoveAllReactionMessages(1);
+
+                    await message.RemoveAllReactionsAsync();
+                    await message.ModifyAsync(m => {m.Embed = MonEmbedBuilder.MainMenu(user); m.Content = "";});
+                    await MessageHandler.MenuEmojis(message);
+
+                    user.ReactionMessages.Add(message.Id, 1);
+                    break;
+                case "singlebattle":
+                    await MessageHandler.NotImplemented(idList, "single battle");
+                    break;
+                case "doublebattle":
+                    await MessageHandler.NotImplemented(idList, "double battle");
+                    break;
+                case "ffa":
+                    await MessageHandler.NotImplemented(idList, "free for all");
+                    break;
+                case "custombattle":
+                    await MessageHandler.NotImplemented(idList, "custom battle");
                     break;
                 default:
                     break;

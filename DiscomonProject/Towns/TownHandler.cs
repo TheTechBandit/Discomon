@@ -26,6 +26,7 @@ namespace DiscomonProject
 
             foreach(KeyValuePair<ulong, TownAccount> entry in _jsonStorage.RestoreObject<Dictionary<ulong, TownAccount>>(filepath))
             {
+                entry.Value.UpdateTeams();
                 _dic.Add(entry.Key, (TownAccount)entry.Value);
             }
 
@@ -68,7 +69,7 @@ namespace DiscomonProject
             return acc;
         }
 
-        private static void SaveTowns()
+        public static void SaveTowns()
         {
             System.Console.WriteLine("Saving towns...");
             _jsonStorage.StoreObject(_dic, filepath);

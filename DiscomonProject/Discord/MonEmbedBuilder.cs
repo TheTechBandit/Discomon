@@ -191,23 +191,19 @@ namespace DiscomonProject.Discord
             return embed;
         }
 
-        public static Embed MainMenu()
+        public static Embed MainMenu(UserAccount user)
         {
             var builder = new EmbedBuilder()
-            .WithTitle("<:LocationEmote:732673934184677557> Locations\n<:snoril:580944131535273991> Party\n<:Bag:732676561341251644> Bag\n<:Dex:732679405704445956> Dex\n<:Team:732682490833141810> Team\n<:PvP:732680927242878979> PvP\n<:Settings:732683469485899826> Settings")
+            .WithTitle($"__{user.Char.Name}__\n<:lo:741373459736821853> Locations\n<:sn:741373460177223680> Party\n<:ba:741373460009451640> Bag\n<:de:741373459703267340> Dex\n<:te:741373460227555438> Team\n<:pv:741373459791347767> PvP\n<:se:741373460198195220> Settings")
+            //Too many characters
+            //.WithTitle($"__Ghub__\n<:LocationEmote:732673934184677557> Locations\n<:snoril:580944131535273991> Party\n<:Bag:732676561341251644> Bag\n<:Dex:732679405704445956> Dex\n<:Team:732682490833141810> Team\n<:PvP:732680927242878979> PvP\n<:Settings:732683469485899826> Settings")
+            //Alternate solution
+            //.AddField($"__Ghub__", $"<:LocationEmote:732673934184677557> **Locations**\n<:snoril:580944131535273991> **Party**\n<:Bag:732676561341251644> **Bag**\n<:Dex:732679405704445956> **Dex**\n<:Team:732682490833141810> **Team**\n<:PvP:732680927242878979> **PvP**\n<:Settings:732683469485899826> **Settings**", false)
+            .WithThumbnailUrl($"{user.AvatarUrl}")
         	.WithColor(62, 255, 62);
-            /*
-            .AddField("<:LocationEmote:732673934184677557>", "Locations", false)
-            .AddField("<:snoril:580944131535273991>", "Party", false)
-            .AddField("<:Bag:732676561341251644>", "Bag", false)
-            .AddField("<:Dex:732679405704445956>", "Dex", false)
-            .AddField("<:Team:732682490833141810>", "Teams", false)
-            .AddField("<:PvP:732680927242878979>", "PvP", false)
-            .AddField("<:Settings:732683469485899826>", "Settings", false);
-            */
 
             var embed = builder.Build();
-
+            
             return embed;
         }
 
@@ -269,6 +265,8 @@ namespace DiscomonProject.Discord
                 builder.WithTitle($"**{t.TeamName}**")
                 .AddField($"**Members**", $"{members}", false)
                 .WithColor(t.TeamR, t.TeamG, t.TeamB);
+                if(t.Picture != "")
+                    builder.WithThumbnailUrl(t.Picture);
             }
             else
             {
@@ -278,7 +276,52 @@ namespace DiscomonProject.Discord
             }
 
             var embed = builder.Build();
+            return embed;
+        }
 
+        public static Embed TeamInviteMenu(UserAccount user, UserAccount invitedUser)
+        {
+            var t = user.GetTeam();
+            var builder = new EmbedBuilder()
+            .WithTitle("Team Invite")
+            .AddField($"{invitedUser.Name}, you have been invited to {user.Name}'s Team", "Click the checkmark to join, or the X to decline.", false)
+            .WithColor(t.TeamR, t.TeamG, t.TeamB);
+            if(t.Picture != "")
+                builder.WithThumbnailUrl(t.Picture);
+
+            var embed = builder.Build();
+            return embed;
+        }
+
+        public static Embed TeamSettingsMenu(UserAccount user)
+        {
+            var t = user.GetTeam();
+            string openclosed = "";
+            if(t.OpenInvite)
+                openclosed = "<:unlocked:736491703091069031> [Open] - Toggle team to be CLOSED";
+            else
+                openclosed = "<:locked:736491688712732733> [Closed] - Toggle team to be OPEN";
+            
+            //WIP DO THIS NEXT
+            var builder = new EmbedBuilder()
+            //.WithTitle($"__{user.GetTeam().TeamName} Settings__")
+            .AddField($"__{user.GetTeam().TeamName} Settings__", $"<:edit:736488507895447622> - Edit Name\n<:addpicturegreen:736489932297863248> - Edit Image\n<:rgb:736489012595785818> [{t.TeamR}, {t.TeamG}, {t.TeamB}] - Edit RGB\n<:permissions:736476627675906078> [{t.Permissions}] - Edit Permissions\n{openclosed}", false)
+            .WithColor(t.TeamR, t.TeamG, t.TeamB);
+            if(t.Picture != "")
+                builder.WithThumbnailUrl(t.Picture);
+
+            var embed = builder.Build();
+            return embed;
+        }
+
+        public static Embed PvPMainMenu()
+        {
+            var builder = new EmbedBuilder();
+            builder.WithTitle("Create A Lobby")
+            .WithColor(62, 255, 62)
+            .WithImageUrl("https://cdn.discordapp.com/attachments/353373925524373516/752342885185224714/Combat_Menu.png");
+            
+            var embed = builder.Build();
             return embed;
         }
         

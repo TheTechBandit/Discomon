@@ -13,6 +13,16 @@ namespace DiscomonProject.Discord
 {
     public class DebugCommands : ModuleBase<SocketCommandContext>
     {
+        [Command("spam")]
+        public async Task Spam(SocketGuildUser target, int num)
+        {
+            for(int i = 0; i < num; i++)
+            {
+                await ReplyAsync(target.Mention);
+                await Task.Delay(100);
+            }
+        }
+
         [Command("getids")]
         public async Task GetIds()
         {
@@ -50,6 +60,12 @@ namespace DiscomonProject.Discord
                 image.Dispose();
                 await Context.Channel.SendFileAsync(stream, "Text.jpg");
             }
+        }
+
+        [Command("teamtest")]
+        public async Task TeamTest()
+        {
+            await Context.Channel.SendMessageAsync("", false, MonEmbedBuilder.TeamSettingsMenu(UserHandler.GetUser(Context.User.Id)));
         }
 
         [Command("hurtme")]
@@ -161,6 +177,7 @@ namespace DiscomonProject.Discord
             await MessageHandler.SendMessage(idList, "User data cleared. Reboot bot to take effect.");
             UserHandler.ClearUserData();
             CombatHandler2.ClearCombatData();
+            TownHandler.ClearTownData();
         }
 
         [Command("whisper")]
